@@ -42,6 +42,7 @@ import {
 } from "@/lib/api";
 import { templates as fallbackTemplates } from "@/data/templates";
 import { useLanguage } from "@/context/LanguageContext";
+import PageLoader from "@/components/PageLoader";
 
 const iconMap: Record<string, any> = {
   Zap,
@@ -62,68 +63,80 @@ const iconMap: Record<string, any> = {
 export default function Home() {
   const router = useRouter();
   const { t, isRTL, locale } = useLanguage();
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [homeData, setHomeData] = useState<any>(null);
   const [displayTemplates, setDisplayTemplates] = useState<any[]>([]);
   const [categoriesData, setCategoriesData] = useState<any[]>([]);
 
   useEffect(() => {
-    getHomeContent()
-      .then((data) => {
-        if (data) setHomeData(data);
-      })
-      .catch(() => {});
+    let mounted = true;
+    Promise.allSettled([
+      getHomeContent(),
+      getResources({ per_page: 50 }),
+      getCategories(),
+    ]).then(([homeRes, resourcesRes, catRes]) => {
+      if (!mounted) return;
 
-    getResources({ per_page: 50 })
-      .then((res) => {
-        if (res?.data?.length > 0) {
-          const normalized = res.data.map((item: any) =>
-            normalizeTemplate(item, locale),
-          );
+      if (homeRes.status === "fulfilled" && homeRes.value) {
+        setHomeData(homeRes.value);
+      }
 
-          // Row 1: Website templates
-          const webTemplates = normalized.filter(
-            (t: any) =>
-              t.resource_type_raw === "website" ||
-              String(t.resourceType || "")
-                .toLowerCase()
-                .includes("website"),
-          );
+      if (
+        resourcesRes.status === "fulfilled" &&
+        resourcesRes.value?.data?.length > 0
+      ) {
+        const normalized = resourcesRes.value.data.map((item: any) =>
+          normalizeTemplate(item, locale),
+        );
 
-          // Row 2: Other templates (featured/popular design, excel, etc.)
-          const otherTemplates = normalized.filter(
-            (t: any) =>
-              t.resource_type_raw !== "website" &&
-              !String(t.resourceType || "")
-                .toLowerCase()
-                .includes("website"),
-          );
+        // Row 1: Website templates
+        const webTemplates = normalized.filter(
+          (t: any) =>
+            t.resource_type_raw === "website" ||
+            String(t.resourceType || "")
+              .toLowerCase()
+              .includes("website"),
+        );
 
-          const combined = [
-            ...webTemplates.slice(0, 4),
-            ...otherTemplates.slice(0, 4),
-          ];
+        // Row 2: Other templates (featured/popular design, excel, etc.)
+        const otherTemplates = normalized.filter(
+          (t: any) =>
+            t.resource_type_raw !== "website" &&
+            !String(t.resourceType || "")
+              .toLowerCase()
+              .includes("website"),
+        );
 
-          // Fallback to top 8 normalized if combined has less than 8
-          if (combined.length < 8) {
-            setDisplayTemplates(normalized.slice(0, 8));
-          } else {
-            setDisplayTemplates(combined);
-          }
+        const combined = [
+          ...webTemplates.slice(0, 4),
+          ...otherTemplates.slice(0, 4),
+        ];
+
+        if (combined.length < 8) {
+          setDisplayTemplates(normalized.slice(0, 8));
         } else {
-          setDisplayTemplates([]);
+          setDisplayTemplates(combined);
         }
-      })
-      .catch(() => {
+      } else {
         setDisplayTemplates([]);
-      });
+      }
 
-    getCategories()
-      .then((data) => {
-        if (data?.length > 0) setCategoriesData(data);
-      })
-      .catch(() => {});
+      if (catRes.status === "fulfilled" && catRes.value?.length > 0) {
+        setCategoriesData(catRes.value);
+      }
+
+      setLoading(false);
+    });
+
+    return () => {
+      mounted = false;
+    };
   }, [locale]);
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   const hero = homeData?.hero || {};
   const heroEyebrow = isRTL
