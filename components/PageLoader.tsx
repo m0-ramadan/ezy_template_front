@@ -50,16 +50,19 @@ export default function PageLoader({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
         }}
       >
         {/* Three Layer Animation */}
         <div
           className="three-layer-loader"
           style={{
-            width: "60px",
-            height: "60px",
+            width: "50px",
+            height: "50px",
             position: "relative",
             marginBottom: "24px",
+            margin: "0 auto 24px",
           }}
         >
           <div
