@@ -26,7 +26,11 @@ export default async function Detail({
           .map(normalizeTemplate)
       : fallbackTemplates.filter((x) => x.slug !== slug).slice(0, 3);
 
-  const mainDetailImage = t.detail_image || t.preview_image || t.image || "";
+  const mainDetailImage =
+    (t as any).detail_image ||
+    (t as any).preview_image ||
+    (t as any).image ||
+    "";
   const galleryScreenshots = Array.isArray(t.screenshots) ? t.screenshots : [];
 
   const displayFeatures =

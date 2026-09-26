@@ -15,9 +15,7 @@ export default function TemplateGallery({
   mainImage,
   screenshots = [],
 }: TemplateGalleryProps) {
-  const defaultFallback = mainImage
-    ? getAssetUrl(mainImage)
-    : "/assets/travelix-detail.png";
+  const defaultFallback = "/assets/travelix-card.png";
 
   // Format and deduplicate all images
   const rawList = [mainImage, ...screenshots].filter(Boolean);
