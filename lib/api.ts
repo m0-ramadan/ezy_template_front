@@ -1,16 +1,36 @@
 // EzyTemplate API Client - Connects Next.js Frontend to Laravel Backend
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  (typeof window !== "undefined"
-    ? `${window.location.protocol}//${window.location.hostname}:8002/api`
-    : "http://127.0.0.1:8002/api");
+const LOCAL_BACKEND_URL = "http://127.0.0.1:8002";
+const PRODUCTION_BACKEND_URL = "https://dashboard.ezytemplate.pro";
+
+function getDefaultBackendUrl(): string {
+  if (typeof window === "undefined") {
+    return process.env.NODE_ENV === "production"
+      ? PRODUCTION_BACKEND_URL
+      : LOCAL_BACKEND_URL;
+  }
+
+  const { hostname, protocol } = window.location;
+  const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
+
+  if (isLocalhost) {
+    return `${protocol}//${hostname}:8002`;
+  }
+
+  // The public Next.js site and Laravel dashboard are deployed on separate
+  // subdomains. All public API and storage requests must go to Laravel.
+  if (hostname === "ezytemplate.pro" || hostname === "www.ezytemplate.pro") {
+    return PRODUCTION_BACKEND_URL;
+  }
+
+  return `${protocol}//${hostname}`;
+}
 
 export const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL ||
-  (typeof window !== "undefined"
-    ? `${window.location.protocol}//${window.location.hostname}:8002`
-    : "http://127.0.0.1:8002");
+  process.env.NEXT_PUBLIC_BACKEND_URL || getDefaultBackendUrl();
+
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
 export function getAssetUrl(path: string | null | undefined): string {
   if (!path) return "/assets/travelix-card.png";
