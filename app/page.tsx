@@ -134,48 +134,6 @@ export default function Home() {
     };
   }, [locale]);
 
-  if (loading) {
-    return <PageLoader />;
-  }
-
-  const hero = homeData?.hero || {};
-  const heroEyebrow = isRTL
-    ? hero.eyebrow_ar || t("hero_eyebrow")
-    : hero.eyebrow || t("hero_eyebrow");
-  const heroTitle = isRTL
-    ? hero.title_ar || t("hero_title_1")
-    : hero.title || t("hero_title_1");
-  const heroHighlight = isRTL
-    ? hero.highlight_text_ar || t("hero_title_2")
-    : hero.highlight_text || t("hero_title_2");
-  const heroLead = isRTL
-    ? hero.lead_ar || t("hero_subtitle")
-    : hero.lead || t("hero_subtitle");
-  const heroNoteTitle = isRTL
-    ? hero.note_title_ar || "مشروعك القادم"
-    : hero.note_title || "Your Next Website";
-  const heroNoteSubtitle = isRTL
-    ? hero.note_subtitle_ar || "يبدأ هنا"
-    : hero.note_subtitle || "Starts Here";
-
-  const popularTags = isRTL
-    ? homeData?.popular_tags_ar || [
-        "لارافيل",
-        "نيكست جي اس",
-        "لوحة تحكم",
-        "متجر إلكتروني",
-        "معرض أعمال",
-        "قوالب إكسيل",
-      ]
-    : homeData?.popular_tags || [
-        "Laravel",
-        "Next.js",
-        "Admin Dashboard",
-        "eCommerce",
-        "Portfolio",
-        "Excel",
-      ];
-
   const benefits = useMemo(() => {
     if (homeData?.benefits?.length) {
       return homeData.benefits.map((b: any) => ({
@@ -414,6 +372,48 @@ export default function Home() {
           ];
     return list;
   }, [categoriesData, t, isRTL]);
+
+  if (loading) {
+    return <PageLoader />;
+  }
+
+  const hero = homeData?.hero || {};
+  const heroEyebrow = isRTL
+    ? hero.eyebrow_ar || t("hero_eyebrow")
+    : hero.eyebrow || t("hero_eyebrow");
+  const heroTitle = isRTL
+    ? hero.title_ar || t("hero_title_1")
+    : hero.title || t("hero_title_1");
+  const heroHighlight = isRTL
+    ? hero.highlight_text_ar || t("hero_title_2")
+    : hero.highlight_text || t("hero_title_2");
+  const heroLead = isRTL
+    ? hero.lead_ar || t("hero_subtitle")
+    : hero.lead || t("hero_subtitle");
+  const heroNoteTitle = isRTL
+    ? hero.note_title_ar || "مشروعك القادم"
+    : hero.note_title || "Your Next Website";
+  const heroNoteSubtitle = isRTL
+    ? hero.note_subtitle_ar || "يبدأ هنا"
+    : hero.note_subtitle || "Starts Here";
+
+  const popularTags = isRTL
+    ? homeData?.popular_tags_ar || [
+        "لارافيل",
+        "نيكست جي اس",
+        "لوحة تحكم",
+        "متجر إلكتروني",
+        "معرض أعمال",
+        "قوالب إكسيل",
+      ]
+    : homeData?.popular_tags || [
+        "Laravel",
+        "Next.js",
+        "Admin Dashboard",
+        "eCommerce",
+        "Portfolio",
+        "Excel",
+      ];
 
   const featuredEyebrow = isRTL
     ? homeData?.featured_section?.eyebrow_ar || t("featured")

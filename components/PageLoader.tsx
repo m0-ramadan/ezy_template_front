@@ -33,14 +33,20 @@ export default function PageLoader({
         position: "fixed",
         top: 0,
         left: 0,
-        width: "100vw",
-        height: "100vh",
+        right: 0,
+        bottom: 0,
+        width: "100%",
+        minHeight: "100vh",
+        height: "100%",
+        margin: 0,
+        padding: 0,
         background: "var(--bg, #0b1120)",
-        zIndex: 99999,
+        zIndex: 999999,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        boxSizing: "border-box",
         transition: "opacity 0.4s ease",
       }}
     >
@@ -52,6 +58,9 @@ export default function PageLoader({
           alignItems: "center",
           justifyContent: "center",
           textAlign: "center",
+          margin: "auto",
+          padding: 0,
+          boxSizing: "border-box",
         }}
       >
         {/* Three Layer Animation */}
@@ -61,8 +70,7 @@ export default function PageLoader({
             width: "50px",
             height: "50px",
             position: "relative",
-            marginBottom: "24px",
-            margin: "0 auto 24px",
+            margin: "0 auto 24px auto",
           }}
         >
           <div
@@ -110,28 +118,27 @@ export default function PageLoader({
         </div>
 
         {/* Brand Image */}
-        <div className="page-loader-brand" style={{ marginBottom: "18px" }}>
+        <div
+          className="page-loader-brand"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <img
             src="/assets/logo.png"
             alt="EzyTemplate"
             className="logo-img light-only"
-            style={{ height: "42px", width: "auto" }}
+            style={{ height: "42px", width: "auto", display: "block" }}
           />
           <img
             src="/assets/logo-white.png"
             alt="EzyTemplate"
             className="logo-img dark-only"
-            style={{ height: "42px", width: "auto" }}
+            style={{ height: "42px", width: "auto", display: "block" }}
           />
         </div>
-
-        {/* Optional Subtext */}
-        <p
-          className="page-loader-text"
-          style={{ color: "var(--muted)", fontSize: "14px" }}
-        >
-          {message || (isRTL ? "جاري التحميل..." : "Loading...")}
-        </p>
       </div>
 
       <style jsx>{`
