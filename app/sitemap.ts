@@ -16,17 +16,21 @@ const categoryPages = {
   "website-templates": ["html-css", "wordpress", "react-nextjs", "tailwind-css"],
 };
 
-export default function sitemap() {
+export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = [
-    "/", "/templates", "/download", "/blog", "/about", "/services",
-    "/login", "/signup", ...Object.keys(categoryPages).map((page) => `/${page}`),
+    "/", "/templates", "/blog", "/about", "/contact", "/faq", "/services",
+    "/resources", "/tools", "/privacy", "/terms", "/cookie-policy",
+    "/copyright", ...Object.keys(categoryPages).map((page) => `/${page}`),
   ];
   const filters = Object.entries(categoryPages).flatMap(([page, categories]) =>
     categories.map((category) => `/${page}/${category}`),
   );
 
   return [...staticPages, ...filters].map((url) => ({
-    url: `https://ezytemplate.example${url}`,
-    lastModified: new Date(),
+    url: `${SITE_URL}${url}`,
+    changeFrequency: url === "/" ? "daily" : "weekly",
+    priority: url === "/" ? 1 : url === "/templates" ? 0.9 : 0.7,
   }));
 }
+import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";

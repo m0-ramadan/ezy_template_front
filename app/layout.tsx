@@ -3,16 +3,50 @@ import "./globals.css";
 import AppLayout from "@/components/AppLayout";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Locale } from "@/lib/translations";
+import AdSenseScript from "@/components/AdSenseScript";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+import type { Metadata, Viewport } from "next";
 
-export const metadata = {
-  title: "EzyTemplate — Free & Premium Website Templates",
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "EzyTemplate — Templates and Practical Online Tools",
+    template: `%s | ${SITE_NAME}`,
+  },
   description:
-    "Beautiful website templates, UI kits and resources by Ezystore.",
+    "Browse downloadable design, Word, Excel and website templates, plus practical browser-based tools.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    url: SITE_URL,
+    title: "EzyTemplate — Templates and Practical Online Tools",
+    description:
+      "Browse downloadable templates and practical browser-based tools.",
+  },
+  twitter: { card: "summary_large_image" },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   icons: {
     icon: "/assets/logo-icon.png",
     shortcut: "/assets/logo-icon.png",
     apple: "/assets/logo-icon.png",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "light dark",
 };
 
 export default async function RootLayout({
@@ -40,11 +74,6 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1622689578222320"
-          crossOrigin="anonymous"
-        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -88,6 +117,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <AdSenseScript />
         <LanguageProvider initialLocale={initialLocale}>
           <AppLayout>{children}</AppLayout>
         </LanguageProvider>

@@ -59,12 +59,12 @@ export default function DetailView({
     { id: "features", label: isRTL ? "المميزات" : "Features" },
     { id: "tech", label: isRTL ? "التقنيات" : "Technologies" },
     { id: "screenshots", label: isRTL ? "صور المشروع" : "Screenshots" },
-    { id: "docs", label: isRTL ? "التوثيق" : "Documentation" },
-    {
-      id: "reviews",
-      label: `${isRTL ? "التقييمات" : "Reviews"} (${t.rating || 5.0} ★)`,
-    },
-  ];
+  ].filter((tab) => {
+    if (tab.id === "features") return activeFeatures.length > 0 || t.formats?.length > 0 || t.qualities?.length > 0;
+    if (tab.id === "tech") return Boolean(displayTech || t.version || t.license);
+    if (tab.id === "screenshots") return galleryScreenshots.length > 0;
+    return true;
+  });
 
   const handleTabClick = (index: number, id: string) => {
     setActiveTab(index);
@@ -84,9 +84,7 @@ export default function DetailView({
     return q;
   };
 
-  const displayQualities = (t.qualities || ["Standard", "HD"]).map(
-    getQualityLabel,
-  );
+  const displayQualities = (t.qualities || []).map(getQualityLabel);
 
   const getResourceTypeLabel = (type: string) => {
     if (!type) return tr("website_template");
@@ -161,11 +159,7 @@ export default function DetailView({
                     dangerouslySetInnerHTML={{ __html: displayDescription }}
                   />
                 ) : (
-                  <p className="lead">
-                    {isRTL
-                      ? `${displayName} هو قالب عصري ومتقن تم تصميمه للمبدعين والشركات، بأكواد برمجية نظيفة وتصميم متجاوب بالكامل وسهل التخصيص.`
-                      : `${displayName} is a modern and elegant template designed for creators and businesses. It comes with clean code, fully responsive layouts, and easy customization options.`}
-                  </p>
+                  <p className="lead">{isRTL ? "لم يضف الناشر وصفاً تفصيلياً لهذا القالب بعد." : "A detailed publisher description is not available for this template yet."}</p>
                 )}
               </div>
             )}
@@ -225,16 +219,13 @@ export default function DetailView({
                   <div>
                     <Calendar />
                     <b>{isRTL ? "الإصدار" : "Version"}</b>
-                    <span>{t.version || "1.0.0"}</span>
+                    <span>{t.version || (isRTL ? "غير محدد" : "Not specified")}</span>
                   </div>
                   <div>
                     <Tag />
                     <b>{isRTL ? "نوع الترخيص" : "License"}</b>
                     <span>
-                      {t.license ||
-                        (isRTL
-                          ? "مجاني للاستخدام التجاري والشخصي"
-                          : "Free for Personal & Commercial Use")}
+                      {t.license || (isRTL ? "يجب التحقق من الترخيص قبل الاستخدام" : "Licence must be verified before use")}
                     </span>
                   </div>
                 </div>
@@ -360,32 +351,32 @@ export default function DetailView({
           <p className="lead">
             {getResourceTypeLabel(t.resourceType)} · {displayCategory}
           </p>
-          <div className="rating">
+          {t.rating && <div className="rating">
             ★★★★★{" "}
             <span>
               {t.rating} {isRTL ? "تقييم" : "rating"}
             </span>
-          </div>
+          </div>}
           <div className="download-meta">
             <Download size={14} /> {t.downloads} {isRTL ? "تحميل" : "Downloads"}{" "}
-            · {t.size}
+            {t.size ? ` · ${t.size}` : ""}
           </div>
           <div className="tags mini">
             {t.resource_type_raw === "website" ||
             String(t.resourceType || "")
               .toLowerCase()
               .includes("website") ? (
-              <span>{displayTech || "HTML & CSS"}</span>
+              displayTech ? <span>{displayTech}</span> : null
             ) : (
               (t.formats || []).map((x: string) => <span key={x}>{x}</span>)
             )}
           </div>
-          <div className="quality-line">
+          {displayQualities.length > 0 && <div className="quality-line">
             <span>
               {isRTL ? "الجودة المتاحة: " : "Available quality: "}
               {displayQualities.join(" · ")}
             </span>
-          </div>
+          </div>}
 
           <Link className="downloadbtn" href={`/download?template=${t.slug}`}>
             <Download size={16} />{" "}
@@ -464,7 +455,7 @@ export default function DetailView({
                 />
                 <span>
                   <b>{isRTL ? r.name_ar || r.name : r.name}</b>
-                  <small>★★★★★ {r.rating}</small>
+                  {r.rating && <small>★ {r.rating}</small>}
                 </span>
                 <em>{r.price === "Premium" ? tr("premium") : tr("free")}</em>
               </Link>

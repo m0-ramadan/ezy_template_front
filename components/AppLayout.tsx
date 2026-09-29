@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import AdBlockDetector from "@/components/AdBlockDetector";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -11,12 +10,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     pathname === "/preview" || pathname?.startsWith("/preview");
 
   if (isPreviewPage) {
-    return (
-      <>
-        {children}
-        <AdBlockDetector />
-      </>
-    );
+    return <>{children}</>;
   }
 
   return (
@@ -24,7 +18,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <Header />
       {children}
       <Footer />
-      <AdBlockDetector />
     </>
   );
 }

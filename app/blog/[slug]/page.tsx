@@ -13,11 +13,10 @@ export default function Article({
   const { slug } = use(params);
   const { t, isRTL } = useLanguage();
   const [article, setArticle] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getArticleBySlug(slug)
-      .then(setArticle)
-      .catch(() => {});
+    getArticleBySlug(slug).then(setArticle).catch(() => {}).finally(() => setLoading(false));
   }, [slug]);
 
   const categoryTranslations: Record<string, string> = {
@@ -35,20 +34,17 @@ export default function Article({
     return categoryTranslations[c] || c;
   };
 
-  const title =
-    (isRTL
-      ? article?.title_ar || article?.title
-      : article?.title || article?.title_ar) ||
-    (isRTL
-      ? "أهم 10 اتجاهات حديثة في تصميم الويب لعام 2026"
-      : "10 Modern Web Design Trends for 2026");
+  if (loading) return <main className="container article-detail"><p>{isRTL ? "جاري التحميل…" : "Loading…"}</p></main>;
+  if (!article) return <main className="container article-detail"><h1>{isRTL ? "المقال غير موجود" : "Article not found"}</h1><Link href="/blog">{isRTL ? "العودة إلى المدونة" : "Back to blog"}</Link></main>;
+
+  const title = isRTL ? article.title_ar || article.title : article.title || article.title_ar;
   const category = isRTL
-    ? getArticleCatLabel(article?.category || "Web Design")
-    : article?.category || "Web Design";
+    ? getArticleCatLabel(article.category || "General")
+    : article.category || "General";
   const author = isRTL
     ? article?.author_name_ar || article?.author_name || "فريق إيزي تمبلت"
     : article?.author_name || "EzyTemplate Team";
-  const readingTime = article?.reading_time || 8;
+  const readingTime = article.reading_time || null;
   const date = article?.published_at
     ? new Date(article.published_at).toLocaleDateString(
         isRTL ? "ar-EG" : "en-US",
@@ -65,12 +61,7 @@ export default function Article({
     article?.cover_image || "/assets/article-web.png",
   );
   const excerpt =
-    (isRTL
-      ? article?.excerpt_ar || article?.excerpt
-      : article?.excerpt || article?.excerpt_ar) ||
-    (isRTL
-      ? "استكشف أحدث اتجاهات تصميم الويب التي ستتصدر المشهد في 2026."
-      : "Explore the latest web design trends that will dominate in 2026.");
+    (isRTL ? article.excerpt_ar || article.excerpt : article.excerpt || article.excerpt_ar) || "";
 
   const content =
     (isRTL
@@ -88,7 +79,7 @@ export default function Article({
       <span className="eyebrow">{category}</span>
       <h1>{title}</h1>
       <div className="meta">
-        {author} • {date} • {readingTime} {t("min_read")}
+        {author} • {date}{readingTime ? ` • ${readingTime} ${t("min_read")}` : ""}
       </div>
 
       <img className="article-cover" src={coverImg} alt={title} />
@@ -112,38 +103,7 @@ export default function Article({
             style={{ fontSize: "15px" }}
             dangerouslySetInnerHTML={{ __html: content }}
           />
-        ) : (
-          <div>
-            <h2>
-              {isRTL ? "التصميم من أجل الوضوح والسهولة" : "Design for clarity"}
-            </h2>
-            <p>
-              {isRTL
-                ? "الهرمية البصرية الواضحة، المساحات البيضاء المريحة، وتصميم المكونات السهلة الوصول تساعد الزوار على فهم موقعك والتحويل بشكل أسرع."
-                : "Strong hierarchy, generous whitespace, responsive systems and accessible components help visitors understand a product faster."}
-            </p>
-            <h2>
-              {isRTL
-                ? "البناء بأنظمة ومكونات قابلة لإعادة الاستخدام"
-                : "Build with reusable systems"}
-            </h2>
-            <p>
-              {isRTL
-                ? "لغة التصميم المتسقة والمكونات الموحدة تجعل القوالب أسهل في التخصيص والصيانة عبر مختلف المشاريع."
-                : "A consistent design language makes templates easier to customize and maintain across different projects."}
-            </p>
-            <h2>
-              {isRTL
-                ? "السرعة والأداء كجزء أساسي من التصميم"
-                : "Make performance part of the design"}
-            </h2>
-            <p>
-              {isRTL
-                ? "الصفحات السريعة والأصول المضغوطة والتفاعلات المدروسة تصنع تجربة استثنائية على كافة الأجهزة."
-                : "Fast pages, optimized assets and thoughtful interaction patterns create better experiences on every device."}
-            </p>
-          </div>
-        )}
+        ) : <p>{isRTL ? "هذا المقال لا يحتوي على نص منشور بعد." : "This article does not have published body content yet."}</p>}
 
         <div
           style={{

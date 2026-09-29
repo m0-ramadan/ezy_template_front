@@ -129,9 +129,7 @@ export function normalizeTemplate(r: any, locale: string = "en") {
     subcategory: r.subcategory || null,
     subcategory_id: r.subcategory_id || r.subcategory?.id || null,
     subcategory_slug: r.subcategory?.slug || r.subcategory_slug || null,
-    tech:
-      tech_stack ||
-      (r.resource_type ? r.resource_type.toUpperCase() : "HTML, CSS"),
+    tech: tech_stack || null,
     tech_stack,
     tech_stack_en: r.tech_stack || "",
     tech_stack_ar: r.tech_stack_ar || "",
@@ -149,7 +147,7 @@ export function normalizeTemplate(r: any, locale: string = "en") {
       r.views_count !== undefined && r.views_count !== null
         ? `${r.views_count}`
         : r.views || "0",
-    rating: r.rating ? `${r.rating}` : "5.0",
+    rating: r.rating !== undefined && r.rating !== null ? `${r.rating}` : null,
     image: getAssetUrl(r.preview_image || r.image),
     preview_image: getAssetUrl(r.preview_image || r.image),
     detail_image: getAssetUrl(r.detail_image || r.preview_image || r.image),
@@ -199,24 +197,20 @@ export function normalizeTemplate(r: any, locale: string = "en") {
               r.files.map((f: any) => f.format || f.extension?.toUpperCase()),
             ),
           )
-        : ["HTML", "ZIP"]),
+        : []),
     // Keep the API attachments on the normalized object. Download pages use
     // these ids to request the real file instead of generating a placeholder.
     files: Array.isArray(r.files) ? r.files : [],
-    qualities: r.qualities || ["Standard", "HD"],
+    qualities: r.qualities || [],
     size:
       r.size ||
       (r.files?.[0]?.size_human
         ? r.files[0].size_human
         : r.files?.[0]?.size_bytes
           ? `${(r.files[0].size_bytes / 1048576).toFixed(1)} MB`
-          : "1.2 MB"),
-    version: r.version || "1.0.0",
-    license:
-      r.license ||
-      (isAr
-        ? "مجاني للاستخدام الشخصي والتجاري"
-        : "Free for Personal & Commercial Use"),
+          : null),
+    version: r.version || null,
+    license: r.license || null,
     short_description,
     short_description_en: r.short_description || "",
     short_description_ar: r.short_description_ar || "",
@@ -852,6 +846,7 @@ export async function submitServiceRequest(data: {
   service: string;
   message: string;
   budget?: string;
+  website?: string;
 }) {
   const res = await fetch(`${API_BASE_URL}/service-requests`, {
     method: "POST",

@@ -52,7 +52,13 @@ export default function PrivacyPage() {
     : data?.subtitle ||
       "We are committed to protecting your personal data and providing clear info about privacy.";
 
-  const sections = data?.sections || [];
+  const sections = data?.sections?.length ? data.sections : [
+    { title: "Information we collect", title_ar: "البيانات التي نجمعها", content: "We receive information you submit through account, contact, service-request and newsletter forms. Our servers also process technical records such as IP address, user agent, referring page, requested path and timestamps for security, delivery and aggregate usage measurement.", content_ar: "نستلم البيانات التي ترسلها عبر نماذج الحساب والتواصل وطلبات الخدمات والنشرة البريدية. كما تعالج الخوادم سجلات تقنية مثل عنوان IP ونوع المتصفح والصفحة المحيلة والمسار والوقت للأمان والتشغيل والقياس المجمع." },
+    { title: "How information is used", title_ar: "كيفية استخدام البيانات", content: "We use information to provide downloads and requested services, operate accounts, answer messages, prevent abuse, maintain security, improve content and meet legal obligations. We do not sell contact-form content.", content_ar: "نستخدم البيانات لتقديم التحميلات والخدمات المطلوبة وتشغيل الحسابات والرد على الرسائل ومنع الإساءة وتحسين المحتوى والوفاء بالالتزامات. لا نبيع محتوى نماذج التواصل." },
+    { title: "Advertising and Google", title_ar: "الإعلانات وGoogle", content: "When enabled, Google AdSense and its partners may process cookies, IP addresses, device/browser information and ad interactions to deliver, secure and measure advertising. Google-certified consent controls must be used where required in the EEA, UK and Switzerland. See our Cookie Policy and Google's own privacy information for details and choices.", content_ar: "عند تفعيل الإعلانات، قد تعالج Google AdSense وشركاؤها ملفات الارتباط وعناوين IP وبيانات الجهاز والمتصفح وتفاعلات الإعلان للعرض والأمان والقياس. يجب استخدام أدوات موافقة معتمدة من Google حيث يلزم." },
+    { title: "Service providers and retention", title_ar: "مقدمو الخدمة ومدة الاحتفاظ", content: "Hosting, security, email and advertising providers may process only the data needed for their role. We retain records only as long as reasonably needed for the purpose, security, disputes and legal duties, then delete or anonymise them when practical.", content_ar: "قد يعالج مقدمو الاستضافة والأمان والبريد والإعلانات فقط البيانات اللازمة لدورهم. نحتفظ بالسجلات للمدة المعقولة اللازمة للغرض والأمان والالتزامات، ثم نحذفها أو نجهلها عندما يكون ذلك عملياً." },
+    { title: "Your choices and contact", title_ar: "خياراتك والتواصل", content: "Depending on applicable law, you may request access, correction, deletion or objection. You may unsubscribe from newsletters and manage browser/advertising consent choices. Submit privacy requests through the Contact page; identity verification may be required.", content_ar: "بحسب القانون المنطبق، يمكنك طلب الوصول أو التصحيح أو الحذف أو الاعتراض. يمكنك إلغاء الاشتراك وإدارة خيارات المتصفح والإعلانات. أرسل طلبات الخصوصية عبر صفحة التواصل." },
+  ];
 
   return (
     <div style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
@@ -117,8 +123,8 @@ export default function PrivacyPage() {
             <Calendar size={14} />
             <span>
               {isRTL
-                ? `آخر تحديث: ${data?.last_updated || "يناير 2026"}`
-                : `Last Updated: ${data?.last_updated || "January 2026"}`}
+                ? `آخر تحديث: ${data?.last_updated || "29 سبتمبر 2026"}`
+                : `Last Updated: ${data?.last_updated || "September 29, 2026"}`}
             </span>
           </div>
         </div>

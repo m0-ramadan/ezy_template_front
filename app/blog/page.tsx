@@ -142,9 +142,7 @@ export default function Blog() {
   );
 
   const posts = useMemo(() => {
-    const list =
-      articles.length > 0
-        ? articles.map((a: any) => ({
+    const list = articles.map((a: any) => ({
             category: a.category || "General",
             title: isRTL ? a.title_ar || a.title : a.title,
             slug: a.slug,
@@ -166,16 +164,6 @@ export default function Blog() {
                 ? "مؤخراً"
                 : "Recent",
             reading_time: a.reading_time || 8,
-          }))
-        : defaultArticles.map((a) => ({
-            category: a.category,
-            title: isRTL ? a.title_ar : a.title,
-            slug: a.slug,
-            excerpt: isRTL ? a.excerpt_ar : a.excerpt,
-            cover_image: a.cover_image,
-            author_name: isRTL ? a.author_name_ar : a.author_name,
-            date: isRTL ? "2026" : a.date,
-            reading_time: a.reading_time,
           }));
 
     return list.filter((p) => {

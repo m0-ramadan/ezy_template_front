@@ -249,6 +249,14 @@ export default function Footer() {
             label: isRTL ? "شروط الاستخدام" : "Terms of Service",
             url: "/terms",
           },
+          {
+            label: isRTL ? "سياسة ملفات الارتباط" : "Cookie Policy",
+            url: "/cookie-policy",
+          },
+          {
+            label: isRTL ? "حقوق النشر وطلبات الإزالة" : "Copyright & Takedown",
+            url: "/copyright",
+          },
         ],
       },
     ],
@@ -286,6 +294,8 @@ export default function Footer() {
     "Technical Support": "الدعم الفني",
     "Privacy Policy": "سياسة الخصوصية",
     "Terms of Service": "شروط الاستخدام",
+    "Cookie Policy": "سياسة ملفات الارتباط",
+    "Copyright & Takedown": "حقوق النشر وطلبات الإزالة",
     Pricing: "الأسعار",
     Services: "الخدمات والحلول",
   };
@@ -362,9 +372,9 @@ export default function Footer() {
             >
               {(settings?.social_links?.length
                 ? settings.social_links.filter(
-                    (s: any) => s.is_active !== false,
+                    (s: any) => s.is_active !== false && s.url && !/^https:\/\/(twitter|github|linkedin|youtube|instagram)\.com\/?$/i.test(s.url),
                   )
-                : defaultSocialLinks
+                : []
               ).map((s: any, idx: number) => (
                 <a
                   key={idx}

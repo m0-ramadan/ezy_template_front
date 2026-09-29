@@ -52,7 +52,13 @@ export default function TermsPage() {
     : data?.subtitle ||
       "Terms and conditions governing your use of EzyTemplate platform and downloaded products.";
 
-  const sections = data?.sections || [];
+  const sections = data?.sections?.length ? data.sections : [
+    { title: "Using the website", title_ar: "استخدام الموقع", content: "Use the site lawfully and do not interfere with security, availability, accounts or other users. Automated abuse, malware, deceptive activity and attempts to bypass access controls are prohibited.", content_ar: "استخدم الموقع بشكل قانوني، ولا تتدخل في الأمان أو التوفر أو الحسابات أو حقوق الآخرين. يُمنع الإساءة الآلية والبرمجيات الضارة والخداع وتجاوز ضوابط الوصول." },
+    { title: "Downloads and licences", title_ar: "التحميلات والتراخيص", content: "Each template may have separate licence terms. You must review them before use. A free download does not by itself grant ownership, commercial-use, resale or redistribution rights. Do not remove required attribution or redistribute source files unless the applicable licence expressly allows it.", content_ar: "قد يكون لكل قالب شروط ترخيص منفصلة يجب مراجعتها قبل الاستخدام. التحميل المجاني لا يمنح تلقائياً الملكية أو حق الاستخدام التجاري أو إعادة البيع أو التوزيع." },
+    { title: "Copyright and reports", title_ar: "حقوق النشر والبلاغات", content: "Respect third-party intellectual property. Rights concerns can be reported under our Copyright and Takedown Policy. We may restrict or remove disputed material while reviewing a sufficiently detailed notice.", content_ar: "احترم حقوق الملكية الفكرية للغير. يمكن الإبلاغ عن المخاوف وفق سياسة حقوق النشر والإزالة، وقد نقيد المادة المتنازع عليها أثناء المراجعة." },
+    { title: "Availability and third parties", title_ar: "التوفر والأطراف الخارجية", content: "Features and files may change, be corrected or become unavailable. External sites and services have their own terms and privacy practices; verify them before relying on a link or resource.", content_ar: "قد تتغير الميزات والملفات أو يتم تصحيحها أو تتوقف. للمواقع والخدمات الخارجية شروطها وممارساتها الخاصة، فتحقق منها قبل الاعتماد على أي رابط أو مورد." },
+    { title: "Disclaimers, changes and contact", title_ar: "إخلاء المسؤولية والتغييرات والتواصل", content: "The site is provided on an as-available basis to the extent permitted by applicable law. Test downloaded files safely and keep backups. We may update these terms and will change the displayed date. Contact us through the Contact page with questions. These general terms are not a substitute for jurisdiction-specific legal review.", content_ar: "يُقدم الموقع حسب التوفر في حدود القانون المنطبق. اختبر الملفات بأمان واحتفظ بنسخ احتياطية. قد نحدث هذه الشروط ونغير التاريخ المعروض. تواصل معنا عبر صفحة التواصل. هذه شروط عامة وليست بديلاً عن مراجعة قانونية خاصة بدولة." },
+  ];
 
   return (
     <div style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
@@ -117,8 +123,8 @@ export default function TermsPage() {
             <Calendar size={14} />
             <span>
               {isRTL
-                ? `آخر تحديث: ${data?.last_updated || "يناير 2026"}`
-                : `Last Updated: ${data?.last_updated || "January 2026"}`}
+                ? `آخر تحديث: ${data?.last_updated || "29 سبتمبر 2026"}`
+                : `Last Updated: ${data?.last_updated || "September 29, 2026"}`}
             </span>
           </div>
         </div>
