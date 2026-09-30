@@ -6,11 +6,11 @@ import {
   readingTimeFromContent,
   wordCount,
 } from "@/lib/articles";
-import LoadUnavailable from "@/components/LoadUnavailable";
 import { getAssetUrl } from "@/lib/api";
 import { SITE_URL } from "@/lib/site";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function plainExcerpt(value: string | null | undefined, max = 158) {
   const text = String(value || "")
@@ -31,13 +31,7 @@ export async function generateMetadata({
   // A missing slug is a genuine 404, never a duplicate of another article.
   // An unreachable API is not a 404: the URL keeps its canonical but stays
   // out of the index for this render.
-  if (unavailable) {
-    return {
-      title: "Article temporarily unavailable",
-      alternates: { canonical: `/blog/${slug}` },
-      robots: { index: false, follow: true },
-    };
-  }
+  if (unavailable) throw new Error(`Article API unavailable for slug: ${slug}`);
   if (!article) notFound();
 
   const description =
@@ -76,14 +70,7 @@ export default async function Article({
   const { slug } = await params;
   const { article, unavailable } = await getArticleBySlugResult(slug);
   if (!article && !unavailable) notFound();
-  if (!article) {
-    return (
-      <LoadUnavailable
-        title="This article is temporarily unavailable"
-        description="The blog service could not be reached while this page was being built. Please try again in a few minutes."
-      />
-    );
-  }
+  if (!article) throw new Error(`Article API unavailable for slug: ${slug}`);
 
   const minutes = readingTimeFromContent(article.content);
   const words = wordCount(article.content);

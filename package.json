@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "start": "next start"
+    "start": "next start",
+    "validate:blog": "node scripts/validate-blog-production.mjs",
+    "validate:categories": "node scripts/validate-categories-production.mjs",
+    "validate:production": "node scripts/validate-production.mjs"
   },
   "dependencies": {
     "@types/qrcode": "^1.5.6",

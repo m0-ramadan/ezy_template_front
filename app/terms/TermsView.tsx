@@ -50,7 +50,7 @@ export default function TermsView({
   ];
 
   return (
-    <div style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
+    <main style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
       <div style={{ maxWidth: "900px", margin: "0 auto" }}>
         {/* HEADER */}
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
@@ -189,6 +189,6 @@ export default function TermsView({
           })}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

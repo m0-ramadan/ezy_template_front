@@ -51,7 +51,7 @@ export default function PrivacyView({
   ];
 
   return (
-    <div style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
+    <main style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
       <div style={{ maxWidth: "900px", margin: "0 auto" }}>
         {/* HEADER */}
         <div style={{ textAlign: "center", marginBottom: "48px" }}>
@@ -190,6 +190,6 @@ export default function PrivacyView({
           })}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import {
-  FolderKanban,
-  FileBox,
   LayoutGrid,
   FileCheck,
   Gift,
@@ -20,14 +18,6 @@ export default function ResourcesMenu({ onClose }: ResourcesMenuProps) {
 
   const resources = [
     {
-      title: isRTL ? "عناصر الجرافيك والتصميم" : "Graphic Assets",
-      desc: isRTL
-        ? "أيقونات، فيكتورز، وخلفيات عالية الجودة"
-        : "Icons, vectors, and high-quality graphics",
-      icon: <FolderKanban size={18} className="text-pink-500" />,
-      href: "/graphic-assets",
-    },
-    {
       title: isRTL ? "مستندات و PDF" : "Documents & PDFs",
       desc: isRTL
         ? "نماذج عقود، نماذج عمل، وتقارير"
@@ -42,14 +32,6 @@ export default function ResourcesMenu({ onClose }: ResourcesMenuProps) {
         : "Directly editable Canva templates",
       icon: <LayoutGrid size={18} className="text-cyan-500" />,
       href: "/canva-templates",
-    },
-    {
-      title: isRTL ? "واجهات مستخدم (UI Kits)" : "UI Kits",
-      desc: isRTL
-        ? "مجموعات واجهات كاملة لتطبيقات والمواقع"
-        : "Full UI kits for Web and Mobile Apps",
-      icon: <FileBox size={18} className="text-purple-500" />,
-      href: "/ui-kits",
     },
     {
       title: isRTL ? "أدوات وحاسبات إلكترونية" : "Web Tools & Calculators",

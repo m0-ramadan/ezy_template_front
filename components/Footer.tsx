@@ -207,10 +207,6 @@ export default function Footer() {
             url: "/templates?price=Free",
           },
           {
-            label: isRTL ? "حزم واجهات المستخدم" : "UI Kits",
-            url: "/templates?cat=UI+Kit",
-          },
-          {
             label: isRTL ? "قوالب إكسيل" : "Excel Templates",
             url: "/templates?type=Excel",
           },
@@ -221,10 +217,6 @@ export default function Footer() {
           {
             label: isRTL ? "تصاميم وجرافيك" : "Design Resources",
             url: "/templates?type=Design",
-          },
-          {
-            label: isRTL ? "الشروحات والمقالات" : "Documentation",
-            url: "/blog",
           },
         ],
       },
@@ -308,7 +300,14 @@ export default function Footer() {
           footerTranslations[col.title] ||
           col.title
         : col.title || col.title_ar,
-      links: (col.links || []).map((l: any) => ({
+      links: (col.links || []).filter((l: any) => {
+        const label = String(l.label || l.label_ar || "").toLowerCase();
+        const url = String(l.url || "");
+        if (label.includes("documentation") || label.includes("الشروحات")) return false;
+        if (url === "/ui-kits" || url.includes("cat=UI+Kit")) return false;
+        if (url === "/graphic-assets") return false;
+        return true;
+      }).map((l: any) => ({
         label: isRTL
           ? (l.label_ar && l.label_ar.trim()) ||
             footerTranslations[l.label] ||

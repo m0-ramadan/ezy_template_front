@@ -2,63 +2,38 @@
 
 import { useState } from "react";
 import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Send,
+  LifeBuoy,
   CheckCircle2,
-  MessageSquare,
+  Clock,
+  ShieldAlert,
+  Send,
+  FileText,
+  Zap,
 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { submitServiceRequest } from "@/lib/api";
 
-export interface ContactData {
+interface SupportData {
   title?: string;
   title_ar?: string;
   subtitle?: string;
   subtitle_ar?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  working_hours?: string;
+  response_time?: string;
+  status?: string;
 }
 
-export default function ContactView({
-  initialData,
-}: {
-  initialData: ContactData | null;
-}) {
+export default function SupportView({ initialData }: { initialData: SupportData | null }) {
   const { isRTL } = useLanguage();
   const data = initialData;
-
-  // Hide obvious placeholder values so unverified contact details are never
-  // published. Real values must be supplied through the CMS.
-  const clean = (v?: string) => {
-    const s = (v || "").trim();
-    if (
-      !s ||
-      /example\.com|100 000 0000|0000 0000|placeholder|lorem ipsum/i.test(s)
-    ) {
-      return "";
-    }
-    return s;
-  };
-  const email = clean(data?.email);
-  const phone = clean(data?.phone);
-  const address = clean(data?.address);
-  const workingHours = clean(data?.working_hours);
-
   const [form, setForm] = useState({
     name: "",
     email: "",
-    service: "General Inquiry",
+    service: "Technical Support",
     message: "",
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const [website, setWebsite] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +48,7 @@ export default function ContactView({
     setSubmitting(true);
     setErrorMsg("");
     try {
-      const res = await submitServiceRequest({ ...form, website });
+      const res = await submitServiceRequest(form);
       if (
         res &&
         (res.id ||
@@ -85,8 +60,8 @@ export default function ContactView({
       } else {
         setErrorMsg(
           isRTL
-            ? "حدث خطأ أثناء إرسال الرسالة."
-            : "Failed to send message. Please try again.",
+            ? "حدث خطأ أثناء تقديم تذكرة الدعم."
+            : "Failed to submit ticket. Please try again.",
         );
       }
     } catch (err) {
@@ -99,105 +74,13 @@ export default function ContactView({
   };
 
   const title = isRTL
-    ? data?.title_ar || "تواصل معنا"
-    : data?.title || "Contact Us";
+    ? data?.title_ar || "الدعم الفني والتقني"
+    : data?.title || "Technical Support";
   const subtitle = isRTL
     ? data?.subtitle_ar ||
-      "يسعدنا دائماً استلام استفساراتك واقتراحاتك والرد عليها في أقرب وقت ممكن."
+      "فريقنا الهندسي متواجد على مدار الساعة لمساعدتك في حل أي المشكلات والرد على استفساراتك التقنية."
     : data?.subtitle ||
-      "Have questions, feedback, or partnership opportunities? We would love to hear from you.";
-
-  const contactCards = [
-    email
-      ? {
-          key: "email",
-          label: isRTL ? "البريد الإلكتروني" : "Email Us",
-          icon: <Mail size={24} />,
-          tint: "rgba(59, 130, 246, 0.15)",
-          color: "#60a5fa",
-          value: (
-            <a
-              href={`mailto:${email}`}
-              style={{
-                fontSize: "16px",
-                fontWeight: 700,
-                color: "var(--text)",
-                textDecoration: "none",
-              }}
-            >
-              {email}
-            </a>
-          ),
-        }
-      : null,
-    phone
-      ? {
-          key: "phone",
-          label: isRTL ? "الهاتف" : "Call Us",
-          icon: <Phone size={24} />,
-          tint: "rgba(16, 185, 129, 0.15)",
-          color: "#34d399",
-          value: (
-            <div
-              style={{
-                fontSize: "16px",
-                fontWeight: 700,
-                color: "var(--text)",
-              }}
-            >
-              {phone}
-            </div>
-          ),
-        }
-      : null,
-    address
-      ? {
-          key: "address",
-          label: isRTL ? "العنوان" : "Office Location",
-          icon: <MapPin size={24} />,
-          tint: "rgba(245, 158, 11, 0.15)",
-          color: "#fbbf24",
-          value: (
-            <div
-              style={{
-                fontSize: "15px",
-                fontWeight: 700,
-                color: "var(--text)",
-              }}
-            >
-              {address}
-            </div>
-          ),
-        }
-      : null,
-    workingHours
-      ? {
-          key: "hours",
-          label: isRTL ? "ساعات العمل" : "Working Hours",
-          icon: <Clock size={24} />,
-          tint: "rgba(168, 85, 247, 0.15)",
-          color: "#c084fc",
-          value: (
-            <div
-              style={{
-                fontSize: "14px",
-                fontWeight: 700,
-                color: "var(--text)",
-              }}
-            >
-              {workingHours}
-            </div>
-          ),
-        }
-      : null,
-  ].filter(Boolean) as Array<{
-    key: string;
-    label: string;
-    icon: React.ReactNode;
-    tint: string;
-    color: string;
-    value: React.ReactNode;
-  }>;
+      "Our engineering team is ready to assist you with installation, customization, and troubleshooting.";
 
   return (
     <main style={{ minHeight: "85vh", padding: "40px 16px 80px" }}>
@@ -211,15 +94,15 @@ export default function ContactView({
               gap: "8px",
               padding: "6px 16px",
               borderRadius: "50px",
-              background: "rgba(59, 130, 246, 0.15)",
-              color: "#60a5fa",
+              background: "rgba(16, 185, 129, 0.15)",
+              color: "#34d399",
               fontSize: "14px",
               fontWeight: 600,
               marginBottom: "16px",
             }}
           >
-            <MessageSquare size={16} />
-            <span>{isRTL ? "نحن هنا لمساعدتك" : "Get in Touch"}</span>
+            <LifeBuoy size={16} />
+            <span>{isRTL ? "24/7 مساعدة متواصلة" : "24/7 Assistance"}</span>
           </div>
 
           <h1
@@ -247,7 +130,87 @@ export default function ContactView({
           </p>
         </div>
 
-        {/* CONTENT GRID */}
+        {/* TOP STATUS CARDS */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "20px",
+            marginBottom: "40px",
+          }}
+        >
+          <div
+            style={{
+              background: "var(--card-bg)",
+              padding: "24px",
+              borderRadius: "16px",
+              border: "1px solid var(--line)",
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <div
+              style={{
+                padding: "12px",
+                borderRadius: "12px",
+                background: "rgba(16, 185, 129, 0.15)",
+                color: "#34d399",
+              }}
+            >
+              <Clock size={24} />
+            </div>
+            <div>
+              <div style={{ fontSize: "13px", color: "var(--muted)" }}>
+                {isRTL ? "متوسط سرعة الاستجابة" : "Avg. Response Time"}
+              </div>
+              <div
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 800,
+                  color: "var(--text)",
+                }}
+              >
+                {data?.response_time || "< 2 Hours"}
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              background: "var(--card-bg)",
+              padding: "24px",
+              borderRadius: "16px",
+              border: "1px solid var(--line)",
+              display: "flex",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <div
+              style={{
+                padding: "12px",
+                borderRadius: "12px",
+                background: "rgba(99, 102, 241, 0.15)",
+                color: "#818cf8",
+              }}
+            >
+              <Zap size={24} />
+            </div>
+            <div>
+              <div style={{ fontSize: "13px", color: "var(--muted)" }}>
+                {isRTL ? "حالة النظام والخدمات" : "System Status"}
+              </div>
+              <div
+                style={{ fontSize: "18px", fontWeight: 800, color: "#34d399" }}
+              >
+                {data?.status || "All Systems Operational"}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* TWO COLUMN SUPPORT & TICKET */}
         <div
           style={{
             display: "grid",
@@ -255,50 +218,102 @@ export default function ContactView({
             gap: "32px",
           }}
         >
-          {/* LEFT CONTACT CARDS */}
+          {/* SUPPORT GUIDANCE */}
           <div
-            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
-            {contactCards.map((card) => (
-              <div
-                key={card.key}
+            <div
+              style={{
+                background: "var(--card-bg)",
+                padding: "28px",
+                borderRadius: "20px",
+                border: "1px solid var(--line)",
+              }}
+            >
+              <h3
                 style={{
-                  background: "var(--card-bg)",
-                  padding: "24px",
-                  borderRadius: "16px",
-                  border: "1px solid var(--line)",
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  marginBottom: "16px",
                   display: "flex",
                   alignItems: "center",
-                  gap: "16px",
+                  gap: "10px",
+                  color: "var(--text)",
                 }}
               >
-                <div
-                  style={{
-                    padding: "14px",
-                    borderRadius: "14px",
-                    background: card.tint,
-                    color: card.color,
-                  }}
-                >
-                  {card.icon}
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "var(--muted)",
-                      fontWeight: 600,
-                    }}
-                  >
-                    {card.label}
-                  </div>
-                  {card.value}
-                </div>
-              </div>
-            ))}
+                <FileText size={20} style={{ color: "#818cf8" }} />
+                <span>
+                  {isRTL
+                    ? "كيفية التجهيز قبل تقديم تذكرة"
+                    : "Before Submitting a Ticket"}
+                </span>
+              </h3>
+              <ul
+                style={{
+                  paddingLeft: isRTL ? 0 : "20px",
+                  paddingRight: isRTL ? "20px" : 0,
+                  color: "var(--muted)",
+                  fontSize: "14px",
+                  lineHeight: 1.8,
+                }}
+              >
+                <li>
+                  {isRTL
+                    ? "تأكد من مراجعة صفحة الأسئلة الشائعة."
+                    : "Check our FAQ page for instant answers to common issues."}
+                </li>
+                <li>
+                  {isRTL
+                    ? "يرجى ذكر اسم القالب وإصدار Next.js / Node المستخدَم."
+                    : "Include your template name and environment details (Node version, Next.js)."}
+                </li>
+                <li>
+                  {isRTL
+                    ? "ارفاق نص الخطأ (Error Console output) لسرعة الحل."
+                    : "Provide exact console error messages or stack traces if applicable."}
+                </li>
+              </ul>
+            </div>
+
+            <div
+              style={{
+                background: "var(--card-bg)",
+                padding: "28px",
+                borderRadius: "20px",
+                border: "1px solid var(--line)",
+              }}
+            >
+              <h3
+                style={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  marginBottom: "16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  color: "var(--text)",
+                }}
+              >
+                <ShieldAlert size={20} style={{ color: "#fbbf24" }} />
+                <span>
+                  {isRTL ? "ضمان الدعم والضمانات" : "Support Guarantee"}
+                </span>
+              </h3>
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "var(--muted)",
+                  lineHeight: 1.6,
+                }}
+              >
+                {isRTL
+                  ? "نضمن تقديم الدعم الفني لكافة القوالب المشتراة أو المحمّلة لضمان تشغيلها بدون أي أخطاء برمجية."
+                  : "We guarantee technical support for all downloaded templates to ensure they run bug-free in your environment."}
+              </p>
+            </div>
           </div>
 
-          {/* RIGHT MESSAGE FORM */}
+          {/* TICKET FORM */}
           <div
             style={{
               background: "var(--card-bg)",
@@ -323,8 +338,8 @@ export default function ContactView({
                   }}
                 >
                   {isRTL
-                    ? "تم إرسال رسالتك بنجاح!"
-                    : "Message Sent Successfully!"}
+                    ? "تم فتح تذكرة الدعم بنجاح!"
+                    : "Ticket Submitted Successfully!"}
                 </h3>
                 <p
                   style={{
@@ -334,8 +349,8 @@ export default function ContactView({
                   }}
                 >
                   {isRTL
-                    ? "شكراً لتواصلك معنا. سنرد على رسالتك على البريد الإلكتروني المدخل في أسرع وقت ممكن."
-                    : "Thank you for reaching out. We will respond to your email as quickly as possible."}
+                    ? "قام النظام بتسجيل تذكرتك. سيتواصل معك أحد مهندسينا عبر الإيميل في أقرب وقت."
+                    : "Your support request has been logged. An engineer will respond to your email shortly."}
                 </p>
                 <button
                   onClick={() => {
@@ -343,7 +358,7 @@ export default function ContactView({
                     setForm({
                       name: "",
                       email: "",
-                      service: "General Inquiry",
+                      service: "Technical Support",
                       message: "",
                     });
                   }}
@@ -351,14 +366,14 @@ export default function ContactView({
                     marginTop: "24px",
                     padding: "10px 24px",
                     borderRadius: "10px",
-                    background: "#3b82f6",
+                    background: "#6366f1",
                     color: "#ffffff",
                     border: "none",
                     fontWeight: 600,
                     cursor: "pointer",
                   }}
                 >
-                  {isRTL ? "إرسال رسالة أخرى" : "Send Another Message"}
+                  {isRTL ? "إرسال استفسار آخر" : "Submit Another Ticket"}
                 </button>
               </div>
             ) : (
@@ -370,10 +385,6 @@ export default function ContactView({
                   gap: "18px",
                 }}
               >
-                <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}>
-                  <label htmlFor="contact-website">Website</label>
-                  <input id="contact-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(e) => setWebsite(e.target.value)} />
-                </div>
                 <h3
                   style={{
                     fontSize: "20px",
@@ -382,7 +393,7 @@ export default function ContactView({
                     color: "var(--text)",
                   }}
                 >
-                  {isRTL ? "أرسل لنا رسالة" : "Send us a Message"}
+                  {isRTL ? "فتح تذكرة دعم جديدة" : "Open a Support Ticket"}
                 </h3>
 
                 {errorMsg && (
@@ -410,13 +421,13 @@ export default function ContactView({
                       color: "var(--text)",
                     }}
                   >
-                    {isRTL ? "الاسم *" : "Full Name *"}
+                    {isRTL ? "الاسم *" : "Your Name *"}
                   </label>
                   <input
                     type="text"
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    placeholder={isRTL ? "أدخل اسمك" : "e.g. Sarah Jenkins"}
+                    placeholder={isRTL ? "أدخل اسمك" : "e.g. Alex Smith"}
                     required
                     style={{
                       width: "100%",
@@ -472,52 +483,20 @@ export default function ContactView({
                       color: "var(--text)",
                     }}
                   >
-                    {isRTL ? "موضوع الرسالة *" : "Message Subject / Topic *"}
-                  </label>
-                  <input
-                    type="text"
-                    value={form.service}
-                    onChange={(e) =>
-                      setForm({ ...form, service: e.target.value })
-                    }
-                    placeholder={
-                      isRTL
-                        ? "مثال: استفسار عن ترخيص القوالب"
-                        : "e.g. Partnership Opportunity"
-                    }
-                    required
-                    style={{
-                      width: "100%",
-                      padding: "12px 14px",
-                      borderRadius: "10px",
-                      border: "1px solid var(--line)",
-                      background: "var(--card-bg)",
-                      color: "var(--text)",
-                      fontSize: "14px",
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      marginBottom: "6px",
-                      color: "var(--text)",
-                    }}
-                  >
-                    {isRTL ? "نص الرسالة *" : "Your Message *"}
+                    {isRTL
+                      ? "توضيح المشكلة أو الاستفسار *"
+                      : "Problem Description / Issue *"}
                   </label>
                   <textarea
-                    rows={4}
+                    rows={5}
                     value={form.message}
                     onChange={(e) =>
                       setForm({ ...form, message: e.target.value })
                     }
                     placeholder={
-                      isRTL ? "اكتب رسالتك هنا..." : "Type your message here..."
+                      isRTL
+                        ? "اشرح المشكلة بالتفصيل والخطوات لإعادتها..."
+                        : "Describe the issue, error codes, and steps to reproduce..."
                     }
                     required
                     style={{
@@ -541,7 +520,7 @@ export default function ContactView({
                     padding: "14px",
                     borderRadius: "12px",
                     background:
-                      "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+                      "linear-gradient(135deg, #10b981 0%, #059669 100%)",
                     color: "#ffffff",
                     border: "none",
                     fontWeight: 700,
@@ -558,11 +537,11 @@ export default function ContactView({
                   <span>
                     {submitting
                       ? isRTL
-                        ? "جاري الإرسال..."
-                        : "Sending..."
+                        ? "جاري التقديم..."
+                        : "Submitting..."
                       : isRTL
-                        ? "إرسال الرسالة"
-                        : "Send Message"}
+                        ? "تقديم التذكرة"
+                        : "Submit Support Ticket"}
                   </span>
                 </button>
               </form>

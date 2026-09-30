@@ -128,7 +128,8 @@ export default function MarketplaceListing({
   const heading = isRTL ? sectionLabelAr : sectionLabel;
 
   return (
-    <main className="container section" style={{ paddingBottom: "80px" }}>
+    <main className="container section" style={{ paddingBottom: "80px" }}
+      data-catalog-total={totalCount} data-rendered-count={initialResources.length}>
       <div className="breadcrumbs">
         <Link href="/">{isRTL ? "الرئيسية" : "Home"}</Link>　›　
         <Link href="/templates">{isRTL ? hubLabelAr : hubLabel}</Link>　›

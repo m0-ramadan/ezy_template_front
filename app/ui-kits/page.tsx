@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getCatalogStats } from "@/lib/catalog";
+import { getCollectionData } from "@/lib/catalog";
 
 export const revalidate = 300;
 
@@ -15,18 +15,17 @@ export const metadata: Metadata = {
 };
 
 export default async function UiKitsPage() {
-  const stats = await getCatalogStats();
-  const designCount =
-    stats?.by_main_category.find((m) => m.slug === "design-templates")?.total ?? 0;
-  const websiteCount =
-    stats?.by_main_category.find((m) => m.slug === "website-templates")?.total ?? 0;
-  const canvaCount = stats?.canva_templates ?? 0;
+  const [design, website, canva] = await Promise.all([
+    getCollectionData("design", { perPage: 1 }),
+    getCollectionData("website", { perPage: 1 }),
+    getCollectionData("canva", { perPage: 1 }),
+  ]);
 
   const alternatives = [
-    { href: "/design-templates", label: `Design Templates (${designCount})` },
-    { href: "/website-templates", label: `Website Templates (${websiteCount})` },
-    { href: "/canva-templates", label: `Canva Templates (${canvaCount})` },
-  ];
+    { href: "/design-templates", label: `Design Templates (${design.total})`, count: design.total },
+    { href: "/website-templates", label: `Website Templates (${website.total})`, count: website.total },
+    { href: "/canva-templates", label: `Canva Templates (${canva.total})`, count: canva.total },
+  ].filter((item) => item.count > 0);
 
   return (
     <main className="container section" style={{ paddingBottom: "80px" }}>

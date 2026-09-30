@@ -65,7 +65,7 @@ export async function getArticlesSSR(
       per_page: String(params.perPage ?? 24),
     });
     const res = await fetch(`${API_BASE_URL}/articles?${sp.toString()}`, {
-      next: { revalidate: ARTICLES_REVALIDATE_SECONDS },
+      cache: "no-store",
       headers: { Accept: "application/json" },
     });
     if (!res.ok) return { articles: [], total: 0, unavailable: true };

@@ -248,7 +248,9 @@ export default function HomeView({
               icon: Grid2X2,
               href: "/templates",
             },
-            ...categoriesData.slice(0, 11).map((c: any) => {
+            ...categoriesData
+              .filter((c: any) => Number(c.resources_count || 0) > 0)
+              .slice(0, 11).map((c: any) => {
               const categoryName = isRTL ? c.name_ar || c.name : c.name;
               const { icon, href } = getCategoryIconAndHref(
                 c.slug,
@@ -274,12 +276,6 @@ export default function HomeView({
               slug: "website-templates",
               icon: Globe,
               href: "/website-templates",
-            },
-            {
-              name: isRTL ? "قوالب كانفا" : "Canva Templates",
-              slug: "canva-templates",
-              icon: SparklesIcon,
-              href: "/canva-templates",
             },
             {
               name: isRTL ? "السير الذاتية (CV)" : "Resumes & CVs",

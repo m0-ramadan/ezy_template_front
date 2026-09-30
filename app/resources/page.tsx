@@ -2,9 +2,6 @@
 
 import Link from "next/link";
 import {
-  FolderKanban,
-  FileBox,
-  LayoutGrid,
   FileCheck,
   Gift,
   Wrench,
@@ -17,16 +14,6 @@ export default function ResourcesHub() {
 
   const resources = [
     {
-      id: "graphic-assets",
-      title: isRTL ? "عناصر الجرافيك والتصميم" : "Graphic Assets",
-      desc: isRTL
-        ? "أيقونات، رسومات فيكتور، وخلفيات عالية الجودة للمصممين"
-        : "Icons, vectors, 3D assets, and high-quality backgrounds",
-      icon: <FolderKanban size={32} className="text-pink-500" />,
-      color: "#ec4899",
-      href: "/graphic-assets",
-    },
-    {
       id: "documents",
       title: isRTL ? "مستندات و PDF" : "Documents & Contracts",
       desc: isRTL
@@ -35,26 +22,6 @@ export default function ResourcesHub() {
       icon: <FileCheck size={32} className="text-blue-500" />,
       color: "#3b82f6",
       href: "/word-templates",
-    },
-    {
-      id: "canva",
-      title: isRTL ? "قوالب كانفا (Canva)" : "Canva Templates",
-      desc: isRTL
-        ? "قوالب تصميم مباشرة قابلة للتعديل بضغطة زر على منصة Canva"
-        : "Directly editable Canva social posts, presentations, and graphics",
-      icon: <LayoutGrid size={32} className="text-cyan-500" />,
-      color: "#06b6d4",
-      href: "/canva-templates",
-    },
-    {
-      id: "ui-kits",
-      title: isRTL ? "واجهات مستخدم (UI Kits)" : "UI Kits",
-      desc: isRTL
-        ? "مكتبات مكونات وأنظمة تصميم كاملة لتطبيقات الجوال والمواقع"
-        : "Full web & mobile UI kit design systems for Figma and Adobe XD",
-      icon: <FileBox size={32} className="text-purple-500" />,
-      color: "#8b5cf6",
-      href: "/ui-kits",
     },
     {
       id: "tools",

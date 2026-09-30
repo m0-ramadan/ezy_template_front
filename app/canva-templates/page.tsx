@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Canva Templates - Editable Social, Menu and Branding Designs",
     description: `Browse ${total} published editable Canva designs: social media posts, menus, flyers, invitations, branding graphics and event artwork you can customise online.`,
     alternates: { canonical: "/canva-templates" },
+    ...(total > 0 ? {} : { robots: { index: false, follow: true } as Metadata["robots"] }),
     openGraph: {
       title: "Canva Templates | EzyTemplate",
       description: `${total} editable Canva designs ready to customise online.`,
