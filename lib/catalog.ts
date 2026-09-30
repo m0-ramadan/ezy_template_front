@@ -77,7 +77,10 @@ async function apiGet<T>(path: string, revalidate = CATALOG_REVALIDATE_SECONDS):
     if (typeof window === "undefined") {
       (options as RequestInit & { next?: { revalidate: number } }).next = { revalidate };
     }
-    const res = await fetch(`${API_BASE_URL}${path}`, options);
+    const res = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      signal: AbortSignal.timeout(15000),
+    });
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch {
@@ -306,4 +309,3 @@ export function unavailableCollectionMetadata(
     robots: { index: false, follow: true },
   };
 }
-

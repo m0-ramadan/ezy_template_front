@@ -2,6 +2,14 @@
 
 const LOCAL_BACKEND_URL = "http://127.0.0.1:8002";
 const PRODUCTION_BACKEND_URL = "https://dashboard.ezytemplate.pro";
+const API_TIMEOUT_MS = 15000;
+
+function apiFetch(input: RequestInfo | URL, init: RequestInit = {}) {
+  return fetch(input, {
+    ...init,
+    signal: init.signal || AbortSignal.timeout(API_TIMEOUT_MS),
+  });
+}
 
 function getDefaultBackendUrl(): string {
   if (typeof window === "undefined") {
@@ -292,7 +300,7 @@ export function normalizeArticle(a: any, locale: string = "en") {
 // 1. Site Settings & Branding
 export async function getSiteSettings() {
   try {
-    const res = await fetch(`${API_BASE_URL}/settings`, {
+    const res = await apiFetch(`${API_BASE_URL}/settings`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -400,7 +408,7 @@ export async function getSiteSettings() {
 // 2. Homepage Content
 export async function getHomeContent() {
   try {
-    const res = await fetch(`${API_BASE_URL}/content/home`, {
+    const res = await apiFetch(`${API_BASE_URL}/content/home`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -509,7 +517,7 @@ export async function getHomeContent() {
 // 3. About Page Content
 export async function getAboutContent() {
   try {
-    const res = await fetch(`${API_BASE_URL}/content/about`, {
+    const res = await apiFetch(`${API_BASE_URL}/content/about`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -614,7 +622,7 @@ export async function getAboutContent() {
 // 4. Services Page Content
 export async function getServicesContent() {
   try {
-    const res = await fetch(`${API_BASE_URL}/content/services`, {
+    const res = await apiFetch(`${API_BASE_URL}/content/services`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -740,7 +748,7 @@ export async function getResources(
     if (params.page) query.set("page", params.page.toString());
     if (params.per_page) query.set("per_page", params.per_page.toString());
 
-    const res = await fetch(`${API_BASE_URL}/resources?${query.toString()}`, {
+    const res = await apiFetch(`${API_BASE_URL}/resources?${query.toString()}`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -764,7 +772,7 @@ export async function getResourceBySlugResult(
   slug: string,
 ): Promise<SlugLookup<any>> {
   try {
-    const res = await fetch(`${API_BASE_URL}/resources/${slug}`, {
+    const res = await apiFetch(`${API_BASE_URL}/resources/${slug}`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -785,7 +793,7 @@ export async function getResourceBySlug(slug: string) {
 // 6. Categories
 export async function getCategories() {
   try {
-    const res = await fetch(`${API_BASE_URL}/categories`, {
+    const res = await apiFetch(`${API_BASE_URL}/categories`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -814,7 +822,7 @@ export async function getArticles(
     if (params.page) query.set("page", params.page.toString());
     if (params.per_page) query.set("per_page", params.per_page.toString());
 
-    const res = await fetch(`${API_BASE_URL}/articles?${query.toString()}`, {
+    const res = await apiFetch(`${API_BASE_URL}/articles?${query.toString()}`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -828,7 +836,7 @@ export async function getArticles(
 
 export async function getArticleBySlug(slug: string) {
   try {
-    const res = await fetch(`${API_BASE_URL}/articles/${slug}`, {
+    const res = await apiFetch(`${API_BASE_URL}/articles/${slug}`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -842,7 +850,7 @@ export async function getArticleBySlug(slug: string) {
 
 // 8. Actions (Newsletter & Service Requests)
 export async function subscribeNewsletter(email: string) {
-  const res = await fetch(`${API_BASE_URL}/newsletter`, {
+  const res = await apiFetch(`${API_BASE_URL}/newsletter`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({ email }),
@@ -858,7 +866,7 @@ export async function submitServiceRequest(data: {
   budget?: string;
   website?: string;
 }) {
-  const res = await fetch(`${API_BASE_URL}/service-requests`, {
+  const res = await apiFetch(`${API_BASE_URL}/service-requests`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(data),
@@ -868,7 +876,7 @@ export async function submitServiceRequest(data: {
 
 export async function getCustomPageContent(key: string) {
   try {
-    const res = await fetch(`${API_BASE_URL}/content/page/${key}`, {
+    const res = await apiFetch(`${API_BASE_URL}/content/page/${key}`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
@@ -886,7 +894,7 @@ export async function apiLogin(credentials: {
   email: string;
   password: string;
 }) {
-  const res = await fetch(`${API_BASE_URL}/auth/login`, {
+  const res = await apiFetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(credentials),
@@ -899,7 +907,7 @@ export async function apiRegister(data: {
   email: string;
   password: string;
 }) {
-  const res = await fetch(`${API_BASE_URL}/auth/register`, {
+  const res = await apiFetch(`${API_BASE_URL}/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify(data),
@@ -910,7 +918,7 @@ export async function apiRegister(data: {
 // 10. Real-time Live Stats
 export async function getRealtimeStats() {
   try {
-    const res = await fetch(`${API_BASE_URL}/stats/realtime`, {
+    const res = await apiFetch(`${API_BASE_URL}/stats/realtime`, {
       cache: "no-store",
       headers: { Accept: "application/json" },
     });
@@ -931,7 +939,7 @@ export async function getToolsFromApi(params?: {
     if (params?.category) query.append("category", params.category);
     if (params?.q) query.append("q", params.q);
 
-    const res = await fetch(`${API_BASE_URL}/tools?${query.toString()}`, {
+    const res = await apiFetch(`${API_BASE_URL}/tools?${query.toString()}`, {
       cache: "no-store",
       headers: { Accept: "application/json" },
     });
@@ -944,7 +952,7 @@ export async function getToolsFromApi(params?: {
 
 export async function getToolBySlugFromApi(slug: string) {
   try {
-    const res = await fetch(`${API_BASE_URL}/tools/${slug}`, {
+    const res = await apiFetch(`${API_BASE_URL}/tools/${slug}`, {
       cache: "no-store",
       headers: { Accept: "application/json" },
     });
@@ -966,7 +974,7 @@ export async function trackToolEvent(
   },
 ) {
   try {
-    await fetch(`${API_BASE_URL}/tools/${slug}/track`, {
+    await apiFetch(`${API_BASE_URL}/tools/${slug}/track`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

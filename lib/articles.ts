@@ -67,6 +67,7 @@ export async function getArticlesSSR(
     const res = await fetch(`${API_BASE_URL}/articles?${sp.toString()}`, {
       cache: "no-store",
       headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return { articles: [], total: 0, unavailable: true };
     const json = (await res.json()) as ArticlesResponse;
@@ -81,8 +82,9 @@ export async function getArticleBySlugResult(
 ): Promise<{ article: RawArticle | null; unavailable: boolean }> {
   try {
     const res = await fetch(`${API_BASE_URL}/articles/${encodeURIComponent(slug)}`, {
-      next: { revalidate: ARTICLES_REVALIDATE_SECONDS },
+      cache: "no-store",
       headers: { Accept: "application/json" },
+      signal: AbortSignal.timeout(15000),
     });
     if (res.status === 404) return { article: null, unavailable: false };
     if (!res.ok) return { article: null, unavailable: true };
