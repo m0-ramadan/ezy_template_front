@@ -1,13 +1,23 @@
 import { templates as fallbackTemplates } from "@/data/templates";
-import { getResourceBySlug, getResources, normalizeTemplate } from "@/lib/api";
+import { getResourceBySlugResult, getResources, normalizeTemplate } from "@/lib/api";
+import LoadUnavailable from "@/components/LoadUnavailable";
 import DetailView from "@/components/DetailView";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const resource = await getResourceBySlug(slug);
-  if (!resource) return { title: "Template not found", robots: { index: false, follow: true } };
+  const { data: resource, unavailable } = await getResourceBySlugResult(slug);
+  // A missing slug is a genuine 404. An unreachable API is not: the URL keeps
+  // its canonical but stays out of the index for this render.
+  if (unavailable) {
+    return {
+      title: "Template temporarily unavailable",
+      alternates: { canonical: `/templates/${slug}` },
+      robots: { index: false, follow: true },
+    };
+  }
+  if (!resource) notFound();
   const title = resource.title || resource.name || slug;
   const description = String(resource.short_description || resource.description || `Template details for ${title}.`).replace(/<[^>]+>/g, "").slice(0, 160);
   return { title, description, alternates: { canonical: `/templates/${slug}` }, openGraph: { title, description } };
@@ -21,9 +31,19 @@ export default async function Detail({
   const { slug } = await params;
 
   // 1. Fetch live resource from API or fallback
-  const apiResource = await getResourceBySlug(slug);
+  const { data: apiResource, unavailable } = await getResourceBySlugResult(slug);
   const t = normalizeTemplate(apiResource) || fallbackTemplates.find((x) => x.slug === slug);
-  if (!t) notFound();
+  // Only a confirmed miss is a 404, so a temporary API problem never removes
+  // a real template URL from the index.
+  if (!t && !unavailable) notFound();
+  if (!t) {
+    return (
+      <LoadUnavailable
+        title="This template is temporarily unavailable"
+        description="The template catalogue could not be reached while this page was being built. Please try again in a few minutes."
+      />
+    );
+  }
 
   // 2. Fetch related resources
   const relatedRes = await getResources({ per_page: 3 });

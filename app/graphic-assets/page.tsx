@@ -1,83 +1,54 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { templates } from "@/data/templates";
-import { getResources } from "@/lib/api";
-import { useLanguage } from "@/context/LanguageContext";
-import TemplateCard from "@/components/TemplateCard";
-import CategoryHeaderBanner from "@/components/CategoryHeaderBanner";
+import type { Metadata } from "next";
+import { getCatalogStats } from "@/lib/catalog";
 
-export default function GraphicAssetsMarketplace() {
-  const { isRTL } = useLanguage();
-  const [resources, setResources] = useState<any[]>([]);
+export const revalidate = 300;
 
-  useEffect(() => {
-    getResources({ type: "graphic-assets" })
-      .then((res) => {
-        if (res?.data?.length > 0) setResources(res.data);
-        else
-          setResources(
-            templates.filter(
-              (i) =>
-                i.resourceType?.toLowerCase().includes("graphic") ||
-                i.category?.toLowerCase().includes("graphic"),
-            ),
-          );
-      })
-      .catch(() =>
-        setResources(
-          templates.filter(
-            (i) =>
-              i.resourceType?.toLowerCase().includes("graphic") ||
-              i.category?.toLowerCase().includes("graphic"),
-          ),
-        ),
-      );
-  }, []);
+export const metadata: Metadata = {
+  title: "Graphic Assets",
+  description:
+    "Standalone graphic asset packs are not part of the published EzyTemplate catalogue yet. Browse the design and Canva collections in the meantime.",
+  alternates: { canonical: "/graphic-assets" },
+  // No published graphic asset pack exists yet, so this page must not be
+  // indexed or treated as a content page.
+  robots: { index: false, follow: true },
+};
 
-  const [searchQuery, setSearchQuery] = useState("");
+export default async function GraphicAssetsPage() {
+  const stats = await getCatalogStats();
+  const designCount =
+    stats?.by_main_category.find((m) => m.slug === "design-templates")?.total ?? 0;
+  const canvaCount = stats?.canva_templates ?? 0;
 
-  const list = resources.length > 0 ? resources : templates.slice(0, 6);
-  const filteredList = list.filter((item) => {
-    const q = searchQuery.toLowerCase().trim();
-    const titleStr = (item.title || item.name || "").toLowerCase();
-    const descStr = (
-      item.description ||
-      item.short_description ||
-      ""
-    ).toLowerCase();
-    return !q || titleStr.includes(q) || descStr.includes(q);
-  });
+  const alternatives = [
+    { href: "/design-templates", label: `Design Templates (${designCount})` },
+    { href: "/canva-templates", label: `Canva Templates (${canvaCount})` },
+  ];
 
   return (
     <main className="container section" style={{ paddingBottom: "80px" }}>
       <div className="breadcrumbs">
-        <Link href="/">{isRTL ? "الرئيسية" : "Home"}</Link>　›　
-        <Link href="/templates">{isRTL ? "مركز القوالب" : "Templates"}</Link>
-        　›　
-        <b>{isRTL ? "سوق عناصر الجرافيك" : "Graphic Assets Marketplace"}</b>
+        <Link href="/">Home</Link>　›　
+        <Link href="/templates">Templates</Link>　›　<b>Graphic Assets</b>
       </div>
 
-      <CategoryHeaderBanner
-        title={
-          isRTL ? "جميع عناصر الجرافيك والفيكتور" : "Graphic Assets Collection"
-        }
-        subtitle={
-          isRTL
-            ? "أيقونات، رسومات فيكتور، وخلفيات عالية الجودة للمصممين والمطورين."
-            : "Vector graphics, illustrations, icon packs, and textures."
-        }
-        type="design"
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-      />
+      <h1 style={{ fontSize: "30px", fontWeight: 800, marginBottom: "14px" }}>
+        Graphic Assets
+      </h1>
+      <p style={{ maxWidth: "720px", color: "var(--muted)", lineHeight: 1.7 }}>
+        There are no published graphic asset packs in the EzyTemplate catalogue
+        yet. This page stays out of search results until real, documented asset
+        packs are added, so visitors are not shown empty placeholders. The
+        collections below are fully populated and can be browsed now.
+      </p>
 
-      <div className="grid">
-        {filteredList.map((item) => (
-          <TemplateCard key={item.slug || item.id} t={item} />
+      <ul style={{ marginTop: "24px", lineHeight: 2 }}>
+        {alternatives.map((a) => (
+          <li key={a.href}>
+            <Link href={a.href}>{a.label}</Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </main>
   );
 }

@@ -27,20 +27,24 @@ export default function MegaMenu({ onClose }: MegaMenuProps) {
       href: "/website-templates",
       items: [
         {
-          label: isRTL ? "فرونت إند (HTML/CSS)" : "HTML & CSS",
-          href: "/website-templates/html-css",
+          label: isRTL ? "مواقع الشركات" : "Corporate",
+          href: "/website-templates/corporate",
         },
         {
-          label: isRTL ? "قوالب ووردبريس" : "WordPress Templates",
-          href: "/website-templates/wordpress",
+          label: isRTL ? "مواقع الأعمال" : "Business",
+          href: "/website-templates/business",
         },
         {
-          label: isRTL ? "رياكت و نيكست جي اس" : "React & Next.js",
-          href: "/website-templates/react-nextjs",
+          label: isRTL ? "صفحات الهبوط" : "Landing Pages",
+          href: "/website-templates/landing-pages",
         },
         {
-          label: isRTL ? "تايلويند كلاسيك" : "Tailwind CSS",
-          href: "/website-templates/tailwind-css",
+          label: isRTL ? "المتاجر الإلكترونية" : "E-commerce",
+          href: "/website-templates/e-commerce",
+        },
+        {
+          label: isRTL ? "ملفات الأعمال" : "Portfolio",
+          href: "/website-templates/portfolio",
         },
       ],
     },
@@ -55,22 +59,22 @@ export default function MegaMenu({ onClose }: MegaMenuProps) {
           href: "/excel-templates/accounting",
         },
         {
-          label: isRTL ? "المالية والأعمال" : "Finance",
-          href: "/excel-templates/finance",
-        },
-        {
           label: isRTL
             ? "التخطيط المالي للأعمال"
             : "Business Financial Planning",
           href: "/excel-templates/business-financial-planning",
         },
         {
-          label: isRTL ? "الموارد البشرية" : "Human Resources",
-          href: "/excel-templates/human-resources",
+          label: isRTL ? "تقارير المبيعات" : "Sales Reporting",
+          href: "/excel-templates/sales-reporting",
         },
         {
-          label: isRTL ? "إدارة المخزون" : "Inventory",
-          href: "/excel-templates/inventory",
+          label: isRTL ? "إدارة المشاريع" : "Project Management",
+          href: "/excel-templates/project-management",
+        },
+        {
+          label: isRTL ? "الموارد البشرية" : "Human Resources",
+          href: "/excel-templates/human-resources",
         },
         {
           label: isRTL
@@ -79,12 +83,12 @@ export default function MegaMenu({ onClose }: MegaMenuProps) {
           href: "/excel-templates/personal-financial-planning",
         },
         {
-          label: isRTL ? "إدارة المشاريع" : "Project Management",
-          href: "/excel-templates/project-management",
+          label: isRTL ? "إدارة المخزون" : "Inventory",
+          href: "/excel-templates/inventory",
         },
         {
-          label: isRTL ? "تسويق السوشيال ميديا" : "Social Media Marketing",
-          href: "/excel-templates/social-media-marketing",
+          label: isRTL ? "المالية" : "Finance",
+          href: "/excel-templates/finance",
         },
       ],
     },
@@ -140,7 +144,7 @@ export default function MegaMenu({ onClose }: MegaMenuProps) {
       items: [
         {
           label: isRTL ? "تسويق السوشيال ميديا" : "Social Media Marketing",
-          href: "/presentation-templates/social-media-marketing",
+          href: "/presentation-templates/presentation-social-media-marketing",
         },
       ],
     },

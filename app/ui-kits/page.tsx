@@ -1,82 +1,57 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { templates } from "@/data/templates";
-import { getResources } from "@/lib/api";
-import { useLanguage } from "@/context/LanguageContext";
-import TemplateCard from "@/components/TemplateCard";
-import CategoryHeaderBanner from "@/components/CategoryHeaderBanner";
+import type { Metadata } from "next";
+import { getCatalogStats } from "@/lib/catalog";
 
-export default function UiKitsMarketplace() {
-  const { isRTL } = useLanguage();
-  const [resources, setResources] = useState<any[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
+export const revalidate = 300;
 
-  useEffect(() => {
-    getResources({ type: "ui-kits" })
-      .then((res) => {
-        if (res?.data?.length > 0) setResources(res.data);
-        else
-          setResources(
-            templates.filter(
-              (i) =>
-                i.resourceType?.toLowerCase().includes("ui") ||
-                i.category?.toLowerCase().includes("ui"),
-            ),
-          );
-      })
-      .catch(() =>
-        setResources(
-          templates.filter(
-            (i) =>
-              i.resourceType?.toLowerCase().includes("ui") ||
-              i.category?.toLowerCase().includes("ui"),
-          ),
-        ),
-      );
-  }, []);
+export const metadata: Metadata = {
+  title: "UI Kits",
+  description:
+    "UI kits are not part of the published EzyTemplate catalogue yet. Browse the design, website and Canva collections while this section is being prepared.",
+  alternates: { canonical: "/ui-kits" },
+  // No published UI kit exists yet, so this page must not be indexed or
+  // advertised to AdSense as if it were a content page.
+  robots: { index: false, follow: true },
+};
 
-  const list = resources.length > 0 ? resources : templates.slice(0, 6);
-  const filteredList = list.filter((item) => {
-    const q = searchQuery.toLowerCase().trim();
-    const titleStr = (item.title || item.name || "").toLowerCase();
-    const descStr = (
-      item.description ||
-      item.short_description ||
-      ""
-    ).toLowerCase();
-    return !q || titleStr.includes(q) || descStr.includes(q);
-  });
+export default async function UiKitsPage() {
+  const stats = await getCatalogStats();
+  const designCount =
+    stats?.by_main_category.find((m) => m.slug === "design-templates")?.total ?? 0;
+  const websiteCount =
+    stats?.by_main_category.find((m) => m.slug === "website-templates")?.total ?? 0;
+  const canvaCount = stats?.canva_templates ?? 0;
+
+  const alternatives = [
+    { href: "/design-templates", label: `Design Templates (${designCount})` },
+    { href: "/website-templates", label: `Website Templates (${websiteCount})` },
+    { href: "/canva-templates", label: `Canva Templates (${canvaCount})` },
+  ];
 
   return (
     <main className="container section" style={{ paddingBottom: "80px" }}>
       <div className="breadcrumbs">
-        <Link href="/">{isRTL ? "الرئيسية" : "Home"}</Link>　›　
-        <Link href="/templates">{isRTL ? "مركز القوالب" : "Templates"}</Link>
-        　›　
-        <b>{isRTL ? "سوق واجهات المستخدم" : "UI Kits Marketplace"}</b>
+        <Link href="/">Home</Link>　›　
+        <Link href="/templates">Templates</Link>　›　<b>UI Kits</b>
       </div>
 
-      <CategoryHeaderBanner
-        title={
-          isRTL ? "جميع واجهات وحزم المستخدم (UI Kits)" : "UI Kits Collection"
-        }
-        subtitle={
-          isRTL
-            ? "مكتبات مكونات وأنظمة تصميم كاملة لتطبيقات الجوال والمواقع."
-            : "Full web & mobile UI kit design systems for Figma and Adobe XD."
-        }
-        type="website"
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-      />
+      <h1 style={{ fontSize: "30px", fontWeight: 800, marginBottom: "14px" }}>
+        UI Kits
+      </h1>
+      <p style={{ maxWidth: "720px", color: "var(--muted)", lineHeight: 1.7 }}>
+        There are no published UI kit files in the EzyTemplate catalogue yet.
+        Rather than show placeholder cards, this page is withheld from search
+        until real, documented UI kits are added. The collections below are fully
+        populated and can be browsed now.
+      </p>
 
-      <div className="grid">
-        {filteredList.map((item) => (
-          <TemplateCard key={item.slug || item.id} t={item} />
+      <ul style={{ marginTop: "24px", lineHeight: 2 }}>
+        {alternatives.map((a) => (
+          <li key={a.href}>
+            <Link href={a.href}>{a.label}</Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </main>
   );
 }

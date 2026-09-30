@@ -20,22 +20,22 @@ export async function generateMetadata({
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
   const { category } = await params;
-  const { facets, unavailable } = await getCollectionData("word");
+  const { facets, unavailable } = await getCollectionData("canva");
   const facet = facets.find((f) => f.slug === category);
   // A missing facet is a real 404, thrown from generateMetadata so the
   // HTTP status is 404 before any body is streamed. An unreachable
   // catalogue is not a 404: the page keeps its canonical but is kept
   // out of the index for this render.
-  if (unavailable) return unavailableCollectionMetadata("/word-templates", category);
+  if (unavailable) return unavailableCollectionMetadata("/canva-templates", category);
   if (!facet) notFound();
   return {
-    title: `${facet.label} - Word Templates`,
-    description: `Download ${facet.count} ${facet.label.toLowerCase()} Word documents from the EzyTemplate catalogue. Preview every file and read its details before downloading.`,
-    alternates: { canonical: `/word-templates/${category}` },
+    title: `${facet.label} - Canva Templates`,
+    description: `Download ${facet.count} ${facet.label.toLowerCase()} Canva designs from the EzyTemplate catalogue. Preview every file and read its details before downloading.`,
+    alternates: { canonical: `/canva-templates/${category}` },
     openGraph: {
-      title: `${facet.label} - Word Templates | EzyTemplate`,
-      description: `${facet.count} downloadable ${facet.label.toLowerCase()} Word documents.`,
-      url: `${SITE_URL}/word-templates/${category}`,
+      title: `${facet.label} - Canva Templates | EzyTemplate`,
+      description: `${facet.count} downloadable ${facet.label.toLowerCase()} Canva designs.`,
+      url: `${SITE_URL}/canva-templates/${category}`,
       type: "website",
     },
   };
@@ -47,7 +47,7 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category } = await params;
-  const base = await getCollectionData("word");
+  const base = await getCollectionData("canva");
   const facet = base.facets.find((f) => f.slug === category);
   // Only a confirmed miss is a 404. When the catalogue is unreachable the
   // page still renders, so a temporary API problem never tells search
@@ -55,21 +55,21 @@ export default async function CategoryPage({
   if (!facet && !base.unavailable) notFound();
   if (!facet) return <LoadUnavailable />;
 
-  const { resources, total, facets, unavailable } = await getCollectionData("word", {
+  const { resources, total, facets, unavailable } = await getCollectionData("canva", {
     subcategory: category,
   });
 
   return (
     <MarketplaceListing
-      basePath="/word-templates"
-      bannerTitle={`${titleCase(category)} - Word Templates`}
-      bannerTitleAr={`قوالب وورد - ${facet.labelAr}`}
-      bannerSubtitle={`${facet.count} published ${facet.label.toLowerCase()} Word documents ready to download.`}
-      bannerSubtitleAr={`${facet.count} مستند وورد منشور في قسم ${facet.labelAr}.`}
-      sectionLabel="Word Templates"
-      sectionLabelAr="قوالب وورد"
-      theme="word"
-      accent="#3b82f6"
+      basePath="/canva-templates"
+      bannerTitle={`${titleCase(category)} - Canva Templates`}
+      bannerTitleAr={`قوالب كانفا - ${facet.labelAr}`}
+      bannerSubtitle={`${facet.count} published ${facet.label.toLowerCase()} Canva designs ready to download.`}
+      bannerSubtitleAr={`${facet.count} قالب كانفا منشور في قسم ${facet.labelAr}.`}
+      sectionLabel="Canva Templates"
+      sectionLabelAr="قوالب كانفا"
+      theme="canva"
+      accent="#14b8a6"
       hubLabel="Templates"
       hubLabelAr="مركز القوالب"
       initialResources={resources}

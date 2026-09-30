@@ -91,9 +91,9 @@ export default function About() {
     const liveVisits = realtime?.visits ?? data?.stats?.[1]?.raw_count ?? null;
     const liveTemplates =
       realtime?.templates ?? data?.stats?.[2]?.raw_count ?? null;
-    const liveRating = realtime?.rating ?? data?.stats?.[3]?.raw_count ?? null;
+    const liveRating = realtime?.rating ?? null;
 
-    return [
+    const items = [
       {
         count:
           liveDownloads !== null
@@ -125,6 +125,10 @@ export default function About() {
         icon: "Star",
       },
     ];
+
+    // Only real, backed numbers are shown. Unavailable stats are hidden rather
+    // than rendered as fabricated or endless skeleton figures.
+    return items.filter((s) => s.count !== null);
   }, [data, realtime, t]);
 
   const story = data?.story || {};

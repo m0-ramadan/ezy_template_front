@@ -126,6 +126,7 @@ export function normalizeTemplate(r: any, locale: string = "en") {
     name_ar: r.title_ar || r.name_ar || "",
     category: categoryName,
     category_id: r.category_id,
+    category_slug: r.category?.slug || "",
     subcategory: r.subcategory || null,
     subcategory_id: r.subcategory_id || r.subcategory?.id || null,
     subcategory_slug: r.subcategory?.slug || r.subcategory_slug || null,
@@ -314,22 +315,12 @@ export async function getSiteSettings() {
         "© 2026 إيزي تمبلت بواسطة إيزي ستور. جميع الحقوق محفوظة.",
       footer_subtext: "Build • Create • Share • Grow",
       footer_subtext_ar: "ابنِ • ابتكر • شارك • انطلق",
-      social_links: [
-        { platform: "Twitter/X", url: "https://twitter.com", is_active: true },
-        { platform: "GitHub", url: "https://github.com", is_active: true },
-        { platform: "LinkedIn", url: "https://linkedin.com", is_active: true },
-      ],
+      social_links: [],
       header_nav_links: [
         {
           label: "Templates",
           label_ar: "القوالب",
           url: "/templates",
-          is_active: true,
-        },
-        {
-          label: "Categories",
-          label_ar: "التصنيفات",
-          url: "/categories",
           is_active: true,
         },
         { label: "Blog", label_ar: "المدونة", url: "/blog", is_active: true },
@@ -348,7 +339,7 @@ export async function getSiteSettings() {
           links: [
             { label: "Home", label_ar: "الرئيسية", url: "/" },
             { label: "Templates", label_ar: "القوالب", url: "/templates" },
-            { label: "Categories", label_ar: "التصنيفات", url: "/categories" },
+            { label: "Resources", label_ar: "الموارد", url: "/resources" },
             { label: "Blog", label_ar: "المدونة", url: "/blog" },
             { label: "About", label_ar: "من نحن", url: "/about" },
           ],
@@ -358,21 +349,47 @@ export async function getSiteSettings() {
           title_ar: "الموارد",
           links: [
             {
-              label: "Documentation",
-              label_ar: "التوثيق والشروحات",
-              url: "/blog",
+              label: "Excel Templates",
+              label_ar: "قوالب إكسيل",
+              url: "/excel-templates",
             },
-            { label: "Freebies", label_ar: "قوالب مجانية", url: "/templates" },
-            { label: "UI Kits", label_ar: "حزم الواجهات", url: "/templates" },
+            {
+              label: "Word Templates",
+              label_ar: "قوالب وورد",
+              url: "/word-templates",
+            },
+            {
+              label: "Design Resources",
+              label_ar: "تصاميم وجرافيك",
+              url: "/design-templates",
+            },
+            {
+              label: "Website Templates",
+              label_ar: "قوالب مواقع",
+              url: "/website-templates",
+            },
           ],
         },
         {
           title: "Help & Support",
           title_ar: "المساعدة والدعم",
           links: [
-            { label: "FAQ", label_ar: "الأسئلة الشائعة", url: "/services" },
-            { label: "Support", label_ar: "الدعم الفني", url: "/services" },
-            { label: "Contact", label_ar: "اتصل بنا", url: "/about" },
+            { label: "FAQ", label_ar: "الأسئلة الشائعة", url: "/faq" },
+            {
+              label: "Contact Us",
+              label_ar: "تواصل معنا",
+              url: "/contact",
+            },
+            {
+              label: "Privacy Policy",
+              label_ar: "سياسة الخصوصية",
+              url: "/privacy",
+            },
+            {
+              label: "Terms of Service",
+              label_ar: "شروط الاستخدام",
+              url: "/terms",
+            },
           ],
         },
       ],
@@ -399,17 +416,17 @@ export async function getHomeContent() {
         title_ar: "قوالب مختارة باحترافية",
         highlight_text: "for Every Project",
         highlight_text_ar: "لكل مشروع وفكرة",
-        lead: "Discover thousands of free and premium website templates, UI kits, and design resources. Download, customize, and build your next amazing project faster.",
+        lead: "Browse free and premium website templates, UI kits, Excel and Word files, and design resources. Download, customize, and build your next project faster.",
         lead_ar:
-          "اكتشف آلاف القوالب المجانية والمدفوعة للمواقع، وحزم واجهات المستخدم، وملفات إكسيل ووورد الجاهزة، وموارد التصميم. حمّل، عدّل، وأطلق مشروعك القادم بسرعة فائقة.",
+          "تصفح مجموعة من القوالب المجانية والمدفوعة للمواقع، وحزم واجهات المستخدم، وملفات إكسيل ووورد الجاهزة، وموارد التصميم. حمّل، عدّل، وأطلق مشروعك القادم بسرعة فائقة.",
         hero_image: "/assets/hero-main.png",
         note_title: "Your Next Website",
         note_title_ar: "مشروعك القادم",
         note_subtitle: "Starts Here",
         note_subtitle_ar: "يبدأ هنا",
-        stat_badge_1_val: "1000+",
-        stat_badge_1_label: "Free Templates",
-        stat_badge_1_label_ar: "قالب مجاني",
+        stat_badge_1_val: "Curated",
+        stat_badge_1_label: "Free & Premium",
+        stat_badge_1_label_ar: "قالب مجاني ومدفوع",
         stat_badge_2_val: "Modern",
         stat_badge_2_label: "& Responsive",
         stat_badge_2_label_ar: "ومتجاوب بالكامل",
@@ -466,10 +483,12 @@ export async function getHomeContent() {
         },
         {
           icon: "Users",
-          title: "Trusted by Developers",
-          title_ar: "موثوق من المطورين",
-          description: "Join thousands of developers worldwide.",
-          description_ar: "انضم إلى آلاف المطورين والشركات حول العالم.",
+          title: "Multi-Format Library",
+          title_ar: "مكتبة متعددة الصيغ",
+          description:
+            "Website, Excel, Word, presentation, and design files in one place.",
+          description_ar:
+            "قوالب مواقع وملفات إكسل ووورد وعروض تقديمية وتصاميم في مكان واحد.",
         },
       ],
       cta: {
@@ -517,36 +536,10 @@ export async function getAboutContent() {
         btn_secondary_text_ar: "انضم إلى مجتمعنا",
         btn_secondary_url: "/signup",
       },
-      stats: [
-        {
-          icon: "Download",
-          count: "28,000+",
-          raw_count: 28000,
-          label: "Total Downloads",
-          label_ar: "إجمالي التحميلات",
-        },
-        {
-          icon: "Eye",
-          count: "465+",
-          raw_count: 465,
-          label: "Total Visits",
-          label_ar: "إجمالي الزيارات",
-        },
-        {
-          icon: "FileCode2",
-          count: "13+",
-          raw_count: 13,
-          label: "Active Templates",
-          label_ar: "قالب متاح",
-        },
-        {
-          icon: "Star",
-          count: "4.7 / 5.0",
-          raw_count: 4.7,
-          label: "Average Rating",
-          label_ar: "متوسط التقييمات",
-        },
-      ],
+      // Stats are intentionally empty in the offline fallback. The About page
+      // renders real, database-backed numbers from /content/about and
+      // /stats/realtime - it must never invent downloads, visits or ratings.
+      stats: [],
       story: {
         eyebrow: "Our Story",
         eyebrow_ar: "قصتنا",
@@ -606,9 +599,10 @@ export async function getAboutContent() {
       cta: {
         title: "Join Our Growing Community",
         title_ar: "انضم إلى مجتمعنا المتنامي",
-        description: "Be part of thousands of developers and designers.",
+        description:
+          "Browse the library, download what you need, and get updates and new resources in your inbox.",
         description_ar:
-          "كن جزءاً من آلاف المطورين والمصممين الذين يبنون تجارب رقمية استثنائية.",
+          "تصفح المكتبة، وحمّل ما تحتاجه، واحصل على التحديثات والموارد الجديدة في بريدك.",
         button_text: "Get Started →",
         button_text_ar: "ابدأ الآن ←",
         button_url: "/signup",
@@ -758,18 +752,34 @@ export async function getResources(
   }
 }
 
-export async function getResourceBySlug(slug: string) {
+export type SlugLookup<T> = { data: T | null; unavailable: boolean };
+
+/**
+ * Fetches one resource by slug and reports *why* it is missing.
+ *
+ * A 404 from the API is a real miss. A 5xx, a timeout or a network failure
+ * is not, and must never be turned into a 404 page for search engines.
+ */
+export async function getResourceBySlugResult(
+  slug: string,
+): Promise<SlugLookup<any>> {
   try {
     const res = await fetch(`${API_BASE_URL}/resources/${slug}`, {
       next: { revalidate: 10 },
       headers: { Accept: "application/json" },
     });
-    if (!res.ok) throw new Error("Resource not found");
-    return await res.json();
+    if (res.status === 404) return { data: null, unavailable: false };
+    if (!res.ok) return { data: null, unavailable: true };
+    return { data: await res.json(), unavailable: false };
   } catch (err) {
     console.warn("Failed to fetch resource slug:", slug, err);
-    return null;
+    return { data: null, unavailable: true };
   }
+}
+
+export async function getResourceBySlug(slug: string) {
+  const { data } = await getResourceBySlugResult(slug);
+  return data;
 }
 
 // 6. Categories

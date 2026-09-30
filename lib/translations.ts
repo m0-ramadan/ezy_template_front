@@ -59,10 +59,10 @@ export const translations = {
     hero_title_1: "Curated templates for",
     hero_title_2: "fast-moving creators",
     hero_subtitle:
-      "Discover thousands of free and premium website templates, UI kits, Excel and Word files, and design resources. Download, customize, and build your next project faster.",
+      "Browse free and premium website templates, UI kits, Excel and Word files, and design resources. Download, customize, and build your next project faster.",
     popular_tags_label: "Popular:",
-    trusted_badge: "Trusted by 10,000+ creators and businesses worldwide",
-    verified_assets: "100% Verified Assets",
+    trusted_badge: "A curated library for modern creators",
+    verified_assets: "Carefully Reviewed Assets",
     instant_download: "Instant Fast Download",
     curated_quality: "Handcrafted Quality",
 
@@ -137,7 +137,7 @@ export const translations = {
     about_story_p1:
       "Founded in 2024, EzyTemplate started with a simple observation: developers and creators spend countless hours rebuilding the same foundational components. We set out to create a marketplace of beautifully designed, production-ready templates.",
     about_story_p2:
-      "Today, our library powers thousands of websites, landing pages, and business tools around the world. We continue to curate top-tier resources that save time and inspire creativity.",
+      "Today, EzyTemplate is a growing, curated library of modern, production-ready templates and resources, and we keep adding and improving assets that save time and inspire creativity.",
     about_team_eyebrow: "Meet Our Team",
     about_team_title: "The People Behind",
     about_developer_eyebrow: "Meet The Developer",
@@ -152,7 +152,7 @@ export const translations = {
     about_values_speed_desc: "Helping you ship faster with minimal friction.",
     about_stat_downloads: "Total Downloads",
     about_stat_visits: "Total Visits",
-    about_stat_templates: "Active Templates",
+    about_stat_templates: "Published Templates",
     about_stat_rating: "Average Rating",
     about_stat_creators: "Happy Creators",
 
@@ -214,7 +214,7 @@ export const translations = {
     login_create_one: "Create an account",
 
     signup_title: "Create Your Account",
-    signup_subtitle: "Join thousands of creators building better websites.",
+    signup_subtitle: "Start downloading templates and resources in seconds.",
     signup_name_label: "Full Name",
     signup_email_label: "Email Address",
     signup_password_label: "Password",
@@ -299,9 +299,9 @@ export const translations = {
     hero_title_1: "قوالب مختارة باحترافية",
     hero_title_2: "للمبدعين ورواد الأعمال",
     hero_subtitle:
-      "اكتشف آلاف القوالب المجانية والمدفوعة للمواقع، وحزم واجهات المستخدم، وملفات إكسيل ووورد الجاهزة، وموارد التصميم. حمّل، عدّل، وأطلق مشروعك القادم بسرعة فائقة.",
+      "تصفح مجموعة من القوالب المجانية والمدفوعة للمواقع، وحزم واجهات المستخدم، وملفات إكسيل ووورد الجاهزة، وموارد التصميم. حمّل، عدّل، وأطلق مشروعك القادم بسرعة فائقة.",
     popular_tags_label: "شائع:",
-    trusted_badge: "موثوق من قِبل أكثر من 10,000 مبدع وشركة حول العالم",
+    trusted_badge: "مكتبة منسّقة بعناية للمبدعين",
     verified_assets: "أصول تم فحصها 100%",
     instant_download: "تحميل فوري وسريع",
     curated_quality: "جودة وتصميم متقن",
@@ -377,7 +377,7 @@ export const translations = {
     about_story_p1:
       "تأسست منصة إيزي تمبلت في 2024 بملاحظة بسيطة: يقضي المطورون والمصممون مئات الساعات في بناء نفس المكونات الأساسية المتكررة. لذلك بدأنا في بناء مكتبة احترافية تضم قوالب متقنة التصميم وجاهزة للإطلاق الفوري.",
     about_story_p2:
-      "اليوم، تدعم مكتبتنا آلاف المواقع وصفحات الهبوط وأدوات الأعمال حول العالم، ونواصل اختيار وتطوير أفضل الأصول الرقمية لتوفير الوقت وإلهام الإبداع.",
+      "اليوم، أصبحت إيزي تمبلت مكتبة متنامية ومنسّقة من القوالب والموارد الحديثة الجاهزة للإنتاج، ونواصل إضافة وتحسين الأصول الرقمية لتوفير الوقت وإلهام الإبداع.",
     about_team_eyebrow: "فريق العمل",
     about_team_title: "الأشخاص الذين يبنون",
     about_developer_eyebrow: "مطور ومؤسس المنصة",
@@ -393,7 +393,7 @@ export const translations = {
       "مساعدتك على إنجاز ونشر مشاريعك بأقل جهد وأعلى سرعة.",
     about_stat_downloads: "إجمالي التحميلات",
     about_stat_visits: "إجمالي الزيارات",
-    about_stat_templates: "قالب متاح",
+    about_stat_templates: "قالب منشور",
     about_stat_rating: "متوسط التقييمات",
     about_stat_creators: "عميل ومبدع سعيد",
 
@@ -454,7 +454,7 @@ export const translations = {
     login_create_one: "إنشاء حساب جديد",
 
     signup_title: "إنشاء حساب جديد",
-    signup_subtitle: "انضم إلى آلاف المبدعين الذين يبنون مواقع وتطبيقات أفضل.",
+    signup_subtitle: "ابدأ تحميل القوالب والموارد في ثوانٍ.",
     signup_name_label: "الاسم الكامل",
     signup_email_label: "البريد الإلكتروني",
     signup_password_label: "كلمة المرور",
