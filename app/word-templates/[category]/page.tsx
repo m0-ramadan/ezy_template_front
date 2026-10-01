@@ -56,9 +56,7 @@ export default async function CategoryPage({
   if (!facet && !base.unavailable) notFound();
   if (!facet) return <LoadUnavailable />;
 
-  const { resources, total, facets, unavailable } = await getCollectionData("word", {
-    subcategory: category,
-  });
+  const { resources, total, facets, unavailable } = base;
 
   return (
     <MarketplaceListing

@@ -246,13 +246,21 @@ export async function getCollectionData(
 
   const resources = page.data.map((r) => normalizeTemplate(r, "en"));
 
-  // Build facets from the rows actually rendered for this request. A
-  // sub-category with no published rows never reaches the sidebar.
+  // Build facets from the rows actually rendered for this request. Some
+  // catalogue rows (notably older Excel imports) have a category but no
+  // subcategory. Fall back to their category so every published resource is
+  // represented in the sidebar totals instead of silently disappearing.
   const counts = new Map<string, { count: number; label: string; labelAr: string }>();
   for (const r of page.data) {
-    const node = spec.facet === "subcategory" ? r.subcategory : r.category;
+    const primaryNode =
+      spec.facet === "subcategory" ? r.subcategory : r.category;
+    const node =
+      primaryNode || (spec.facet === "subcategory" ? r.category : null);
     if (!node) continue;
-    const slug = facetSlug(node.slug, spec.stripPrefix);
+    // Only subcategory slugs carry collection prefixes such as `excel-`.
+    // Category fallback slugs (for example `timesheets-hr`) are already
+    // canonical and must not be shortened.
+    const slug = facetSlug(node.slug, !!primaryNode && spec.stripPrefix);
     if (!slug) continue;
     const entry = counts.get(slug) ?? {
       count: 0,

@@ -78,7 +78,7 @@ export default function MarketplaceListing({
 
   const facetValue = (item: any) =>
     facetKey === "subcategory"
-      ? String(item.subcategory_slug || "")
+      ? String(item.subcategory_slug || item.category_slug || "")
       : String(item.category_slug || "");
 
   const filteredResources = useMemo(() => {

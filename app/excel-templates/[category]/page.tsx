@@ -56,9 +56,10 @@ export default async function ExcelCategoryPage({
   if (!facet && !base.unavailable) notFound();
   if (!facet) return <LoadUnavailable />;
 
-  const { resources, total, facets, unavailable } = await getCollectionData("excel", {
-    subcategory: category,
-  });
+  // Keep the complete parent collection in the client listing. The URL facet
+  // remains selected, while the sidebar can show (and switch to) every sibling
+  // sub-category without another request.
+  const { resources, total, facets, unavailable } = base;
 
   return (
     <MarketplaceListing

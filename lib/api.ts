@@ -12,26 +12,12 @@ function apiFetch(input: RequestInfo | URL, init: RequestInit = {}) {
 }
 
 function getDefaultBackendUrl(): string {
-  if (typeof window === "undefined") {
-    return process.env.NODE_ENV === "production"
-      ? PRODUCTION_BACKEND_URL
-      : LOCAL_BACKEND_URL;
-  }
-
-  const { hostname, protocol } = window.location;
-  const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
-
-  if (isLocalhost) {
-    return `${protocol}//${hostname}:8002`;
-  }
-
-  // The public Next.js site and Laravel dashboard are deployed on separate
-  // subdomains. All public API and storage requests must go to Laravel.
-  if (hostname === "ezytemplate.pro" || hostname === "www.ezytemplate.pro") {
-    return PRODUCTION_BACKEND_URL;
-  }
-
-  return `${protocol}//${hostname}`;
+  // This module is imported by Client Components that are also prerendered on
+  // the server. Keep the fallback independent of `window.location` so the
+  // server HTML and the first client render always use the exact same URL.
+  return process.env.NODE_ENV === "production"
+    ? PRODUCTION_BACKEND_URL
+    : LOCAL_BACKEND_URL;
 }
 
 export const BACKEND_URL =
