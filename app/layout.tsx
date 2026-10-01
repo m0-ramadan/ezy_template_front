@@ -41,6 +41,9 @@ export const metadata: Metadata = {
     shortcut: "/assets/logo-icon.png",
     apple: "/assets/logo-icon.png",
   },
+  verification: {
+    google: "eL995GrkcwpTtzQoLXtq1gZzTL8oJ6HOWQJTVu-DjLI",
+  },
 };
 
 export const viewport: Viewport = {
