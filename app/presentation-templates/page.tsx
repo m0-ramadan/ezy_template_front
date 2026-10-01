@@ -3,7 +3,8 @@ import { getCollectionData } from "@/lib/catalog";
 import MarketplaceListing from "@/components/MarketplaceListing";
 import { SITE_URL } from "@/lib/site";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
   const { total } = await getCollectionData("presentation", { perPage: 1 });

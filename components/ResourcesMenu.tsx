@@ -47,7 +47,7 @@ export default function ResourcesMenu({ onClose }: ResourcesMenuProps) {
         ? "قوالب وموارد مجانية بالكامل للمصممين"
         : "100% free templates for creators",
       icon: <Gift size={18} className="text-amber-500" />,
-      href: "/excel-templates?price=free",
+      href: "/excel-templates",
     },
   ];
 

@@ -204,19 +204,19 @@ export default function Footer() {
         links: [
           {
             label: isRTL ? "قوالب مجانية" : "Freebies",
-            url: "/templates?price=Free",
+            url: "/templates",
           },
           {
             label: isRTL ? "قوالب إكسيل" : "Excel Templates",
-            url: "/templates?type=Excel",
+            url: "/excel-templates",
           },
           {
             label: isRTL ? "قوالب وورد" : "Word Templates",
-            url: "/templates?type=Word",
+            url: "/word-templates",
           },
           {
             label: isRTL ? "تصاميم وجرافيك" : "Design Resources",
-            url: "/templates?type=Design",
+            url: "/design-templates",
           },
         ],
       },

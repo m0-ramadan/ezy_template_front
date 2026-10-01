@@ -41,7 +41,7 @@ export default function ResourcesHub() {
         : "100% free templates, spreadsheets, and design resources",
       icon: <Gift size={32} className="text-amber-500" />,
       color: "#f59e0b",
-      href: "/excel-templates?price=free",
+      href: "/excel-templates",
     },
   ];
 

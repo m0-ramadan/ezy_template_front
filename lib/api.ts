@@ -749,7 +749,7 @@ export async function getResources(
     if (params.per_page) query.set("per_page", params.per_page.toString());
 
     const res = await apiFetch(`${API_BASE_URL}/resources?${query.toString()}`, {
-      next: { revalidate: 10 },
+      cache: "no-store",
       headers: { Accept: "application/json" },
     });
     if (!res.ok) throw new Error("Failed to fetch resources");

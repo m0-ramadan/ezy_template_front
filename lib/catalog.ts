@@ -68,17 +68,11 @@ export type ResourcePage = {
   last_page: number;
 };
 
-async function apiGet<T>(path: string, revalidate = CATALOG_REVALIDATE_SECONDS): Promise<T | null> {
+async function apiGet<T>(path: string): Promise<T | null> {
   try {
-    const options: RequestInit = {
-      headers: { Accept: "application/json" },
-    };
-    // `next.revalidate` is a server-only fetch option; skip it in the browser.
-    if (typeof window === "undefined") {
-      (options as RequestInit & { next?: { revalidate: number } }).next = { revalidate };
-    }
     const res = await fetch(`${API_BASE_URL}${path}`, {
-      ...options,
+      cache: "no-store",
+      headers: { Accept: "application/json" },
       signal: AbortSignal.timeout(15000),
     });
     if (!res.ok) return null;

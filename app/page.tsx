@@ -8,7 +8,8 @@ import { getCatalogStats } from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
 import HomeView from "./HomeView";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: {

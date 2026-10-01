@@ -16,6 +16,9 @@ import {
 } from "@/lib/catalog";
 import { SITE_URL } from "@/lib/site";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Free and Premium Templates for Excel, Word, Design and Canva",
   description:

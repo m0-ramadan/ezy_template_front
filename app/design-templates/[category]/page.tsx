@@ -5,7 +5,8 @@ import LoadUnavailable from "@/components/LoadUnavailable";
 import MarketplaceListing from "@/components/MarketplaceListing";
 import { SITE_URL } from "@/lib/site";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 function titleCase(value: string) {
   return value

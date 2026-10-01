@@ -4,7 +4,8 @@ import { getArticlesSSR, readingTimeFromContent } from "@/lib/articles";
 import { getAssetUrl } from "@/lib/api";
 import { SITE_URL } from "@/lib/site";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata(): Promise<Metadata> {
   const { total } = await getArticlesSSR({ perPage: 1 });
