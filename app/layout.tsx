@@ -3,7 +3,6 @@ import "./globals.css";
 import AppLayout from "@/components/AppLayout";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Locale } from "@/lib/translations";
-import AdSenseScript from "@/components/AdSenseScript";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import type { Metadata, Viewport } from "next";
 
@@ -44,6 +43,9 @@ export const metadata: Metadata = {
   verification: {
     google: "eL995GrkcwpTtzQoLXtq1gZzTL8oJ6HOWQJTVu-DjLI",
   },
+  other: {
+    "google-adsense-account": "ca-pub-1622689578222320",
+  },
 };
 
 export const viewport: Viewport = {
@@ -77,6 +79,15 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-1622689578222320"
+        />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1622689578222320"
+          crossOrigin="anonymous"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -120,7 +131,6 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <AdSenseScript />
         <LanguageProvider initialLocale={initialLocale}>
           <AppLayout>{children}</AppLayout>
         </LanguageProvider>
