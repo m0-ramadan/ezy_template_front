@@ -299,9 +299,7 @@ export function buildDescription(
   return `${r.title} is a downloadable ${label} on EzyTemplate.`;
 }
 
-export function formatCount(n: number): string {
-  return new Intl.NumberFormat("en-US").format(n);
-}
+export { formatCount } from "@/lib/format";
 
 export type CollectionFacet = {
   slug: string;

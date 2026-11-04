@@ -33,7 +33,7 @@ import {
   Stamp,
 } from "lucide-react";
 import { normalizeTemplate, getAssetUrl } from "@/lib/api";
-import { formatCount } from "@/lib/catalog";
+import { formatCount } from "@/lib/format";
 import { useLanguage } from "@/context/LanguageContext";
 
 const iconMap: Record<string, any> = {

@@ -9,11 +9,8 @@ import {
   LayoutGrid,
   ArrowRight,
 } from "lucide-react";
-import {
-  getCollectionData,
-  formatCount,
-  type CollectionKey,
-} from "@/lib/catalog";
+import { getCollectionData, type CollectionKey } from "@/lib/catalog";
+import { formatCount } from "@/lib/format";
 import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
