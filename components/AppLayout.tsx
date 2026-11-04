@@ -3,8 +3,15 @@
 import { usePathname } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import type { NavGroup } from "@/lib/navigation";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function AppLayout({
+  children,
+  navGroups,
+}: {
+  children: React.ReactNode;
+  navGroups?: NavGroup[];
+}) {
   const pathname = usePathname();
   const isPreviewPage =
     pathname === "/preview" || pathname?.startsWith("/preview");
@@ -15,7 +22,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <Header />
+      <Header navGroups={navGroups} />
       {children}
       <Footer />
     </>

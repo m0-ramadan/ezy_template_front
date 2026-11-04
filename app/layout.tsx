@@ -4,6 +4,7 @@ import AppLayout from "@/components/AppLayout";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { Locale } from "@/lib/translations";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { getNavigationFacets } from "@/lib/navigation";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
@@ -73,6 +74,7 @@ export default async function RootLayout({
   }
 
   const isRTL = initialLocale === "ar";
+  const navGroups = await getNavigationFacets();
 
   return (
     <html
@@ -134,7 +136,7 @@ export default async function RootLayout({
       </head>
       <body>
         <LanguageProvider initialLocale={initialLocale}>
-          <AppLayout>{children}</AppLayout>
+          <AppLayout navGroups={navGroups}>{children}</AppLayout>
         </LanguageProvider>
         <script
           dangerouslySetInnerHTML={{

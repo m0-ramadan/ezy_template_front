@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getCollectionData, unavailableCollectionMetadata } from "@/lib/catalog";
+import { getCollectionData, unavailableCollectionMetadata, normalizeFacetParam } from "@/lib/catalog";
 import LoadUnavailable from "@/components/LoadUnavailable";
 import MarketplaceListing from "@/components/MarketplaceListing";
 import { SITE_URL } from "@/lib/site";
@@ -20,7 +20,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
-  const { category } = await params;
+  const { category: rawCategory } = await params;
+  const category = normalizeFacetParam("excel", rawCategory);
   const { facets, unavailable } = await getCollectionData("excel");
   const facet = facets.find((f) => f.slug === category);
   // A missing facet is a real 404, thrown from generateMetadata so the
@@ -47,7 +48,8 @@ export default async function ExcelCategoryPage({
 }: {
   params: Promise<{ category: string }>;
 }) {
-  const { category } = await params;
+  const { category: rawCategory } = await params;
+  const category = normalizeFacetParam("excel", rawCategory);
   const base = await getCollectionData("excel");
   const facet = base.facets.find((f) => f.slug === category);
   // Only a confirmed miss is a 404. When the catalogue is unreachable the

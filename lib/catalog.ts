@@ -555,3 +555,18 @@ export function getCategoriesCached(): Promise<any[] | null> {
 export function getLatestResourcesCached(perPage = 50): Promise<any | null> {
   return apiGet<any>(`/resources?per_page=${perPage}`);
 }
+
+/**
+ * Accept both the public facet slug and the stored, collection-prefixed one.
+ * Older links (and the dashboard) use `/excel-templates/excel-accounting`
+ * while the public URL is `/excel-templates/accounting`.
+ */
+export function normalizeFacetParam(
+  key: CollectionKey,
+  value: string,
+): string {
+  const slug = String(value || "").toLowerCase();
+  if (key === "excel") return slug.replace(/^excel-/, "");
+  if (key === "word") return slug.replace(/^word-/, "");
+  return slug;
+}

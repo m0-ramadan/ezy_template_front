@@ -18,6 +18,7 @@ import {
 import { useEffect, useState, useRef, useMemo } from "react";
 import { templates } from "@/data/templates";
 import { BACKEND_URL, getSiteSettings } from "@/lib/api";
+import type { NavGroup } from "@/lib/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import MegaMenu from "@/components/MegaMenu";
 import ResourcesMenu from "@/components/ResourcesMenu";
@@ -44,7 +45,7 @@ const popularTagsAr = [
   "قوالب وورد",
 ];
 
-export default function Header() {
+export default function Header({ navGroups }: { navGroups?: NavGroup[] }) {
   const { locale, toggleLanguage, t, isRTL } = useLanguage();
   const [dark, setDark] = useState(false);
   const [open, setOpen] = useState(false);
@@ -323,7 +324,7 @@ export default function Header() {
                     <ChevronDown size={14} />
                   </Link>
                   {megaMenuOpen && (
-                    <MegaMenu onClose={() => setMegaMenuOpen(false)} />
+                    <MegaMenu navGroups={navGroups} onClose={() => setMegaMenuOpen(false)} />
                   )}
                 </div>
               );

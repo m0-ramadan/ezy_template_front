@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+import type { NavGroup } from "@/lib/navigation";
 import {
   Globe,
   FileSpreadsheet,
@@ -14,141 +15,51 @@ import {
 
 interface MegaMenuProps {
   onClose: () => void;
+  navGroups?: NavGroup[];
 }
 
-export default function MegaMenu({ onClose }: MegaMenuProps) {
+export default function MegaMenu({ onClose, navGroups }: MegaMenuProps) {
   const { isRTL } = useLanguage();
 
-  const megaColumns = [
-    {
-      title: isRTL ? "قوالب المواقع" : "Website Templates",
-      icon: <Globe size={18} className="text-blue-500" />,
-      color: "#2563eb",
-      href: "/website-templates",
-      items: [
-        {
-          label: isRTL ? "مواقع الشركات" : "Corporate",
-          href: "/website-templates/corporate",
-        },
-        {
-          label: isRTL ? "مواقع الأعمال" : "Business",
-          href: "/website-templates/business",
-        },
-        {
-          label: isRTL ? "صفحات الهبوط" : "Landing Pages",
-          href: "/website-templates/landing-pages",
-        },
-        {
-          label: isRTL ? "المتاجر الإلكترونية" : "E-commerce",
-          href: "/website-templates/e-commerce",
-        },
-        {
-          label: isRTL ? "ملفات الأعمال" : "Portfolio",
-          href: "/website-templates/portfolio",
-        },
-      ],
-    },
-    {
-      title: isRTL ? "قوالب إكسيل" : "Excel Templates",
+  const META: Record<
+    string,
+    { icon: React.ReactNode; color: string }
+  > = {
+    website: { icon: <Globe size={18} className="text-blue-500" />, color: "#2563eb" },
+    excel: {
       icon: <FileSpreadsheet size={18} className="text-emerald-600" />,
       color: "#10b981",
-      href: "/excel-templates",
-      items: [
-        {
-          label: isRTL ? "المحاسبة" : "Accounting",
-          href: "/excel-templates/accounting",
-        },
-        {
-          label: isRTL
-            ? "التخطيط المالي للأعمال"
-            : "Business Financial Planning",
-          href: "/excel-templates/business-financial-planning",
-        },
-        {
-          label: isRTL ? "تقارير المبيعات" : "Sales Reporting",
-          href: "/excel-templates/sales-reporting",
-        },
-        {
-          label: isRTL ? "إدارة المشاريع" : "Project Management",
-          href: "/excel-templates/project-management",
-        },
-        {
-          label: isRTL ? "الموارد البشرية" : "Human Resources",
-          href: "/excel-templates/human-resources",
-        },
-        {
-          label: isRTL
-            ? "التخطيط المالي الشخصي"
-            : "Personal Financial Planning",
-          href: "/excel-templates/personal-financial-planning",
-        },
-        {
-          label: isRTL ? "إدارة المخزون" : "Inventory",
-          href: "/excel-templates/inventory",
-        },
-        {
-          label: isRTL ? "المالية" : "Finance",
-          href: "/excel-templates/finance",
-        },
-      ],
     },
-    {
-      title: isRTL ? "قوالب وورد" : "Word Templates",
-      icon: <FileText size={18} className="text-blue-600" />,
-      color: "#3b82f6",
-      href: "/word-templates",
-      items: [
-        {
-          label: isRTL ? "التخطيط المالي للأعمال" : "Business Financial Planning",
-          href: "/word-templates/business-financial-planning",
-        },
-        {
-          label: isRTL ? "المالية" : "Finance",
-          href: "/word-templates/finance",
-        },
-        {
-          label: isRTL ? "إدارة المشاريع" : "Project Management",
-          href: "/word-templates/project-management",
-        },
-      ],
-    },
-    {
-      title: isRTL ? "قوالب التصميم" : "Design Templates",
-      icon: <Palette size={18} className="text-pink-500" />,
-      color: "#ec4899",
-      href: "/design-templates",
-      items: [
-        {
-          label: isRTL ? "كروت الأعمال" : "Business Cards",
-          href: "/design-templates/business-cards",
-        },
-        {
-          label: isRTL ? "الشهادات والدروع" : "Certificates & Awards",
-          href: "/design-templates/certificates-awards",
-        },
-        {
-          label: isRTL ? "الهوية المؤسسية" : "Corporate Identity",
-          href: "/design-templates/corporate-identity",
-        },
-        {
-          label: isRTL ? "المناسبات والدعوات" : "Events & Invitations",
-          href: "/design-templates/events-invitations",
-        },
-      ],
-    },
-    {
-      title: isRTL ? "العروض التقديمية" : "Presentations",
+    word: { icon: <FileText size={18} className="text-blue-600" />, color: "#3b82f6" },
+    design: { icon: <Palette size={18} className="text-pink-500" />, color: "#ec4899" },
+    presentation: {
       icon: <Presentation size={18} className="text-purple-500" />,
       color: "#8b5cf6",
-      href: "/presentation-templates",
-      items: [
-        {
-          label: isRTL ? "تسويق السوشيال ميديا" : "Social Media Marketing",
-          href: "/presentation-templates/presentation-social-media-marketing",
-        },
-      ],
     },
+    canva: { icon: <Sparkles size={18} className="text-amber-500" />, color: "#f59e0b" },
+  };
+
+  // Links come from the live catalogue facets, so the menu can never point at
+  // a sub-category page that does not exist.
+  const FALLBACK: NavGroup[] = [
+    { key: "website", href: "/website-templates", title: "Website Templates", titleAr: "قوالب المواقع", items: [] },
+    { key: "excel", href: "/excel-templates", title: "Excel Templates", titleAr: "قوالب إكسيل", items: [] },
+    { key: "word", href: "/word-templates", title: "Word Templates", titleAr: "قوالب وورد", items: [] },
+    { key: "design", href: "/design-templates", title: "Design Templates", titleAr: "قوالب التصميم", items: [] },
+    { key: "presentation", href: "/presentation-templates", title: "Presentations", titleAr: "العروض التقديمية", items: [] },
   ];
+
+  const megaColumns = ((navGroups && navGroups.length > 0 ? navGroups : FALLBACK)).map((group) => ({
+    key: group.key,
+    title: isRTL ? group.titleAr : group.title,
+    href: group.href,
+    icon: META[group.key]?.icon ?? <Globe size={18} />,
+    color: META[group.key]?.color ?? "#2563eb",
+    items: group.items.map((item) => ({
+      label: isRTL ? item.labelAr : item.label,
+      href: `${group.href}/${item.slug}`,
+    })),
+  }));
 
   return (
     <div
@@ -170,7 +81,7 @@ export default function MegaMenu({ onClose }: MegaMenuProps) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(5, minmax(0, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
           gap: "20px",
         }}
       >
