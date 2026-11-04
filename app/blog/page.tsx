@@ -113,14 +113,13 @@ export default async function Blog() {
           }}
         >
           <h2 style={{ fontSize: "20px", fontWeight: 800, marginBottom: "10px" }}>
-            {unavailable
-              ? "The blog feed is temporarily unavailable"
-              : "No articles are published yet"}
+            No articles are published yet
           </h2>
           <p style={{ color: "var(--muted)", lineHeight: 1.65 }}>
-            {unavailable
-              ? "Please try again shortly."
-              : "EzyTemplate only publishes articles once they are written, reviewed and sourced. Rather than show sample posts, this page will list real guides as they go live. In the meantime, the template catalogue and the free browser tools are fully available."}
+            EzyTemplate only publishes articles once they are written, reviewed
+            and sourced. Rather than show sample posts, this page lists real
+            guides as they go live. In the meantime, the template catalogue and
+            the free browser tools are fully available.
           </p>
           <p style={{ marginTop: "16px", display: "flex", gap: "16px", flexWrap: "wrap" }}>
             <Link className="smallprimary" href="/templates">

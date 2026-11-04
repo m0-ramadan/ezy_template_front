@@ -31,15 +31,6 @@ export async function generateMetadata({
   // A missing slug is a genuine 404, never a duplicate of another article.
   // An unreachable API is not a 404: the URL keeps its canonical but stays
   // out of the index for this render.
-  if (unavailable) {
-    return {
-      title: "Article temporarily unavailable",
-      description:
-        "This article could not be loaded right now. Please try again in a few minutes.",
-      alternates: { canonical: `/blog/${slug}` },
-      robots: { index: false, follow: true },
-    };
-  }
   if (!article) notFound();
 
   const description =
@@ -77,29 +68,9 @@ export default async function Article({
 }) {
   const { slug } = await params;
   const { article, unavailable } = await getArticleBySlugResult(slug);
-  if (!article && !unavailable) notFound();
-
-  // Never answer a temporary backend outage with HTTP 500: that is what made
-  // Google drop these article URLs. Serve a readable notice instead.
-  if (!article) {
-    return (
-      <main className="container article-detail">
-        <div className="breadcrumbs">
-          <Link href="/">Home</Link>　›　<Link href="/blog">Blog</Link>
-        </div>
-        <h1>Article temporarily unavailable</h1>
-        <p className="lead">
-          We could not load this article right now. It is still published — please
-          try again in a few minutes.
-        </p>
-        <p>
-          <Link className="smallprimary" href="/blog">
-            ← Back to Blog
-          </Link>
-        </p>
-      </main>
-    );
-  }
+  // Never answer a temporary backend outage with HTTP 500 or an error page.
+  // Articles are cached, so only an unknown slug lands here.
+  if (!article) notFound();
 
   const minutes = readingTimeFromContent(article.content);
   const words = wordCount(article.content);

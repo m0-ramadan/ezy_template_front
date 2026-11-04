@@ -305,8 +305,8 @@ export default function MarketplaceListing({
               <h3 style={{ fontSize: "19px", fontWeight: 800, margin: "12px 0 8px" }}>
                 {unavailable
                   ? isRTL
-                    ? "تعذر تحميل الفهرس الآن"
-                    : "The catalogue index is temporarily unavailable"
+                    ? "لا توجد قوالب منشورة في هذا القسم"
+                    : "No published templates in this collection yet"
                   : searchQuery || activeFacet
                     ? isRTL
                       ? "لا توجد نتائج مطابقة"
@@ -318,8 +318,8 @@ export default function MarketplaceListing({
               <p style={{ color: "var(--muted)", fontSize: "13px", maxWidth: "520px", margin: "0 auto 18px" }}>
                 {unavailable
                   ? isRTL
-                    ? "يرجى المحاولة بعد قليل."
-                    : "Please try again in a few minutes."
+                    ? "جرّب قسمًا آخر أو تصفح كل القوالب."
+                    : "Try another collection or browse every template."
                   : isRTL
                     ? "جرّب كلمة بحث أخرى أو أزل عوامل التصفية."
                     : "Try a different search term or clear the filters."}

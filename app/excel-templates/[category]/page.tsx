@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getCollectionData, unavailableCollectionMetadata, normalizeFacetParam } from "@/lib/catalog";
-import LoadUnavailable from "@/components/LoadUnavailable";
 import MarketplaceListing from "@/components/MarketplaceListing";
 import { SITE_URL } from "@/lib/site";
 
@@ -56,7 +55,9 @@ export default async function ExcelCategoryPage({
   // page still renders, so a temporary API problem never tells search
   // engines that these URLs do not exist.
   if (!facet && !base.unavailable) notFound();
-  if (!facet) return <LoadUnavailable />;
+  // The catalogue snapshot supplies every published facet, so a missing one
+  // is a genuine 404 rather than a temporary error page.
+  if (!facet) notFound();
 
   // Keep the complete parent collection in the client listing. The URL facet
   // remains selected, while the sidebar can show (and switch to) every sibling

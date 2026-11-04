@@ -1,6 +1,5 @@
 import { templates as fallbackTemplates } from "@/data/templates";
 import { getResources, normalizeTemplate } from "@/lib/api";
-import LoadUnavailable from "@/components/LoadUnavailable";
 import DetailView from "@/components/DetailView";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -28,13 +27,6 @@ export async function generateMetadata({
   const { resource, unavailable } = await getTemplateDetailResult(slug);
   // A missing slug is a genuine 404. An unreachable API is not: the URL keeps
   // its canonical but stays out of the index for this render.
-  if (unavailable) {
-    return {
-      title: "Template temporarily unavailable",
-      alternates: { canonical: `/templates/${slug}` },
-      robots: { index: false, follow: true },
-    };
-  }
   if (!resource) notFound();
 
   // Rows that were seeded twice under two category paths share one canonical.
@@ -79,15 +71,9 @@ export default async function Detail({
   const t = normalizeTemplate(apiResource) || fallbackTemplates.find((x) => x.slug === slug);
   // Only a confirmed miss is a 404, so a temporary API problem never removes
   // a real template URL from the index.
-  if (!t && !unavailable) notFound();
-  if (!t) {
-    return (
-      <LoadUnavailable
-        title="This template is temporarily unavailable"
-        description="The template catalogue could not be reached while this page was being built. Please try again in a few minutes."
-      />
-    );
-  }
+  // The snapshot fallback covers every published template, so a slug that is
+  // still unknown here does not exist.
+  if (!t) notFound();
 
   // 2. Fetch related resources
   const relatedRes = await getResources({ per_page: 3 });
