@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Template preview coming soon">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect x="60" y="60" width="1080" height="780" rx="28" fill="#ffffff" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="14 12"/>
+  <rect x="150" y="230" width="380" height="24" rx="12" fill="url(#accent)" opacity="0.85"/>
+  <rect x="150" y="286" width="520" height="16" rx="8" fill="#cbd5e1"/>
+  <rect x="150" y="318" width="460" height="16" rx="8" fill="#cbd5e1"/>
+  <rect x="150" y="350" width="500" height="16" rx="8" fill="#cbd5e1"/>
+  <rect x="150" y="430" width="260" height="230" rx="18" fill="#eef2ff" stroke="#c7d2fe" stroke-width="2"/>
+  <rect x="440" y="430" width="260" height="230" rx="18" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+  <rect x="730" y="430" width="260" height="230" rx="18" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="2"/>
+  <path d="M240 590l60-70 50 55 40-40 70 85H220z" fill="#a5b4fc"/>
+  <text x="600" y="735" text-anchor="middle" font-family="Cairo, Arial, sans-serif" font-size="34" font-weight="700" fill="#475569">Preview coming soon</text>
+  <text x="600" y="780" text-anchor="middle" font-family="Cairo, Arial, sans-serif" font-size="24" fill="#94a3b8">EzyTemplate</text>
+</svg>

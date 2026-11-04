@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import ImageConverter from "@/components/tools/image/ImageConverter";
 
 export const metadata: Metadata = {
-  title: "محول صيغ الصور مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/image-converter" },
+  title: "Image Converter – JPG, PNG and WebP",
   description:
-    "تحويل صيغ الصور بين PNG و JPG و WEBP فوراً وبأعلى جودة مجاناً بدون رفع لسيرفرات.",
+    "Convert images between JPG, PNG and WebP formats instantly in your browser, with no upload.",
 };
 
 export default function ImageConverterPage() {

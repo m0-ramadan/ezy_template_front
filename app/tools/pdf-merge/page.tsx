@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import PDFMerge from "@/components/tools/pdf/PDFMerge";
 
 export const metadata: Metadata = {
-  title: "دمج ملفات PDF مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/pdf-merge" },
+  title: "Merge PDF Files – Combine PDFs Online",
   description:
-    "دمج وتجميع عدة ملفات PDF في مستند واحد مرتب بسلاسة وبشكل آمن مجاناً بدون تسجيل.",
+    "Combine multiple PDF documents into a single file in the order you choose. Free and no signup.",
   keywords: ["دمج pdf", "pdf merge", "تجميع pdf", "دمج مستندات"],
 };
 

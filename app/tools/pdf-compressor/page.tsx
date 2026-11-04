@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import PDFCompressor from "@/components/tools/pdf/PDFCompressor";
 
 export const metadata: Metadata = {
-  title: "ضغط ملفات PDF مجانًا أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/pdf-compressor" },
+  title: "PDF Compressor – Reduce PDF File Size",
   description:
-    "قلل حجم ملفات PDF بسهولة وأمان مع الحفاظ على وضوح المستند وجودته مجاناً بدون تسجيل.",
+    "Compress PDF files in your browser so they are easier to email and upload. Free and private.",
   keywords: [
     "ضغط pdf",
     "pdf compressor",

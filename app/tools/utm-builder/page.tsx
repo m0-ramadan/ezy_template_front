@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import UTMBuilder from "@/components/tools/seo/UTMBuilder";
 
 export const metadata: Metadata = {
-  title: "مولد روابط الحملات الإعلانية UTM | EzyTemplate",
+  alternates: { canonical: "/tools/utm-builder" },
+  title: "UTM Builder – Campaign Link Generator",
   description:
-    "إنشاء وبناء روابط تتبع الحملات التسويقية الإعلانية لـ Google Analytics وسوشيال ميديا.",
+    "Build UTM-tagged campaign URLs so your analytics attribution stays clean and accurate.",
 };
 
 export default function UTMBuilderPage() {

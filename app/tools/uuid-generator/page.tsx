@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import UUIDGenerator from "@/components/tools/developers/UUIDGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد معرّفات UUID / GUID v4 | EzyTemplate",
+  alternates: { canonical: "/tools/uuid-generator" },
+  title: "UUID Generator – v4 GUIDs Online",
   description:
-    "توليد معرّفات عشوائية فريدة UUID v4 بالجملة لقواعد البيانات والتطبيقات أونلاين.",
+    "Generate random RFC 4122 version 4 UUIDs in bulk for databases, APIs and test fixtures.",
 };
 
 export default function UUIDGeneratorPage() {

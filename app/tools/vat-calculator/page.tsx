@@ -7,9 +7,10 @@ import RelatedTools from "@/components/tools/RelatedTools";
 import VATCalculator from "@/components/tools/vat/VATCalculator";
 
 export const metadata: Metadata = {
-  title: "حاسبة ضريبة القيمة المضافة VAT مجانًا | EzyTemplate",
+  alternates: { canonical: "/tools/vat-calculator" },
+  title: "VAT Calculator – Add or Remove VAT",
   description:
-    "احسب ضريبة القيمة المضافة بسرعة، إضافة الضريبة أو استخراجها من المبلغ الإجمالي بدقة عالية.",
+    "Add VAT to a net amount or extract VAT from a gross price using any tax rate.",
   keywords: [
     "حاسبة الضريبة",
     "vat calculator",
@@ -26,7 +27,7 @@ export default function VATToolPage() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "حاسبة ضريبة القيمة المضافة VAT | EzyTemplate",
-    url: "https://ezytemplate.com/tools/vat-calculator",
+    url: "https://ezytemplate.pro/tools/vat-calculator",
     applicationCategory: "BusinessApplication",
     operatingSystem: "All",
     offers: {

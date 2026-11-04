@@ -14,7 +14,9 @@ export const metadata: Metadata = {
   },
   description:
     "Browse downloadable design, Word, Excel and website templates, plus practical browser-based tools.",
-  alternates: { canonical: "/" },
+  // Canonicals are declared per route. A global "/" default silently told
+  // Google that every page without its own canonical was a duplicate of the
+  // homepage (the /tools tree was affected).
   openGraph: {
     type: "website",
     siteName: SITE_NAME,

@@ -33,7 +33,8 @@ export default function TemplateCard({
     resourceKind.includes("website") ||
     resourceKind.includes("موقع");
   const imageUrl = getAssetUrl(
-    t.preview_image || t.previewImage || t.image || "/assets/travelix-card.png",
+    t.preview_image || t.previewImage || t.image ||
+      "/assets/template-placeholder.svg",
   );
 
   useEffect(() => {
@@ -134,7 +135,7 @@ export default function TemplateCard({
               objectFit: t.resource_type_raw === "design" ? "contain" : "cover",
             }}
             onError={(e: any) => {
-              e.currentTarget.src = "/assets/travelix-card.png";
+              e.currentTarget.src = "/assets/template-placeholder.svg";
             }}
           />
         </Link>

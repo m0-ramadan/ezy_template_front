@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import CaseConverter from "@/components/tools/text/CaseConverter";
 
 export const metadata: Metadata = {
-  title: "محول حالة الأحرف والنصوص | EzyTemplate",
+  alternates: { canonical: "/tools/case-converter" },
+  title: "Case Converter – Change Text Case Online",
   description:
-    "تحويل حالة النص فوراً بين UPPERCASE و lowercase و Title Case و camelCase و snake_case.",
+    "Convert text to UPPER CASE, lower case, title case or sentence case instantly in your browser. Free, private and no signup required.",
 };
 
 export default function CaseConverterPage() {

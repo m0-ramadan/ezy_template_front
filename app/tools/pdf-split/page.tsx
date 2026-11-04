@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import PDFSplit from "@/components/tools/pdf/PDFSplit";
 
 export const metadata: Metadata = {
-  title: "تقسيم ملفات PDF مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/pdf-split" },
+  title: "Split PDF Files – Extract Pages Online",
   description:
-    "فصل صفحات ملف PDF أو استخراج نطاق صفحات مخصص بسهولة مجاناً بدون تسجيل.",
+    "Split a PDF into separate documents or extract a page range in seconds.",
   keywords: ["تقسيم pdf", "pdf split", "فصل صفحات pdf", "استخراج صفحات"],
 };
 

@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import ImageResizer from "@/components/tools/image/ImageResizer";
 
 export const metadata: Metadata = {
-  title: "تغيير حجم الصور مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/image-resizer" },
+  title: "Image Resizer – Resize Images Online",
   description:
-    "تعديل أبعاد الصور مع قياسات جاهزة للسوشيال ميديا (انستجرام، فيسبوك، A4) مجاناً بدون تسجيل.",
+    "Resize images to exact pixel dimensions for web, social media and print. Free and private.",
   keywords: [
     "تغيير حجم الصور",
     "image resizer",

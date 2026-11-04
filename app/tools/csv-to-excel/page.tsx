@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import CSVToExcel from "@/components/tools/excel/CSVToExcel";
 
 export const metadata: Metadata = {
-  title: "تحويل CSV إلى Excel مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/csv-to-excel" },
+  title: "CSV to Excel Converter – Free Online",
   description:
-    "تحويل ملفات البيانات المفصولة بفاصلة CSV إلى جداول إكسيل XLSX مجاناً بدون تسجيل.",
+    "Convert CSV files into .xlsx Excel workbooks in your browser. Your data never leaves your device.",
   keywords: [
     "تحويل csv الى excel",
     "csv to xlsx",

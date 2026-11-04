@@ -4,11 +4,44 @@ const LOCAL_BACKEND_URL = "http://127.0.0.1:8002";
 const PRODUCTION_BACKEND_URL = "https://dashboard.ezytemplate.pro";
 const API_TIMEOUT_MS = 15000;
 
-function apiFetch(input: RequestInfo | URL, init: RequestInit = {}) {
-  return fetch(input, {
-    ...init,
-    signal: init.signal || AbortSignal.timeout(API_TIMEOUT_MS),
-  });
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * The shared host intermittently answers PHP requests with 503 while a
+ * neighbouring request succeeds. Read requests are retried a couple of times
+ * with a short backoff so a single bad response never blanks a page.
+ */
+async function apiFetch(
+  input: RequestInfo | URL,
+  init: RequestInit = {},
+): Promise<Response> {
+  const method = (init.method || "GET").toUpperCase();
+  const attempts = method === "GET" ? 3 : 1;
+  let lastError: unknown = new Error("Request failed");
+
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      const response = await fetch(input, {
+        ...init,
+        signal: init.signal || AbortSignal.timeout(API_TIMEOUT_MS),
+      });
+      if (RETRYABLE_STATUS.has(response.status) && attempt < attempts - 1) {
+        lastError = new Error(`API responded ${response.status}`);
+        await sleep(250 * (attempt + 1));
+        continue;
+      }
+      return response;
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts - 1) await sleep(250 * (attempt + 1));
+    }
+  }
+
+  throw lastError;
 }
 
 function getDefaultBackendUrl(): string {
@@ -26,8 +59,33 @@ export const BACKEND_URL =
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || `${BACKEND_URL}/api`;
 
+/** Neutral placeholder used whenever a real template image is unavailable. */
+export const PLACEHOLDER_TEMPLATE_IMAGE = "/assets/template-placeholder.svg";
+
+/**
+ * The catalogue was seeded with a `sample-1..3` gallery convention, but the
+ * storage sync only ever produced `cover.png` next to those paths. The dead
+ * URLs used to fall back to an unrelated website-template card, which is why
+ * visitors saw an image that did not belong to the template they opened.
+ */
+const LEGACY_SAMPLE_PATTERN =
+  /\/template-previews\/[^/]+\/sample-\d+\.(?:png|jpe?g|webp)$/i;
+
+export function isMissingSampleImage(path: string | null | undefined): boolean {
+  return !!path && LEGACY_SAMPLE_PATTERN.test(path);
+}
+
+/** Map a dead gallery path to the cover image that actually exists next to it. */
+export function coverForPreview(path: string | null | undefined): string | null {
+  if (!path) return null;
+  if (isMissingSampleImage(path)) {
+    return path.replace(/sample-\d+\.[a-z]+$/i, "cover.png");
+  }
+  return path;
+}
+
 export function getAssetUrl(path: string | null | undefined): string {
-  if (!path) return "/assets/travelix-card.png";
+  if (!path) return PLACEHOLDER_TEMPLATE_IMAGE;
   if (path.startsWith("http://") || path.startsWith("https://")) {
     return path;
   }
@@ -143,17 +201,26 @@ export function normalizeTemplate(r: any, locale: string = "en") {
         ? `${r.views_count}`
         : r.views || "0",
     rating: r.rating !== undefined && r.rating !== null ? `${r.rating}` : null,
-    image: getAssetUrl(r.preview_image || r.image),
-    preview_image: getAssetUrl(r.preview_image || r.image),
-    detail_image: getAssetUrl(r.detail_image || r.preview_image || r.image),
-    screenshots: Array.isArray(r.screenshots)
-      ? r.screenshots.map((s: string) => getAssetUrl(s))
-      : typeof r.screenshots === "string" && r.screenshots.trim()
+    // Prefer the cover that exists on the media server over the legacy
+    // sample-1 gallery path that returned 503 for almost every template.
+    image: getAssetUrl(coverForPreview(r.preview_image || r.image)),
+    preview_image: getAssetUrl(coverForPreview(r.preview_image || r.image)),
+    detail_image: getAssetUrl(
+      coverForPreview(r.detail_image) ||
+        coverForPreview(r.preview_image) ||
+        coverForPreview(r.image),
+    ),
+    // Only keep gallery images that are known to exist. Missing `sample-*`
+    // files are dropped so the gallery never shows a different template.
+    screenshots: (
+      Array.isArray(r.screenshots)
         ? r.screenshots
-            .split("\n")
-            .map((s: string) => getAssetUrl(s.trim()))
-            .filter(Boolean)
-        : [],
+        : typeof r.screenshots === "string" && r.screenshots.trim()
+          ? r.screenshots.split("\n").map((s: string) => s.trim())
+          : []
+    )
+      .filter((s: string) => !!s && !isMissingSampleImage(s))
+      .map((s: string) => getAssetUrl(s)),
     features,
     features_en,
     features_ar,
@@ -279,7 +346,7 @@ export function normalizeArticle(a: any, locale: string = "en") {
         })
       : "Recent",
     readTime: `${a.reading_time || 5} ${isAr ? "دقائق" : "min read"}`,
-    image: getAssetUrl(a.cover_image || "/assets/blog-1.png"),
+    image: getAssetUrl(a.cover_image || "/assets/blog-web-card.png"),
   };
 }
 
@@ -303,7 +370,7 @@ export async function getSiteSettings() {
         "Discover thousands of free and premium website templates, UI kits, and design resources.",
       site_description_ar:
         "اكتشف آلاف القوالب المجانية والمدفوعة للمواقع، وحزم واجهات المستخدم، والموارد الرقمية.",
-      contact_email: "support@ezytemplate.com",
+      contact_email: "support@ezytemplate.pro",
       copyright_text: "© 2026 EzyTemplate by Ezystore. All rights reserved.",
       copyright_text_ar:
         "© 2026 إيزي تمبلت بواسطة إيزي ستور. جميع الحقوق محفوظة.",

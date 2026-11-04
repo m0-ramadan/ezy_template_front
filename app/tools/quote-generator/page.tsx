@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import QuoteGenerator from "@/components/tools/business/QuoteGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد عروض الأسعار والتقديرات | EzyTemplate",
+  alternates: { canonical: "/tools/quote-generator" },
+  title: "Quote Generator – Create Client Quotes",
   description:
-    "إنشاء وتحميل عروض الأسعار التجارية والتقديرات المالية للعملاء بصيغة PDF فوراً.",
+    "Build professional quotes with line items, tax and totals, then download or print them.",
 };
 
 export default function QuoteGeneratorPage() {

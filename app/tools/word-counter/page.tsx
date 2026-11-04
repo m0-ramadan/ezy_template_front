@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import WordCounter from "@/components/tools/text/WordCounter";
 
 export const metadata: Metadata = {
-  title: "عداد الكلمات والحروف مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/word-counter" },
+  title: "Word Counter – Words, Characters and Reading Time",
   description:
-    "عد الكلمات والحروف بدون مسافات، الجمل، الفقرات ووقت القراءة المقدر مجاناً بدون تسجيل.",
+    "Count words, characters, sentences and paragraphs, and estimate reading time as you type.",
   keywords: ["عداد الكلمات", "word counter", "حساب الكلمات", "عد الحروف"],
 };
 

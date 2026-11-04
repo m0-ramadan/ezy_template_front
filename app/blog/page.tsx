@@ -4,11 +4,10 @@ import { getArticlesSSR, readingTimeFromContent } from "@/lib/articles";
 import { getAssetUrl } from "@/lib/api";
 import { SITE_URL } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { total } = await getArticlesSSR({ perPage: 1 });
+  const { total, unavailable } = await getArticlesSSR({ perPage: 1 });
   return {
     title: "Blog - Template Guides and Practical Tutorials",
     description:
@@ -23,7 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
       type: "website",
     },
     // An empty blog index has no content to rank and would be a thin page.
-    ...(total > 0 ? {} : { robots: { index: false, follow: true } as Metadata["robots"] }),
+    // An unreachable API is not an empty blog: never deindex the index page
+    // because the backend had a bad minute.
+    ...(total > 0 || unavailable
+      ? {}
+      : { robots: { index: false, follow: true } as Metadata["robots"] }),
   };
 }
 

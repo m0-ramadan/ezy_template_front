@@ -1,13 +1,31 @@
 import { templates as fallbackTemplates } from "@/data/templates";
-import { getResourceBySlugResult, getResources, normalizeTemplate } from "@/lib/api";
+import { getResources, normalizeTemplate } from "@/lib/api";
 import LoadUnavailable from "@/components/LoadUnavailable";
 import DetailView from "@/components/DetailView";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
+import {
+  getCanonicalTemplateSlug,
+  getTemplateDetailResult,
+} from "@/lib/catalog";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+function plainText(value: unknown, max = 160): string {
+  const text = String(value || "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (text.length <= max) return text;
+  return `${text.slice(0, max - 1).trimEnd()}…`;
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
-  const { data: resource, unavailable } = await getResourceBySlugResult(slug);
+  const { resource, unavailable } = await getTemplateDetailResult(slug);
   // A missing slug is a genuine 404. An unreachable API is not: the URL keeps
   // its canonical but stays out of the index for this render.
   if (unavailable) {
@@ -18,9 +36,35 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
   if (!resource) notFound();
-  const title = resource.title || resource.name || slug;
-  const description = String(resource.short_description || resource.description || `Template details for ${title}.`).replace(/<[^>]+>/g, "").slice(0, 160);
-  return { title, description, alternates: { canonical: `/templates/${slug}` }, openGraph: { title, description } };
+
+  // Rows that were seeded twice under two category paths share one canonical.
+  const canonicalSlug = await getCanonicalTemplateSlug(slug);
+  const normalized = normalizeTemplate(resource);
+  const title = plainText(resource.title || slug, 120);
+  const description =
+    plainText(resource.short_description, 155) ||
+    plainText(resource.description, 155) ||
+    `Download and preview ${title} on ${SITE_NAME}.`;
+  const image = normalized?.detail_image || normalized?.preview_image;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/templates/${canonicalSlug}` },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url: `${SITE_URL}/templates/${canonicalSlug}`,
+      type: "website",
+      images: image ? [{ url: image, alt: title }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      images: image ? [image] : undefined,
+    },
+  };
 }
 
 export default async function Detail({
@@ -31,7 +75,7 @@ export default async function Detail({
   const { slug } = await params;
 
   // 1. Fetch live resource from API or fallback
-  const { data: apiResource, unavailable } = await getResourceBySlugResult(slug);
+  const { resource: apiResource, unavailable } = await getTemplateDetailResult(slug);
   const t = normalizeTemplate(apiResource) || fallbackTemplates.find((x) => x.slug === slug);
   // Only a confirmed miss is a 404, so a temporary API problem never removes
   // a real template URL from the index.
@@ -64,13 +108,58 @@ export default async function Detail({
 
   const displayFeatures = t.features && t.features.length > 0 ? t.features : [];
 
+  const url = `${SITE_URL}/templates/${slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Templates",
+            item: `${SITE_URL}/templates`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: t.name_en || t.name || t.title,
+            item: url,
+          },
+        ],
+      },
+      {
+        "@type": "CreativeWork",
+        name: t.name_en || t.name || t.title,
+        description: plainText(
+          (t as any).description_en || (t as any).description,
+          500,
+        ),
+        url,
+        ...(mainDetailImage ? { image: mainDetailImage } : {}),
+        ...((t as any).category ? { genre: (t as any).category } : {}),
+        inLanguage: "en",
+        isAccessibleForFree: (t as any).price === "Free",
+        publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+      },
+    ],
+  };
+
   return (
-    <DetailView
-      t={t}
-      relatedList={relatedList}
-      mainDetailImage={mainDetailImage}
-      galleryScreenshots={galleryScreenshots}
-      displayFeatures={displayFeatures}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <DetailView
+        t={t}
+        relatedList={relatedList}
+        mainDetailImage={mainDetailImage}
+        galleryScreenshots={galleryScreenshots}
+        displayFeatures={displayFeatures}
+      />
+    </>
   );
 }

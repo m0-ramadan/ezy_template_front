@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import JSONFormatter from "@/components/tools/developers/JSONFormatter";
 
 export const metadata: Metadata = {
-  title: "منسق وفاحص ملفات JSON | EzyTemplate",
+  alternates: { canonical: "/tools/json-formatter" },
+  title: "JSON Formatter and Validator – Free Online",
   description:
-    "تنسيق وتجميل وضغط كود JSON واكتشاف أخطاء القواعد والسطر فوراً أونلاين.",
+    "Format, validate, beautify and minify JSON data with clear error messages. Runs entirely in your browser.",
 };
 
 export default function JSONFormatterPage() {

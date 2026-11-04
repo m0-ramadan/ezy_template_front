@@ -7,10 +7,10 @@ import {
   wordCount,
 } from "@/lib/articles";
 import { getAssetUrl } from "@/lib/api";
-import { SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// Data is cached in lib/articles.ts, so no route-level opt-out is needed.
+export const revalidate = 300;
 
 function plainExcerpt(value: string | null | undefined, max = 158) {
   const text = String(value || "")
@@ -31,7 +31,15 @@ export async function generateMetadata({
   // A missing slug is a genuine 404, never a duplicate of another article.
   // An unreachable API is not a 404: the URL keeps its canonical but stays
   // out of the index for this render.
-  if (unavailable) throw new Error(`Article API unavailable for slug: ${slug}`);
+  if (unavailable) {
+    return {
+      title: "Article temporarily unavailable",
+      description:
+        "This article could not be loaded right now. Please try again in a few minutes.",
+      alternates: { canonical: `/blog/${slug}` },
+      robots: { index: false, follow: true },
+    };
+  }
   if (!article) notFound();
 
   const description =
@@ -70,7 +78,28 @@ export default async function Article({
   const { slug } = await params;
   const { article, unavailable } = await getArticleBySlugResult(slug);
   if (!article && !unavailable) notFound();
-  if (!article) throw new Error(`Article API unavailable for slug: ${slug}`);
+
+  // Never answer a temporary backend outage with HTTP 500: that is what made
+  // Google drop these article URLs. Serve a readable notice instead.
+  if (!article) {
+    return (
+      <main className="container article-detail">
+        <div className="breadcrumbs">
+          <Link href="/">Home</Link>　›　<Link href="/blog">Blog</Link>
+        </div>
+        <h1>Article temporarily unavailable</h1>
+        <p className="lead">
+          We could not load this article right now. It is still published — please
+          try again in a few minutes.
+        </p>
+        <p>
+          <Link className="smallprimary" href="/blog">
+            ← Back to Blog
+          </Link>
+        </p>
+      </main>
+    );
+  }
 
   const minutes = readingTimeFromContent(article.content);
   const words = wordCount(article.content);
@@ -83,8 +112,51 @@ export default async function Article({
       })
     : "";
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE_URL}/blog` },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: article.title,
+            item: `${SITE_URL}/blog/${article.slug}`,
+          },
+        ],
+      },
+      {
+        "@type": "BlogPosting",
+        headline: article.title,
+        description:
+          article.meta_description || plainExcerpt(article.excerpt || article.content),
+        image: [cover],
+        datePublished: article.published_at || undefined,
+        dateModified: article.published_at || undefined,
+        author: {
+          "@type": "Organization",
+          name: article.author_name || SITE_NAME,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: SITE_NAME,
+          url: SITE_URL,
+        },
+        mainEntityOfPage: `${SITE_URL}/blog/${article.slug}`,
+        inLanguage: "en",
+      },
+    ],
+  };
+
   return (
     <main className="container article-detail">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="breadcrumbs">
         <Link href="/">Home</Link>　›　
         <Link href="/blog">Blog</Link>　›　

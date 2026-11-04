@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import DiscountCalculator from "@/components/tools/calculator/DiscountCalculator";
 
 export const metadata: Metadata = {
-  title: "حاسبة الخصومات والتخفيضات مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/discount-calculator" },
+  title: "Discount Calculator – Sale Price and Savings",
   description:
-    "حساب السعر النهائي بعد الخصم ومقدار التوفير المالي بسهولة مجاناً بدون تسجيل.",
+    "Calculate sale prices, savings and discount percentages instantly with this free online discount calculator.",
   keywords: [
     "حاسبة الخصومات",
     "discount calculator",

@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import MetaTagGenerator from "@/components/tools/seo/MetaTagGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد الميتا تاج و OpenGraph لـ SEO | EzyTemplate",
+  alternates: { canonical: "/tools/meta-tag-generator" },
+  title: "Meta Tag Generator – SEO and Open Graph",
   description:
-    "إنشاء وتوليد وسوم الميتا تاج و OpenGraph و Twitter Cards لرفع ترتيب الموقع في جوجل.",
+    "Generate complete SEO meta tags, Open Graph and Twitter card markup for any web page.",
 };
 
 export default function MetaTagGeneratorPage() {

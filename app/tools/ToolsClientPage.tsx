@@ -7,7 +7,9 @@ import { Search, Wrench } from "lucide-react";
 import ToolCard from "@/components/tools/ToolCard";
 import ToolBreadcrumb from "@/components/tools/ToolBreadcrumb";
 import { getToolsFromApi } from "@/lib/api";
-import { TOOLS as fallbackTools, Tool } from "@/data/tools";
+import { Tool } from "@/data/tools";
+import { TOOL_SLUGS } from "@/data/tool-catalog";
+import { AVAILABLE_TOOLS as fallbackTools } from "@/lib/toolsUtils";
 
 export default function ToolsClientPage() {
   const { isRTL } = useLanguage();
@@ -37,7 +39,8 @@ export default function ToolsClientPage() {
 
   const sourceTools = useMemo(() => {
     if (apiTools && apiTools.length > 0) {
-      return apiTools.map((t: any) => {
+      const routable = apiTools.filter((t: any) => TOOL_SLUGS.has(t.slug));
+      if (routable.length > 0) return routable.map((t: any) => {
         let catSlug = "business";
         if (typeof t.category === "string") {
           catSlug = t.category;

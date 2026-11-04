@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import ImageCompressor from "@/components/tools/image/ImageCompressor";
 
 export const metadata: Metadata = {
-  title: "ضغط الصور مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/image-compressor" },
+  title: "Image Compressor – Reduce Image Size Online",
   description:
-    "ضغط وتصغير حجم صور JPG و PNG و WEBP بسرعة وبأعلى جودة مجاناً بدون تسجيل.",
+    "Compress JPG, PNG and WebP images to a smaller file size while keeping quality. Free, processed locally in your browser.",
   keywords: [
     "ضغط الصور",
     "image compressor",

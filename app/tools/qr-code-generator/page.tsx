@@ -7,9 +7,10 @@ import RelatedTools from "@/components/tools/RelatedTools";
 import QRGenerator from "@/components/tools/qr/QRGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد QR Code مجاني أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/qr-code-generator" },
+  title: "QR Code Generator – Free Custom QR Codes",
   description:
-    "أنشئ رموز QR مخصصة للمواقع، الشبكات، والاتصالات بجودة عالية وحمّلها بصيغة PNG أو SVG بدون تسجيل.",
+    "Create QR codes for links, text and contact details, customise the colours and download them as PNG.",
   keywords: [
     "مولد qr",
     "qr code generator",
@@ -26,7 +27,7 @@ export default function QRToolPage() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "مولد الرموز QR Code | EzyTemplate",
-    url: "https://ezytemplate.com/tools/qr-code-generator",
+    url: "https://ezytemplate.pro/tools/qr-code-generator",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "All",
     offers: {

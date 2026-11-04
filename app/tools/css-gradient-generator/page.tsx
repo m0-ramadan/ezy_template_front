@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import CSSGradientGenerator from "@/components/tools/image/CSSGradientGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد التدرجات اللونية CSS | EzyTemplate",
+  alternates: { canonical: "/tools/css-gradient-generator" },
+  title: "CSS Gradient Generator – Copy Ready CSS",
   description:
-    "أداة تفاعلية لتصميم التدرجات اللونية الخطية والدائرية ونسخ كود CSS جاهز للموقع.",
+    "Design linear and radial CSS gradients visually and copy the generated CSS code straight into your stylesheet.",
 };
 
 export default function CSSGradientGeneratorPage() {

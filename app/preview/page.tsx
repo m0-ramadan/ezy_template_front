@@ -158,7 +158,7 @@ function PreviewContent() {
             }}
           >
             <img
-              src={templateItem.image || "/assets/travelix-card.png"}
+              src={templateItem.image || "/assets/template-placeholder.svg"}
               alt={displayName}
               style={{
                 width: "28px",
@@ -617,7 +617,7 @@ function PreviewContent() {
                     templateItem?.detail_image ||
                     templateItem?.preview_image ||
                     templateItem?.image ||
-                    "/assets/travelix-card.png"
+                    "/assets/template-placeholder.svg"
                   }
                   alt={displayName}
                   style={{

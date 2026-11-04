@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 import {
+  getCanonicalTemplateMap,
   getCollectionData,
   getPublishedResources,
   type CollectionKey,
 } from "@/lib/catalog";
 import { getArticlesSSR } from "@/lib/articles";
+import { TOOL_CATEGORIES, TOOL_ROUTES } from "@/data/tool-catalog";
 
 export const revalidate = 3600;
 
@@ -27,6 +29,8 @@ const STATIC_PATHS = [
   "/services",
   "/resources",
   "/tools",
+  "/support",
+  "/custom-requests",
   "/privacy",
   "/terms",
   "/cookie-policy",
@@ -37,8 +41,14 @@ function entry(
   url: string,
   priority: number,
   changeFrequency: "daily" | "weekly" | "monthly",
+  lastModified?: string | null,
 ): MetadataRoute.Sitemap[number] {
-  return { url: `${SITE_URL}${url}`, changeFrequency, priority };
+  return {
+    url: `${SITE_URL}${url}`,
+    changeFrequency,
+    priority,
+    ...(lastModified ? { lastModified: new Date(lastModified) } : {}),
+  };
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -73,11 +83,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Every published resource detail page.
-  const resources = await getPublishedResources({ per_page: 2000, sort: "latest" });
+  // Every tool category and every tool page. These are real, self-canonical
+  // pages; they were missing from the sitemap, which left 26 indexable tool
+  // URLs discovered but never crawled.
+  for (const category of TOOL_CATEGORIES) {
+    entries.push(entry(`/tools/${category}`, 0.6, "monthly"));
+  }
+  for (const tool of TOOL_ROUTES) {
+    entries.push(entry(`/tools/${tool.slug}`, 0.7, "monthly"));
+  }
+
+  // Every published resource detail page. Rows that duplicate another row's
+  // content are left out: their canonical points at the primary URL.
+  const [resources, duplicates] = await Promise.all([
+    getPublishedResources({ per_page: 2000, sort: "latest" }),
+    getCanonicalTemplateMap(),
+  ]);
   for (const resource of resources) {
-    if (resource?.slug) {
-      entries.push(entry(`/templates/${resource.slug}`, 0.7, "monthly"));
+    if (resource?.slug && !duplicates[resource.slug]) {
+      entries.push(
+        entry(
+          `/templates/${resource.slug}`,
+          0.7,
+          "monthly",
+          resource.updated_at || resource.published_at,
+        ),
+      );
     }
   }
 

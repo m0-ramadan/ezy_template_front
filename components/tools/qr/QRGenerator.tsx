@@ -26,7 +26,7 @@ export default function QRGenerator() {
   const [qrType, setQrType] = useState<QRType>("url");
 
   // Input states
-  const [url, setUrl] = useState("https://ezytemplate.com");
+  const [url, setUrl] = useState("https://ezytemplate.pro");
   const [text, setText] = useState("مرحباً بكم في EzyTemplate");
 
   // WhatsApp
@@ -71,7 +71,7 @@ export default function QRGenerator() {
   const getQRRawValue = (): string => {
     switch (qrType) {
       case "url":
-        return url || "https://ezytemplate.com";
+        return url || "https://ezytemplate.pro";
       case "text":
         return text || "EzyTemplate";
       case "whatsapp":
@@ -86,7 +86,7 @@ export default function QRGenerator() {
       case "wifi":
         return `WIFI:S:${wifiSsid};T:${wifiType};P:${wifiPass};H:${wifiHidden ? "true" : "false"};;`;
       default:
-        return "https://ezytemplate.com";
+        return "https://ezytemplate.pro";
     }
   };
 

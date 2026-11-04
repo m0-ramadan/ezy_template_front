@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import ProfitMarginCalculator from "@/components/tools/calculator/ProfitMarginCalculator";
 
 export const metadata: Metadata = {
-  title: "حاسبة هامش الربح مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/profit-margin-calculator" },
+  title: "Profit Margin Calculator – Cost and Price",
   description:
-    "حساب صافي الأرباح وهامش الربح المئوي ومعدل الزيادة على التكلفة (Markup) مجاناً بدون تسجيل.",
+    "Calculate gross profit, margin and markup from cost and selling price instantly.",
   keywords: [
     "حاسبة هامش الربح",
     "profit margin calculator",

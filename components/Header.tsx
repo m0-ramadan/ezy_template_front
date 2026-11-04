@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState, useRef, useMemo } from "react";
 import { templates } from "@/data/templates";
-import { getSiteSettings } from "@/lib/api";
+import { BACKEND_URL, getSiteSettings } from "@/lib/api";
 import { useLanguage } from "@/context/LanguageContext";
 import MegaMenu from "@/components/MegaMenu";
 import ResourcesMenu from "@/components/ResourcesMenu";
@@ -444,7 +444,7 @@ export default function Header() {
             >
               {currentUser.role === "admin" && (
                 <a
-                  href="http://localhost:8002/admin"
+                  href={`${BACKEND_URL}/admin`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="iconbtn"
@@ -573,7 +573,7 @@ export default function Header() {
                 </Link>
                 {currentUser.role === "admin" && (
                   <a
-                    href="http://localhost:8002/admin"
+                    href={`${BACKEND_URL}/admin`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{

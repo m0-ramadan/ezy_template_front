@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import {
-  getHomeContent,
-  getResources,
-  getCategories,
-} from "@/lib/api";
-import { getCatalogStats } from "@/lib/catalog";
-import { SITE_URL } from "@/lib/site";
+  getCatalogStats,
+  getCategoriesCached,
+  getHomeContentCached,
+  getLatestResourcesCached,
+} from "@/lib/catalog";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import HomeView from "./HomeView";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [homeRes, resourcesRes, catRes, statsRes] = await Promise.allSettled([
-    getHomeContent(),
-    getResources({ per_page: 50 }),
-    getCategories(),
+    getHomeContentCached(),
+    getLatestResourcesCached(50),
+    getCategoriesCached(),
     getCatalogStats(),
   ]);
 
@@ -47,12 +47,40 @@ export default async function HomePage() {
       ? statsRes.value.total_templates
       : null;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: `${SITE_URL}/assets/logo.png`,
+      },
+      {
+        "@type": "WebSite",
+        name: SITE_NAME,
+        url: SITE_URL,
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${SITE_URL}/templates?q={search_term_string}`,
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
+
   return (
-    <HomeView
-      initialHomeData={homeData}
-      initialResources={resources}
-      initialCategories={categories}
-      initialCatalogTotal={catalogTotal}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <HomeView
+        initialHomeData={homeData}
+        initialResources={resources}
+        initialCategories={categories}
+        initialCatalogTotal={catalogTotal}
+      />
+    </>
   );
 }

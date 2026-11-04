@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { API_BASE_URL, normalizeTemplate } from "@/lib/api";
+import { unstable_cache } from "next/cache";
+import {
+  API_BASE_URL,
+  getResourceBySlugResult,
+  normalizeTemplate,
+} from "@/lib/api";
+import catalogueSnapshot from "@/data/catalogue-snapshot.json";
 
 /**
  * Server-side catalogue access.
@@ -51,6 +57,8 @@ export type RawResource = {
   short_description: string | null;
   description: string | null;
   is_free: boolean | number;
+  featured?: boolean | number;
+  rating?: number | string | null;
   price: string | number | null;
   downloads_count: number;
   published_at: string | null;
@@ -68,15 +76,53 @@ export type ResourcePage = {
   last_page: number;
 };
 
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchJson<T>(path: string): Promise<T> {
+  let lastError: unknown = new Error(`Catalogue API failed for ${path}`);
+
+  // The shared host answers a share of PHP requests with 503 while the next
+  // request succeeds. Retry before giving up, and only throw after the last
+  // attempt so a failed response is never written to the data cache.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let res: Response;
+    try {
+      res = await fetch(`${API_BASE_URL}${path}`, {
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(15000),
+      });
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2) await sleep(250 * (attempt + 1));
+      continue;
+    }
+
+    if (res.ok) return (await res.json()) as T;
+
+    // A 404 is a real answer: do not retry it.
+    if (!RETRYABLE_STATUS.has(res.status)) {
+      throw new Error(`Catalogue API responded ${res.status} for ${path}`);
+    }
+    lastError = new Error(`Catalogue API responded ${res.status} for ${path}`);
+    if (attempt < 2) await sleep(250 * (attempt + 1));
+  }
+
+  throw lastError;
+}
+
+const cachedFetchJson = unstable_cache(fetchJson, ["catalog-api"], {
+  revalidate: CATALOG_REVALIDATE_SECONDS,
+});
+
 async function apiGet<T>(path: string): Promise<T | null> {
   try {
-    const res = await fetch(`${API_BASE_URL}${path}`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(15000),
-    });
-    if (!res.ok) return null;
-    return (await res.json()) as T;
+    const data = (await cachedFetchJson(path)) as T;
+    return data ?? null;
   } catch {
     return null;
   }
@@ -112,7 +158,109 @@ export async function getResourcePage(
   } = {},
 ): Promise<ResourcePage | null> {
   const query = qs({ ...params, page: params.page ?? 1, per_page: params.per_page ?? 24 });
-  return apiGet<ResourcePage>(`/resources${query}`);
+  const page = await apiGet<ResourcePage>(`/resources${query}`);
+  // Last-known-good fallback: a checked-in snapshot of the published
+  // catalogue. It is only used when the live API cannot be reached, so a
+  // hosting hiccup never empties the site or the sitemap.
+  return page ?? snapshotResourcePage(params);
+}
+
+/** Snapshot rows, typed as the API rows they were captured from. */
+const SNAPSHOT_ROWS = (catalogueSnapshot as unknown) as RawResource[];
+
+type ResourceQuery = NonNullable<Parameters<typeof getResourcePage>[0]>;
+
+function matchesSnapshotFilters(
+  row: RawResource,
+  params: ResourceQuery,
+): boolean {
+  const type = (params.type || "").toLowerCase();
+  if (type && type !== "canva" && row.resource_type !== type) return false;
+  if (type === "canva") {
+    const isCanva =
+      !!row.canva_design_id ||
+      (row.category?.slug || "").includes("canva") ||
+      row.resource_type === "canva";
+    if (!isCanva) return false;
+  }
+  if (params.exclude_canva) {
+    const isCanva =
+      !!row.canva_design_id || (row.category?.slug || "").includes("canva");
+    if (isCanva) return false;
+  }
+  if (params.category && row.category?.slug !== params.category) return false;
+  if (params.subcategory) {
+    const slug = row.subcategory?.slug || "";
+    if (slug !== params.subcategory && !slug.endsWith(`-${params.subcategory}`)) {
+      return false;
+    }
+  }
+  if (params.platform) {
+    const platform = params.platform.toLowerCase();
+    if (platform === "canva" && !row.canva_design_id) return false;
+    if (["excel", "xlsx"].includes(platform) && row.resource_type !== "excel") return false;
+    if (["word", "docx"].includes(platform) && row.resource_type !== "word") return false;
+    if (
+      ["powerpoint", "pptx", "presentation"].includes(platform) &&
+      row.resource_type !== "presentation"
+    ) {
+      return false;
+    }
+  }
+  if (params.featured && !row.featured) return false;
+  if (params.search) {
+    const term = params.search.toLowerCase();
+    const haystack = [row.title, row.short_description, row.title_ar]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    if (!haystack.includes(term)) return false;
+  }
+  return true;
+}
+
+function snapshotResourcePage(params: ResourceQuery): ResourcePage {
+  const filtered = SNAPSHOT_ROWS.filter((row) =>
+    matchesSnapshotFilters(row, params),
+  );
+
+  const sort = params.sort || "latest";
+  const sorted = [...filtered].sort((a, b) => {
+    if (sort === "popular") return (b.downloads_count || 0) - (a.downloads_count || 0);
+    if (sort === "rating") return Number(b.rating || 0) - Number(a.rating || 0);
+    return String(b.published_at || "").localeCompare(String(a.published_at || ""));
+  });
+
+  const perPage = params.per_page ?? 24;
+  const currentPage = params.page ?? 1;
+  const start = (currentPage - 1) * perPage;
+
+  return {
+    data: sorted.slice(start, start + perPage),
+    total: sorted.length,
+    per_page: perPage,
+    current_page: currentPage,
+    last_page: Math.max(1, Math.ceil(sorted.length / perPage)),
+  };
+}
+
+/**
+ * Detail lookup that tolerates a live-API outage.
+ *
+ * A real 404 from the API still 404s. Only an unreachable API falls back to
+ * the snapshot, so a published template never disappears from Google because
+ * the backend had a bad minute.
+ */
+export async function getTemplateDetailResult(
+  slug: string,
+): Promise<{ resource: RawResource | null; unavailable: boolean }> {
+  const { data, unavailable } = await getResourceBySlugResult(slug);
+  if (data) return { resource: data as RawResource, unavailable: false };
+  if (unavailable) {
+    const snapshot = SNAPSHOT_ROWS.find((row) => row.slug === slug);
+    if (snapshot) return { resource: snapshot, unavailable: false };
+  }
+  return { resource: null, unavailable };
 }
 
 export async function getPublishedResources(
@@ -310,4 +458,102 @@ export function unavailableCollectionMetadata(
     alternates: { canonical: `${basePath}/${category}` },
     robots: { index: false, follow: true },
   };
+}
+
+/** Normalise a title so "Small Business Budget" and "small  business budget"
+ *  are recognised as the same template. */
+function titleKey(value: string | null | undefined): string {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&[a-z]+;/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+/**
+ * The catalogue contains a handful of rows seeded twice under different
+ * category paths (same title, same content). Search Console reported them as
+ * "Duplicate without user-selected canonical". Each duplicate points its
+ * canonical at one primary URL instead of competing with itself.
+ */
+async function buildCanonicalMap(): Promise<Record<string, string>> {
+  const resources = await getPublishedResources({ per_page: 2000 });
+  const groups = new Map<
+    string,
+    Array<{ slug: string; downloads: number; published: string }>
+  >();
+
+  for (const resource of resources) {
+    const slug = resource?.slug;
+    const title = titleKey(resource?.title);
+    if (!slug || !title) continue;
+    // Only merge rows whose actual copy is identical. Two different templates
+    // can legitimately share a title (an Excel and a presentation version),
+    // and collapsing those would hide real content.
+    const body = `${resource.short_description || ""}|${resource.description || ""}`
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+    const key = `${title}::${body.slice(0, 400)}`;
+    const list = groups.get(key) ?? [];
+    list.push({
+      slug,
+      downloads: Number(resource.downloads_count || 0),
+      published: resource.published_at || "",
+    });
+    groups.set(key, list);
+  }
+
+  const map: Record<string, string> = {};
+  for (const list of groups.values()) {
+    if (list.length < 2) continue;
+    const [primary] = [...list].sort((a, b) => {
+      if (b.downloads !== a.downloads) return b.downloads - a.downloads;
+      if (a.published !== b.published) return a.published < b.published ? -1 : 1;
+      return a.slug.localeCompare(b.slug);
+    });
+    for (const item of list) {
+      if (item.slug !== primary.slug) map[item.slug] = primary.slug;
+    }
+  }
+  return map;
+}
+
+const cachedCanonicalMap = unstable_cache(buildCanonicalMap, ["template-canonicals"], {
+  revalidate: CATALOG_REVALIDATE_SECONDS,
+});
+
+export async function getCanonicalTemplateMap(): Promise<Record<string, string>> {
+  try {
+    return await cachedCanonicalMap();
+  } catch {
+    return {};
+  }
+}
+
+export async function getCanonicalTemplateSlug(slug: string): Promise<string> {
+  try {
+    const map = await cachedCanonicalMap();
+    return map[slug] || slug;
+  } catch {
+    return slug;
+  }
+}
+
+/**
+ * Cached server-side helpers for the home page. They share the same data cache
+ * as the rest of the catalogue, so the dynamic home route no longer issues
+ * four uncached requests to PHP on every visitor.
+ */
+export function getHomeContentCached(): Promise<any | null> {
+  return apiGet<any>("/content/home");
+}
+
+export function getCategoriesCached(): Promise<any[] | null> {
+  return apiGet<any[]>("/categories");
+}
+
+export function getLatestResourcesCached(perPage = 50): Promise<any | null> {
+  return apiGet<any>(`/resources?per_page=${perPage}`);
 }

@@ -7,9 +7,10 @@ import RelatedTools from "@/components/tools/RelatedTools";
 import InvoiceGenerator from "@/components/tools/invoice/InvoiceGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد فواتير مجاني أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/invoice-generator" },
+  title: "Free Invoice Generator – Create PDF Invoices",
   description:
-    "أنشئ فاتورة احترافية مجانًا واحسب الضريبة والخصومات وحمّل الفاتورة بصيغة PDF بدون تسجيل.",
+    "Create professional invoices with tax, discounts and your logo, then download them as a PDF. Free, no signup.",
   keywords: [
     "مولد فواتير",
     "فاتورة pdf",
@@ -26,7 +27,7 @@ export default function InvoiceToolPage() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "مولد الفواتير الاحترافي | EzyTemplate",
-    url: "https://ezytemplate.com/tools/invoice-generator",
+    url: "https://ezytemplate.pro/tools/invoice-generator",
     applicationCategory: "BusinessApplication",
     operatingSystem: "All",
     offers: {

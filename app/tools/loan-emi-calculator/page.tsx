@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import LoanEMICalculator from "@/components/tools/calculators/LoanEMICalculator";
 
 export const metadata: Metadata = {
-  title: "حاسبة القروض والقسط الشهري (EMI) | EzyTemplate",
+  alternates: { canonical: "/tools/loan-emi-calculator" },
+  title: "Loan EMI Calculator – Monthly Instalment",
   description:
-    "حساب القسط الشهري للقروض والتمويل العقاري والشخصي وإجمالي الفوائد المستحقة مع جدول السداد.",
+    "Calculate monthly loan instalments, total interest and the complete repayment schedule for any loan amount.",
 };
 
 export default function LoanEMICalculatorPage() {

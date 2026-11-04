@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import PasswordGenerator from "@/components/tools/dev/PasswordGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد كلمات المرور القوية مجاناً | EzyTemplate",
+  alternates: { canonical: "/tools/password-generator" },
+  title: "Strong Password Generator – Free Online",
   description:
-    "توليد كلمات مرور عشوائية وآمنة جداً مع التحكم بالأرقام والرموز والطول مجاناً بالمتصفح.",
+    "Generate secure random passwords with custom length, symbols and character rules.",
   keywords: [
     "مولد كلمات المرور",
     "password generator",

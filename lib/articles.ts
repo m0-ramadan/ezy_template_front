@@ -1,11 +1,13 @@
+import { unstable_cache } from "next/cache";
 import { API_BASE_URL } from "@/lib/api";
 
 /**
  * Server-side blog access.
  *
- * Articles are fetched directly from the Laravel API. A slug that does not
- * exist resolves to `null` and the page returns a real 404 - there is no
- * fallback that renders a different article.
+ * Articles are fetched directly from the Laravel API, but the responses are
+ * cached. The previous implementation used `cache: "no-store"` on every render
+ * and threw on any API hiccup, which turned six published articles into HTTP
+ * 500 pages (and made Google drop them) every time the backend was busy.
  */
 
 export const ARTICLES_REVALIDATE_SECONDS = 300;
@@ -33,6 +35,11 @@ type ArticlesResponse = {
   total: number;
 };
 
+type ArticleLookup = {
+  status: "found" | "missing";
+  article: RawArticle | null;
+};
+
 const WORDS_PER_MINUTE = 220;
 
 /** Real reading time derived from the article body, never a fixed value. */
@@ -56,42 +63,96 @@ export function wordCount(content: string | null | undefined): number {
   return text ? text.split(" ").filter(Boolean).length : 0;
 }
 
+
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/** Retry transient host errors; a 404 is returned immediately. */
+async function fetchWithRetry(url: string): Promise<Response> {
+  let lastError: unknown = new Error(`Request failed: ${url}`);
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const res = await fetch(url, {
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+        signal: AbortSignal.timeout(15000),
+      });
+      if (res.ok || !RETRYABLE_STATUS.has(res.status)) return res;
+      lastError = new Error(`API responded ${res.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+    if (attempt < 2) await sleep(250 * (attempt + 1));
+  }
+  throw lastError;
+}
+
+async function fetchArticlesPage(
+  page: number,
+  perPage: number,
+): Promise<ArticlesResponse> {
+  const sp = new URLSearchParams({
+    page: String(page),
+    per_page: String(perPage),
+  });
+  const res = await fetchWithRetry(`${API_BASE_URL}/articles?${sp.toString()}`);
+  // Throw so a failed request is never written to the data cache.
+  if (!res.ok) throw new Error(`Articles API responded ${res.status}`);
+  return (await res.json()) as ArticlesResponse;
+}
+
+const cachedArticlesPage = unstable_cache(
+  fetchArticlesPage,
+  ["articles-page"],
+  { revalidate: ARTICLES_REVALIDATE_SECONDS },
+);
+
 export async function getArticlesSSR(
   params: { page?: number; perPage?: number } = {},
 ): Promise<{ articles: RawArticle[]; total: number; unavailable: boolean }> {
   try {
-    const sp = new URLSearchParams({
-      page: String(params.page ?? 1),
-      per_page: String(params.perPage ?? 24),
-    });
-    const res = await fetch(`${API_BASE_URL}/articles?${sp.toString()}`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(15000),
-    });
-    if (!res.ok) return { articles: [], total: 0, unavailable: true };
-    const json = (await res.json()) as ArticlesResponse;
-    return { articles: json.data ?? [], total: json.total ?? 0, unavailable: false };
+    const json = await cachedArticlesPage(params.page ?? 1, params.perPage ?? 24);
+    return {
+      articles: json.data ?? [],
+      total: json.total ?? 0,
+      unavailable: false,
+    };
   } catch {
     return { articles: [], total: 0, unavailable: true };
   }
 }
 
+async function fetchArticleBySlug(slug: string): Promise<ArticleLookup> {
+  const res = await fetchWithRetry(
+    `${API_BASE_URL}/articles/${encodeURIComponent(slug)}`,
+  );
+  // A 404 is a real answer and may be cached. Anything else is an outage, and
+  // throwing keeps the failure out of the data cache.
+  if (res.status === 404) return { status: "missing", article: null };
+  if (!res.ok) throw new Error(`Article API responded ${res.status}`);
+  const article = (await res.json()) as RawArticle;
+  // Guard against a malformed API response ever rendering under the wrong URL.
+  if (!article || article.slug !== slug) {
+    return { status: "missing", article: null };
+  }
+  return { status: "found", article };
+}
+
+const cachedArticleBySlug = unstable_cache(
+  fetchArticleBySlug,
+  ["article-by-slug"],
+  { revalidate: ARTICLES_REVALIDATE_SECONDS },
+);
+
 export async function getArticleBySlugResult(
   slug: string,
 ): Promise<{ article: RawArticle | null; unavailable: boolean }> {
   try {
-    const res = await fetch(`${API_BASE_URL}/articles/${encodeURIComponent(slug)}`, {
-      cache: "no-store",
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(15000),
-    });
-    if (res.status === 404) return { article: null, unavailable: false };
-    if (!res.ok) return { article: null, unavailable: true };
-    const article = (await res.json()) as RawArticle;
-    // Guard against a malformed API response ever rendering under the wrong URL.
-    if (!article || article.slug !== slug) return { article: null, unavailable: false };
-    return { article, unavailable: false };
+    const lookup = await cachedArticleBySlug(slug);
+    return { article: lookup.article, unavailable: false };
   } catch {
     return { article: null, unavailable: true };
   }

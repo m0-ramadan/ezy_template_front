@@ -755,4 +755,407 @@ export const TOOLS: Tool[] = [
     href: "/tools/sitemap-generator",
     keywords: ["xml sitemap", "sitemap generator", "خريطة الموقع", "جوجل"],
   },
+  {
+    slug: "color-palette-generator",
+    title: {
+      ar: "مولد لوحات الألوان",
+      en: "Color Palette Generator",
+    },
+    shortDescription: {
+      ar: "أنشئ لوحات ألوان متناسقة وانسخ أكواد HEX لتصاميمك مجاناً.",
+      en: "Build harmonious colour palettes and copy HEX codes for your designs, free.",
+    },
+    description: {
+      ar: "أداة مجانية لإنشاء لوحات ألوان متناسقة (مكملة، متقابلة، أحادية) انطلاقاً من لون أساسي، مع نسخ أكواد HEX وRGB مباشرة للاستخدام في التصميم أو CSS.",
+      en: "A free tool that generates harmonious colour palettes (complementary, analogous, triadic, monochromatic) from a base colour, with one-click HEX and RGB values ready to paste into a design or stylesheet.",
+    },
+    icon: "Palette",
+    category: "images",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/color-palette-generator",
+    keywords: ["color palette", "colour palette", "hex", "لوحة ألوان", "مولد ألوان"],
+    features: [
+      { ar: "توليد لوحات متناسقة من لون واحد", en: "Generate harmonious palettes from one colour" },
+      { ar: "نسخ أكواد HEX وRGB بضغطة", en: "Copy HEX and RGB values instantly" },
+      { ar: "يعمل بالكامل داخل المتصفح", en: "Runs entirely in the browser" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل الأداة مجانية؟", en: "Is the tool free?" },
+        answer: { ar: "نعم، مجانية بالكامل وبدون تسجيل.", en: "Yes, it is completely free and requires no signup." },
+      },
+    ],
+  },
+  {
+    slug: "csv-to-excel",
+    title: {
+      ar: "تحويل CSV إلى Excel",
+      en: "CSV to Excel Converter",
+    },
+    shortDescription: {
+      ar: "حوّل ملفات CSV إلى مصنفات Excel بصيغة xlsx داخل متصفحك.",
+      en: "Convert CSV files into .xlsx Excel workbooks inside your browser.",
+    },
+    description: {
+      ar: "أداة مجانية لتحويل ملفات CSV النصية إلى مصنفات Excel جاهزة للتعديل، دون رفع بياناتك إلى أي سيرفر؛ تتم العملية بالكامل على جهازك.",
+      en: "A free converter that turns plain CSV files into editable Excel workbooks. The conversion happens entirely in your browser, so your data never leaves your device.",
+    },
+    icon: "FileSpreadsheet",
+    category: "excel",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/csv-to-excel",
+    keywords: ["csv to excel", "تحويل csv", "xlsx", "ملفات إكسيل"],
+    features: [
+      { ar: "تحويل سريع لملفات CSV كبيرة", en: "Fast conversion for large CSV files" },
+      { ar: "لا يتم رفع الملف إلى أي سيرفر", en: "Nothing is uploaded to a server" },
+      { ar: "الحفاظ على الصفوف والأعمدة كما هي", en: "Rows and columns preserved exactly" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل يتم حفظ ملفاتي على السيرفر؟", en: "Are my files stored on your server?" },
+        answer: { ar: "لا، تحدث كل عملية التحويل محلياً داخل متصفحك.", en: "No. All conversion happens locally in your browser." },
+      },
+    ],
+  },
+  {
+    slug: "discount-calculator",
+    title: {
+      ar: "حاسبة الخصومات",
+      en: "Discount Calculator",
+    },
+    shortDescription: {
+      ar: "احسب سعر ما بعد الخصم ومقدار التوفير فوراً.",
+      en: "Work out the sale price and how much you save instantly.",
+    },
+    description: {
+      ar: "حاسبة مجانية للخصومات: أدخل السعر الأصلي ونسبة الخصم لتحصل على السعر النهائي ومقدار التوفير، أو احسب نسبة الخصم من السعرين.",
+      en: "A free discount calculator: enter the original price and the discount percentage to get the final price and the amount saved, or calculate the discount percentage from two prices.",
+    },
+    icon: "Percent",
+    category: "calculator",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/discount-calculator",
+    keywords: ["discount calculator", "حاسبة خصم", "نسبة الخصم", "سعر بعد الخصم"],
+    features: [
+      { ar: "حساب السعر النهائي والتوفير", en: "Final price and savings" },
+      { ar: "حساب نسبة الخصم من سعرين", en: "Discount percentage from two prices" },
+      { ar: "نتائج فورية وواضحة", en: "Instant, clearly labelled results" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل تدعم الخصومات المتعددة؟", en: "Does it support stacked discounts?" },
+        answer: { ar: "نعم، يمكنك تطبيق خصم بعد آخر ومقارنة النتيجة.", en: "Yes, you can apply one discount after another and compare results." },
+      },
+    ],
+  },
+  {
+    slug: "excel-to-csv",
+    title: {
+      ar: "تحويل Excel إلى CSV",
+      en: "Excel to CSV Converter",
+    },
+    shortDescription: {
+      ar: "استخرج بيانات مصنفات Excel إلى ملفات CSV نظيفة.",
+      en: "Extract data from Excel workbooks into clean CSV files.",
+    },
+    description: {
+      ar: "أداة مجانية لتحويل ملفات Excel (xlsx) إلى ملفات CSV قابلة للاستيراد في أي نظام، مع الحفاظ على ترتيب الأعمدة والقيم.",
+      en: "A free tool that converts Excel (.xlsx) workbooks into plain CSV files you can import anywhere, keeping column order and values intact.",
+    },
+    icon: "FileSpreadsheet",
+    category: "excel",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/excel-to-csv",
+    keywords: ["excel to csv", "تحويل إكسيل", "csv", "تصدير بيانات"],
+    features: [
+      { ar: "تحويل xlsx إلى CSV", en: "Convert .xlsx to CSV" },
+      { ar: "معالجة محلية بدون رفع", en: "Local processing, no upload" },
+      { ar: "الحفاظ على القيم الأصلية", en: "Original values preserved" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل يدعم عدة أوراق عمل؟", en: "Does it support multiple sheets?" },
+        answer: { ar: "يمكنك تحويل كل ورقة على حدة.", en: "You can convert each sheet individually." },
+      },
+    ],
+  },
+  {
+    slug: "image-compressor",
+    title: {
+      ar: "ضغط الصور",
+      en: "Image Compressor",
+    },
+    shortDescription: {
+      ar: "قلل حجم صور JPG وPNG وWebP دون فقدان واضح في الجودة.",
+      en: "Reduce the size of JPG, PNG and WebP images without visible quality loss.",
+    },
+    description: {
+      ar: "أداة مجانية لضغط الصور داخل المتصفح، مناسبة لتصغير صور المواقع والمتاجر قبل الرفع مع التحكم في مستوى الجودة.",
+      en: "A free browser-based image compressor for shrinking photos and product shots before upload, with control over the quality level.",
+    },
+    icon: "Image",
+    category: "images",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/image-compressor",
+    keywords: ["image compressor", "ضغط الصور", "تصغير حجم الصورة", "webp"],
+    features: [
+      { ar: "ضغط JPG وPNG وWebP", en: "Compress JPG, PNG and WebP" },
+      { ar: "التحكم في مستوى الجودة", en: "Adjustable quality level" },
+      { ar: "لا يتم رفع الصور إلى السيرفر", en: "Images never leave your device" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل تقل جودة الصورة؟", en: "Does image quality drop?" },
+        answer: { ar: "يمكنك ضبط الجودة والموازنة بين الحجم والوضوح.", en: "You control the quality balance between file size and sharpness." },
+      },
+    ],
+  },
+  {
+    slug: "image-resizer",
+    title: {
+      ar: "تغيير حجم الصور",
+      en: "Image Resizer",
+    },
+    shortDescription: {
+      ar: "غيّر أبعاد الصور بالبكسل لتناسب الويب أو الطباعة.",
+      en: "Resize images to exact pixel dimensions for web or print.",
+    },
+    description: {
+      ar: "أداة مجانية لتغيير أبعاد الصور بدقة بالبكسل مع الحفاظ على النسبة أو تخصيص العرض والارتفاع، مناسبة لصور المتاجر ومنصات التواصل.",
+      en: "A free tool for resizing images to exact pixel dimensions, either keeping the aspect ratio or setting width and height independently, ideal for store and social-media images.",
+    },
+    icon: "Scaling",
+    category: "images",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/image-resizer",
+    keywords: ["image resizer", "تغيير حجم الصورة", "resize image", "أبعاد الصور"],
+    features: [
+      { ar: "تحديد العرض والارتفاع بالبكسل", en: "Set width and height in pixels" },
+      { ar: "الحفاظ على النسبة أو تخصيصها", en: "Keep or customise the aspect ratio" },
+      { ar: "تنزيل فوري للنسخة الجديدة", en: "Instant download of the resized copy" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل تحافظ على شفافية PNG؟", en: "Is PNG transparency preserved?" },
+        answer: { ar: "نعم، تحافظ الأداة على شفافية الصور عند الحاجة.", en: "Yes, transparency is preserved where it exists." },
+      },
+    ],
+  },
+  {
+    slug: "image-to-pdf",
+    title: {
+      ar: "تحويل الصور إلى PDF",
+      en: "Image to PDF Converter",
+    },
+    shortDescription: {
+      ar: "اجمع عدة صور في ملف PDF واحد داخل متصفحك.",
+      en: "Combine several images into a single PDF document in your browser.",
+    },
+    description: {
+      ar: "أداة مجانية لتحويل صور JPG وPNG إلى ملف PDF واحد مرتب حسب ترتيب الصور، دون رفع أي ملف إلى السيرفر.",
+      en: "A free tool that converts JPG and PNG images into one ordered PDF document, with no file uploaded to a server.",
+    },
+    icon: "FileImage",
+    category: "pdf",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/image-to-pdf",
+    keywords: ["image to pdf", "صور إلى pdf", "تحويل صور", "pdf"],
+    features: [
+      { ar: "دمج عدة صور في PDF واحد", en: "Combine multiple images into one PDF" },
+      { ar: "ترتيب الصور قبل التحويل", en: "Reorder images before converting" },
+      { ar: "معالجة محلية بالكامل", en: "Fully local processing" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل يمكن ترتيب الصور؟", en: "Can I reorder the images?" },
+        answer: { ar: "نعم، رتب الصور قبل إنشاء الملف.", en: "Yes, arrange the images before generating the file." },
+      },
+    ],
+  },
+  {
+    slug: "password-generator",
+    title: {
+      ar: "مولد كلمات المرور القوية",
+      en: "Strong Password Generator",
+    },
+    shortDescription: {
+      ar: "أنشئ كلمات مرور عشوائية قوية بطول ورموز مخصصة.",
+      en: "Generate strong random passwords with a custom length and character rules.",
+    },
+    description: {
+      ar: "أداة مجانية لتوليد كلمات مرور عشوائية آمنة مع تحديد الطول واستخدام الأحرف الكبيرة والصغيرة والأرقام والرموز، دون إرسال أي بيانات.",
+      en: "A free generator for secure random passwords, with configurable length and options for upper case, lower case, digits and symbols. Nothing is transmitted.",
+    },
+    icon: "KeyRound",
+    category: "business",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/password-generator",
+    keywords: ["password generator", "كلمة مرور قوية", "توليد كلمة سر"],
+    features: [
+      { ar: "طول ورموز قابلة للتخصيص", en: "Customisable length and symbols" },
+      { ar: "توليد محلي عشوائي آمن", en: "Secure local random generation" },
+      { ar: "نسخ سريع للحافظة", en: "One-click copy to clipboard" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل تُحفظ كلمات المرور؟", en: "Are generated passwords stored?" },
+        answer: { ar: "لا، تُنشأ داخل المتصفح ولا تُرسل أو تُخزن.", en: "No. They are generated in the browser and never sent or stored." },
+      },
+    ],
+  },
+  {
+    slug: "pdf-merge",
+    title: {
+      ar: "دمج ملفات PDF",
+      en: "Merge PDF Files",
+    },
+    shortDescription: {
+      ar: "اجمع عدة ملفات PDF في مستند واحد بالترتيب الذي تختاره.",
+      en: "Combine several PDF files into one document in the order you choose.",
+    },
+    description: {
+      ar: "أداة مجانية لدمج ملفات PDF متعددة في ملف واحد مع الترتيب والتحكم في الصفحات، دون رفع المستندات إلى السيرفر.",
+      en: "A free tool for merging multiple PDF files into one, with control over the order and pages, without uploading the documents anywhere.",
+    },
+    icon: "Files",
+    category: "pdf",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/pdf-merge",
+    keywords: ["merge pdf", "دمج pdf", "ضم ملفات", "pdf merger"],
+    features: [
+      { ar: "دمج عدد غير محدود من الملفات", en: "Merge an unlimited number of files" },
+      { ar: "ترتيب الملفات قبل الدمج", en: "Reorder files before merging" },
+      { ar: "معالجة داخل المتصفح", en: "Processed in the browser" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل تدعم الملفات الكبيرة؟", en: "Are large files supported?" },
+        answer: { ar: "نعم، حسب ذاكرة المتصفح المتاحة.", en: "Yes, subject to your browser's available memory." },
+      },
+    ],
+  },
+  {
+    slug: "pdf-split",
+    title: {
+      ar: "تقسيم ملفات PDF",
+      en: "Split PDF Files",
+    },
+    shortDescription: {
+      ar: "قسّم ملف PDF أو استخرج نطاق صفحات في ثوانٍ.",
+      en: "Split a PDF or extract a page range in seconds.",
+    },
+    description: {
+      ar: "أداة مجانية لتقسيم مستندات PDF إلى ملفات منفصلة أو استخراج صفحات محددة، مع الحفاظ على الجودة الأصلية.",
+      en: "A free tool for splitting PDF documents into separate files or extracting specific pages, preserving the original quality.",
+    },
+    icon: "Scissors",
+    category: "pdf",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/pdf-split",
+    keywords: ["split pdf", "تقسيم pdf", "استخراج صفحات", "pdf splitter"],
+    features: [
+      { ar: "تقسيم حسب النطاق أو كل صفحة", en: "Split by page range or every page" },
+      { ar: "استخراج صفحات محددة", en: "Extract selected pages" },
+      { ar: "جودة أصلية دون إعادة ضغط", en: "Original quality preserved" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل يمكن تقسيم ملف محمي بكلمة مرور؟", en: "Can I split a password-protected file?" },
+        answer: { ar: "يجب إزالة كلمة المرور أولاً.", en: "The password must be removed first." },
+      },
+    ],
+  },
+  {
+    slug: "percentage-calculator",
+    title: {
+      ar: "حاسبة النسبة المئوية",
+      en: "Percentage Calculator",
+    },
+    shortDescription: {
+      ar: "احسب النسب والتغير النسبي والزيادة والنقصان بسهولة.",
+      en: "Work out percentages, percentage change, increases and decreases easily.",
+    },
+    description: {
+      ar: "حاسبة مجانية للنسب المئوية تشمل نسبة من رقم، ونسبة رقم من آخر، والتغير النسبي بين قيمتين، مع عرض المعادلة المستخدمة.",
+      en: "A free percentage calculator covering a percentage of a number, one number as a percentage of another, and the percentage change between two values, with the formula shown.",
+    },
+    icon: "Percent",
+    category: "calculator",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/percentage-calculator",
+    keywords: ["percentage calculator", "حاسبة نسبة", "النسبة المئوية", "percent change"],
+    features: [
+      { ar: "أنواع متعددة من حسابات النسبة", en: "Several percentage calculation modes" },
+      { ar: "عرض المعادلة المستخدمة", en: "Formula shown with the result" },
+      { ar: "نتائج فورية", en: "Instant results" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل تدعم النسب السالبة؟", en: "Does it handle negative changes?" },
+        answer: { ar: "نعم، وتظهر النتيجة كزيادة أو نقصان.", en: "Yes, and the result is labelled as an increase or a decrease." },
+      },
+    ],
+  },
+  {
+    slug: "profit-margin-calculator",
+    title: {
+      ar: "حاسبة هامش الربح",
+      en: "Profit Margin Calculator",
+    },
+    shortDescription: {
+      ar: "احسب الربح وهامش الربح ومعدل الزيادة من التكلفة والسعر.",
+      en: "Calculate profit, margin and markup from cost and selling price.",
+    },
+    description: {
+      ar: "حاسبة مجانية لهامش الربح: أدخل التكلفة وسعر البيع لتحصل على الربح الإجمالي وهامش الربح ونسبة الزيادة، أو اشتق سعر البيع من هامش مستهدف.",
+      en: "A free profit-margin calculator: enter cost and selling price to get gross profit, margin and markup, or derive a selling price from a target margin.",
+    },
+    icon: "TrendingUp",
+    category: "calculator",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/profit-margin-calculator",
+    keywords: ["profit margin", "هامش الربح", "حاسبة ربح", "markup"],
+    features: [
+      { ar: "حساب الربح والهامش والزيادة", en: "Profit, margin and markup" },
+      { ar: "اشتقاق السعر من هامش مستهدف", en: "Derive a price from a target margin" },
+      { ar: "عرض المعادلة", en: "Formula displayed" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل يفرق بين الهامش والزيادة؟", en: "Does it distinguish margin and markup?" },
+        answer: { ar: "نعم، يعرض كلاً منهما بشكل منفصل.", en: "Yes, both are shown separately." },
+      },
+    ],
+  },
+  {
+    slug: "word-counter",
+    title: {
+      ar: "عداد الكلمات والحروف",
+      en: "Word Counter",
+    },
+    shortDescription: {
+      ar: "عد الكلمات والحروف والجمل وقدّر وقت القراءة.",
+      en: "Count words, characters and sentences, and estimate reading time.",
+    },
+    description: {
+      ar: "أداة مجانية لعد الكلمات والحروف (مع وبدون مسافات) والجمل والفقرات، مع تقدير وقت القراءة، مناسبة للمقالات ومنشورات التواصل.",
+      en: "A free counter for words, characters (with and without spaces), sentences and paragraphs, plus an estimated reading time, useful for articles and social posts.",
+    },
+    icon: "Type",
+    category: "text",
+    badge: { ar: "مجاني", en: "Free Tool" },
+    href: "/tools/word-counter",
+    keywords: ["word counter", "عداد الكلمات", "عدد الحروف", "حساب الكلمات"],
+    features: [
+      { ar: "عد الكلمات والحروف والجمل", en: "Words, characters and sentences" },
+      { ar: "تقدير وقت القراءة", en: "Estimated reading time" },
+      { ar: "مؤشرات فورية أثناء الكتابة", en: "Live counters while typing" },
+    ],
+    faqs: [
+      {
+        question: { ar: "هل النص يُرسل إلى السيرفر؟", en: "Is the text sent to a server?" },
+        answer: { ar: "لا، يتم العد داخل متصفحك فقط.", en: "No. Counting happens only in your browser." },
+      },
+    ],
+  },
 ];

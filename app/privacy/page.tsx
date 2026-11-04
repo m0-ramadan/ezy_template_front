@@ -53,7 +53,7 @@ export default function PrivacyPage() {
         Under applicable data protection laws (including GDPR and CCPA), you are entitled to exercise your user rights, including the right to access, rectify, erase, restrict processing of, or object to the processing of your personal data.
       </p>
       <p>
-        If you have any questions about this Privacy Policy or wish to exercise your user rights/contact our team, please reach out to us via our <Link href="/contact">contact page</Link> or by email at support@ezytemplate.com.
+        If you have any questions about this Privacy Policy or wish to exercise your user rights/contact our team, please reach out to us via our <Link href="/contact">contact page</Link> or by email at support@ezytemplate.pro.
       </p>
     </main>
   );

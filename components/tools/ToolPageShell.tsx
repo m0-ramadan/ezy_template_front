@@ -10,6 +10,7 @@ import RelatedTemplates from "@/components/tools/RelatedTemplates";
 import ToolAdSlot from "@/components/tools/ToolAdSlot";
 import { getToolBySlugFromApi, trackToolEvent } from "@/lib/api";
 import { getToolBySlug } from "@/lib/toolsUtils";
+import { SITE_URL } from "@/lib/site";
 import { AlertCircle, Lock } from "lucide-react";
 
 export default function ToolPageShell({
@@ -65,7 +66,7 @@ export default function ToolPageShell({
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: `${title} | EzyTemplate`,
-    url: `https://ezytemplate.com/tools/${slug}`,
+    url: `${SITE_URL}/tools/${slug}`,
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "All",
     offers: {

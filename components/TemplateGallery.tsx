@@ -15,7 +15,7 @@ export default function TemplateGallery({
   mainImage,
   screenshots = [],
 }: TemplateGalleryProps) {
-  const defaultFallback = "/assets/travelix-card.png";
+  const defaultFallback = "/assets/template-placeholder.svg";
 
   // Format and deduplicate all images
   const rawList = [mainImage, ...screenshots].filter(Boolean);

@@ -3,9 +3,10 @@ import ToolPageShell from "@/components/tools/ToolPageShell";
 import ColorPaletteGenerator from "@/components/tools/image/ColorPaletteGenerator";
 
 export const metadata: Metadata = {
-  title: "مولد لوحات الألوان مجاناً أونلاين | EzyTemplate",
+  alternates: { canonical: "/tools/color-palette-generator" },
+  title: "Color Palette Generator – Build Palettes Online",
   description:
-    "توليد تناسقات ألوان عصرية واستخراج كود الألوان (HEX/RGB) من الصور مجاناً بدون تسجيل.",
+    "Generate harmonious colour palettes and copy HEX codes for your designs. A free browser tool with no signup.",
   keywords: [
     "لوحات ألوان",
     "color palette generator",

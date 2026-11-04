@@ -7,7 +7,7 @@ import { trackToolEvent } from "@/lib/api";
 
 export default function UTMBuilder() {
   const { isRTL } = useLanguage();
-  const [url, setUrl] = useState("https://ezytemplate.com");
+  const [url, setUrl] = useState("https://ezytemplate.pro");
   const [source, setSource] = useState("facebook");
   const [medium, setMedium] = useState("cpc");
   const [campaign, setCampaign] = useState("summer_sale");
