@@ -159,16 +159,12 @@ export default function ToolProgressOverlay({
 
         <div
           style={{
-            fontSize: "30px",
+            fontSize: "32px",
             fontWeight: 900,
             letterSpacing: "-0.02em",
             lineHeight: 1,
-            background: done
-              ? "linear-gradient(90deg,#10b981,#059669)"
-              : "linear-gradient(90deg,#2563eb,#7c3aed)",
-            WebkitBackgroundClip: "text",
-            backgroundClip: "text",
-            color: "transparent",
+            color: done ? "#10b981" : "#2563eb",
+            transition: "color 200ms ease",
           }}
         >
           {percent}%
