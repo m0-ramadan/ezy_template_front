@@ -180,6 +180,18 @@ html.dark .logo-img.dark-only {
   border-radius: 9px;
   padding: 10px 16px;
 }
+/* Login + Sign Up sit in their own row; without flex the two inline links
+   collapsed onto the same position and overlapped. */
+.desktop-only-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  white-space: nowrap;
+}
+.desktop-only-auth > a:not(.signup) {
+  display: inline-flex;
+  align-items: center;
+}
 .mobile-menu {
   display: none;
 }

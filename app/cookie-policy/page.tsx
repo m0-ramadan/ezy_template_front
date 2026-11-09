@@ -24,7 +24,16 @@ export default function CookiePolicyPage() {
       </ul>
       <h2>Your choices</h2>
       <p>
-        You can clear or block cookies in your browser. Some preferences or account features may stop working. For visitors in the EEA, UK and Switzerland, advertising consent must be collected through a Google-certified consent management platform before applicable personalised advertising is enabled.
+        When you first visit the site, a consent bar lets you accept or reject
+        non-essential cookies. Advertising cookies from Google are only loaded
+        after you accept. You can change your choice at any time using the
+        “Cookie settings” link in the footer, or by clearing cookies in your
+        browser; some preferences or account features may then stop working.
+      </p>
+      <p>
+        For visitors in the EEA, UK and Switzerland, advertising consent is
+        collected through a Google-certified consent management platform before
+        personalised advertising is enabled.
       </p>
       <h2>Managing advertising consent</h2>
       <p>

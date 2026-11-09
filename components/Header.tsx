@@ -495,15 +495,7 @@ export default function Header({ navGroups }: { navGroups?: NavGroup[] }) {
             </div>
           ) : (
             <div className="desktop-only-auth">
-              <Link
-                href="/login"
-                style={{
-                  marginRight: isRTL ? 0 : "10px",
-                  marginLeft: isRTL ? "10px" : 0,
-                }}
-              >
-                {t("login")}
-              </Link>
+              <Link href="/login">{t("login")}</Link>
               <Link className="signup" href="/signup">
                 {t("signup")}
               </Link>

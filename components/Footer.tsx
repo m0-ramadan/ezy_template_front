@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { openConsentSettings } from "@/lib/consent";
 import { useEffect, useState, useMemo } from "react";
 import { getSiteSettings, subscribeNewsletter } from "@/lib/api";
 import { useLanguage } from "@/context/LanguageContext";
@@ -479,7 +480,24 @@ export default function Footer() {
 
         <div className="copyright">
           <span>{displayCopyright}</span>
-          <span>{displaySubtext}</span>
+          <span style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={openConsentSettings}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                font: "inherit",
+                color: "inherit",
+                textDecoration: "underline",
+                cursor: "pointer",
+              }}
+            >
+              {isRTL ? "إعدادات ملفات الارتباط" : "Cookie settings"}
+            </button>
+            <span>{displaySubtext}</span>
+          </span>
         </div>
       </div>
     </footer>

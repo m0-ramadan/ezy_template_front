@@ -6,6 +6,7 @@ import { Locale } from "@/lib/translations";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getNavigationFacets } from "@/lib/navigation";
 import AdSenseScript from "@/components/AdSenseScript";
+import ConsentBanner from "@/components/ConsentBanner";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
@@ -127,9 +128,10 @@ export default async function RootLayout({
         />
       </head>
       <body>
-        <AdSenseScript />
         <LanguageProvider initialLocale={initialLocale}>
           <AppLayout navGroups={navGroups}>{children}</AppLayout>
+          <AdSenseScript />
+          <ConsentBanner />
         </LanguageProvider>
         <script
           dangerouslySetInnerHTML={{
