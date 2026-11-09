@@ -75,7 +75,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entries.push(entry(`/${COLLECTION_PATHS[key]}`, 0.8, "weekly"));
 
     for (const facet of data.facets) {
-      if (facet.count > 0) {
+      // A facet whose slug equals the collection path is the category
+      // fallback (e.g. /excel-templates/excel-templates); that URL is not a
+      // route. The hub entry above already covers it.
+      if (facet.count > 0 && facet.slug !== COLLECTION_PATHS[key]) {
         entries.push(
           entry(`/${COLLECTION_PATHS[key]}/${facet.slug}`, 0.6, "weekly"),
         );
