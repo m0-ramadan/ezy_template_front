@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import QRCode from "qrcode";
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 import {
   Download,
   RotateCcw,
@@ -24,6 +25,7 @@ export default function QRGenerator() {
   const { isRTL } = useLanguage();
 
   const [qrType, setQrType] = useState<QRType>("url");
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Input states
   const [url, setUrl] = useState("https://ezytemplate.pro");
@@ -167,11 +169,15 @@ export default function QRGenerator() {
   ]);
 
   const handleDownload = (format: "png" | "svg") => {
+    setIsDownloading(true);
     if (format === "png") {
-      const link = document.createElement("a");
-      link.download = `qrcode-${Date.now()}.png`;
-      link.href = qrDataUrl;
-      link.click();
+      setTimeout(() => {
+        const link = document.createElement("a");
+        link.download = `qrcode-${Date.now()}.png`;
+        link.href = qrDataUrl;
+        link.click();
+        setIsDownloading(false);
+      }, 120);
     } else {
       const rawVal = getQRRawValue();
       QRCode.toString(rawVal, {
@@ -184,7 +190,8 @@ export default function QRGenerator() {
         link.download = `qrcode-${Date.now()}.svg`;
         link.href = URL.createObjectURL(blob);
         link.click();
-      });
+        setIsDownloading(false);
+      }).catch(() => setIsDownloading(false));
     }
   };
 
@@ -220,6 +227,8 @@ export default function QRGenerator() {
   ];
 
   return (
+    <>
+      <ToolProgressOverlay active={isDownloading} />
     <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "32px" }}>
       {/* Type Tabs */}
       <div
@@ -971,5 +980,6 @@ export default function QRGenerator() {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -19,6 +19,7 @@ import { PDFDocument } from "pdf-lib";
 import { formatBytes } from "@/lib/toolsUtils";
 import { trackToolEvent } from "@/lib/api";
 
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 interface PDFItem {
   id: string;
   file: File;
@@ -127,6 +128,8 @@ export default function PDFMerge() {
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -401,5 +404,6 @@ export default function PDFMerge() {
         </div>
       )}
     </div>
+    </>
   );
 }

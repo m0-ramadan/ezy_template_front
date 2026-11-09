@@ -14,6 +14,7 @@ import {
 import { jsPDF } from "jspdf";
 import { trackToolEvent } from "@/lib/api";
 
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 interface ImageItem {
   id: string;
   file: File;
@@ -102,6 +103,8 @@ export default function ImageToPDF() {
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -342,5 +345,6 @@ export default function ImageToPDF() {
         </div>
       )}
     </div>
+    </>
   );
 }

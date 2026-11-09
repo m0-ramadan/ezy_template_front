@@ -13,6 +13,7 @@ import {
 import * as XLSX from "xlsx";
 import { trackToolEvent } from "@/lib/api";
 
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 export default function CSVToExcel() {
   const { isRTL } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
@@ -65,6 +66,8 @@ export default function CSVToExcel() {
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -254,5 +257,6 @@ export default function CSVToExcel() {
         </div>
       )}
     </div>
+    </>
   );
 }

@@ -16,6 +16,7 @@ import {
 import { PDFDocument } from "pdf-lib";
 import { formatBytes } from "@/lib/toolsUtils";
 
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 type CompressionLevel = "light" | "medium" | "strong";
 
 export default function PDFCompressor() {
@@ -130,6 +131,8 @@ export default function PDFCompressor() {
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -610,5 +613,6 @@ export default function PDFCompressor() {
         </div>
       )}
     </div>
+    </>
   );
 }

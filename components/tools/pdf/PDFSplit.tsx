@@ -15,6 +15,7 @@ import { PDFDocument } from "pdf-lib";
 import { trackToolEvent } from "@/lib/api";
 import { formatBytes } from "@/lib/toolsUtils";
 
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 export default function PDFSplit() {
   const { isRTL } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
@@ -144,6 +145,8 @@ export default function PDFSplit() {
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -418,5 +421,6 @@ export default function PDFSplit() {
         </div>
       )}
     </div>
+    </>
   );
 }

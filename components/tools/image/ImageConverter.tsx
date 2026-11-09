@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { trackToolEvent } from "@/lib/api";
 
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 export default function ImageConverter() {
   const { isRTL } = useLanguage();
   const [file, setFile] = useState<File | null>(null);
@@ -52,10 +53,13 @@ export default function ImageConverter() {
       }
       setIsProcessing(false);
     };
+    img.onerror = () => setIsProcessing(false);
     img.src = preview;
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -234,5 +238,6 @@ export default function ImageConverter() {
         </div>
       )}
     </div>
+    </>
   );
 }

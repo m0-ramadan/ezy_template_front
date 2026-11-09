@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { UploadCloud, Download, Maximize2, RotateCcw } from "lucide-react";
 import { trackToolEvent } from "@/lib/api";
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 
 const PRESETS = [
   { label: "Instagram Post (1080x1080)", width: 1080, height: 1080 },
@@ -25,6 +26,7 @@ export default function ImageResizer() {
   const [keepAspect, setKeepAspect] = useState(true);
   const [format, setFormat] = useState<"jpeg" | "png" | "webp">("jpeg");
   const [resizedDataUrl, setResizedDataUrl] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -68,6 +70,7 @@ export default function ImageResizer() {
 
   const handleResize = () => {
     if (!preview) return;
+    setIsProcessing(true);
     trackToolEvent("image-resizer", "upload_started");
     const img = new Image();
     img.onload = () => {
@@ -81,11 +84,15 @@ export default function ImageResizer() {
       const url = canvas.toDataURL(mime, 0.9);
       setResizedDataUrl(url);
       trackToolEvent("image-resizer", "processing_success");
+      setIsProcessing(false);
     };
+    img.onerror = () => setIsProcessing(false);
     img.src = preview;
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -345,5 +352,6 @@ export default function ImageResizer() {
         </div>
       )}
     </div>
+    </>
   );
 }

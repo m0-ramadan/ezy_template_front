@@ -13,6 +13,7 @@ import {
 import { formatBytes } from "@/lib/toolsUtils";
 import { trackToolEvent } from "@/lib/api";
 
+import ToolProgressOverlay from "@/components/tools/ToolProgressOverlay";
 interface CompressedResult {
   file: File;
   previewUrl: string;
@@ -105,6 +106,8 @@ export default function ImageCompressor() {
   };
 
   return (
+    <>
+      <ToolProgressOverlay active={isProcessing} />
     <div
       style={{
         background: "var(--card-bg, #ffffff)",
@@ -198,20 +201,6 @@ export default function ImageCompressor() {
         </h3>
       </div>
 
-      {isProcessing && (
-        <div style={{ textAlign: "center", padding: "20px" }}>
-          <Loader2
-            className="animate-spin"
-            size={28}
-            color="var(--blue)"
-            style={{ margin: "0 auto 8px" }}
-          />
-          <span>
-            {isRTL ? "جاري ضغط الصور بسرعة..." : "Compressing images..."}
-          </span>
-        </div>
-      )}
-
       {results.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <h4 style={{ fontSize: "15px", fontWeight: 700, margin: 0 }}>
@@ -293,5 +282,6 @@ export default function ImageCompressor() {
         </div>
       )}
     </div>
+    </>
   );
 }
