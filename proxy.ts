@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { TOOL_CATEGORIES, TOOL_ROUTES } from "@/data/tool-catalog";
 
-const privateOrUtility = /^\/(login|signup|profile|download|preview)(\/|$)/;
+const privateOrUtility = /^\/(login|signup|profile|preview)(\/|$)/;
 
 const toolPaths = new Set<string>([
   ...TOOL_ROUTES.map((tool) => `/tools/${tool.slug}`),
