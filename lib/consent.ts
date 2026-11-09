@@ -30,6 +30,20 @@ export function readConsent(): ConsentChoice {
 export function writeConsent(choice: "granted" | "denied") {
   if (typeof document === "undefined") return;
   document.cookie = `${CONSENT_COOKIE}=${choice}; path=/; max-age=${CONSENT_MAX_AGE}; SameSite=Lax`;
+
+  // Google Consent Mode v2: tell Google's tags about the decision so ad
+  // storage stays denied until the visitor actually accepts.
+  const state = choice === "granted" ? "granted" : "denied";
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof gtag === "function") {
+    gtag("consent", "update", {
+      ad_storage: state,
+      ad_user_data: state,
+      ad_personalization: state,
+      analytics_storage: state,
+    });
+  }
+
   window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: choice }));
 }
 

@@ -5,8 +5,8 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { Locale } from "@/lib/translations";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getNavigationFacets } from "@/lib/navigation";
-import AdSenseScript from "@/components/AdSenseScript";
 import ConsentBanner from "@/components/ConsentBanner";
+import AdSenseScript from "@/components/AdSenseScript";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
@@ -85,6 +85,34 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Google Consent Mode v2: advertising storage stays denied until the
+            visitor accepts the cookie bar, even though the AdSense tag itself
+            is present in the HTML (required for site verification). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                ad_storage: 'denied',
+                ad_user_data: 'denied',
+                ad_personalization: 'denied',
+                analytics_storage: 'denied',
+                wait_for_update: 500
+              });
+            `,
+          }}
+        />
+        {/* The exact AdSense tag, present in the HTML for verification but
+            inert (`type="text/plain"`) until the visitor accepts cookies. The
+            live tag is injected by <AdSenseScript /> after consent. */}
+        <script
+          type="text/plain"
+          data-ezy-adsense
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1622689578222320"
+          crossOrigin="anonymous"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
