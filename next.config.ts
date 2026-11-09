@@ -4,6 +4,17 @@ import path from "path";
 const nextConfig: NextConfig = {
   images: { unoptimized: true },
   poweredByHeader: false,
+  experimental: {
+    // The production host is a shared Hostinger account with a hard limit on
+    // the number of processes/threads a single user may spawn. Next size the
+    // page-data workers from the host CPU count (63 on that machine), which
+    // aborted every deploy with "OS can't spawn worker thread: Resource
+    // temporarily unavailable". Capping the workers keeps the build inside
+    // the account limit.
+    cpus: 2,
+    workerThreads: false,
+    memoryBasedWorkersCount: false,
+  },
   async headers() {
     return [
       {
