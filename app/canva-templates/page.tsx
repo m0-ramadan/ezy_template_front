@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CollectionIntro from "@/components/CollectionIntro";
 import { getCollectionData } from "@/lib/catalog";
 import MarketplaceListing from "@/components/MarketplaceListing";
 import { SITE_URL } from "@/lib/site";
@@ -26,7 +27,8 @@ export default async function CanvaMarketplace() {
   const { resources, total, facets, unavailable } = await getCollectionData("canva");
 
   return (
-    <MarketplaceListing
+    <>
+      <MarketplaceListing
       basePath="/canva-templates"
       bannerTitle="Canva Templates Collection"
       bannerTitleAr="مجموعة قوالب كانفا"
@@ -44,5 +46,7 @@ export default async function CanvaMarketplace() {
       facets={facets}
       facetKey="subcategory"
     />
+      <CollectionIntro collection="canva" />
+    </>
   );
 }

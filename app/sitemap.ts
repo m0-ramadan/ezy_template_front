@@ -8,6 +8,7 @@ import {
 } from "@/lib/catalog";
 import { getArticlesSSR } from "@/lib/articles";
 import { TOOL_CATEGORIES, TOOL_ROUTES } from "@/data/tool-catalog";
+import { GUIDES } from "@/data/guides";
 
 export const revalidate = 3600;
 
@@ -29,6 +30,7 @@ const STATIC_PATHS = [
   "/services",
   "/resources",
   "/tools",
+  "/guides",
   "/support",
   "/custom-requests",
   "/privacy",
@@ -84,6 +86,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         );
       }
     }
+  }
+
+  // Editorial guides.
+  for (const guide of GUIDES) {
+    entries.push(
+      entry(`/guides/${guide.slug}`, 0.7, "monthly", guide.updated || guide.published),
+    );
   }
 
   // Every tool category and every tool page. These are real, self-canonical

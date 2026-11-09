@@ -4,6 +4,7 @@ import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { ADSENSE_PUBLISHER_ID } from "@/lib/site";
 
+// Pages without indexable content must not load ad code (AdSense policy).
 const excludedPrefixes = [
   "/login",
   "/signup",

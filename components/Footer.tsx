@@ -195,6 +195,7 @@ export default function Footer() {
             url: "/tools",
           },
           { label: isRTL ? "المدونة والمقالات" : "Blog", url: "/blog" },
+          { label: isRTL ? "أدلة عملية" : "Guides", url: "/guides" },
           { label: isRTL ? "الخدمات والحلول" : "Services", url: "/services" },
           { label: isRTL ? "من نحن" : "About Us", url: "/about" },
         ],
@@ -294,7 +295,7 @@ export default function Footer() {
 
   const columns = useMemo(() => {
     if (!settings?.footer_columns?.length) return defaultColumns;
-    return settings.footer_columns.map((col: any) => ({
+    const mapped = settings.footer_columns.map((col: any) => ({
       title: isRTL
         ? (col.title_ar && col.title_ar.trim()) ||
           footerTranslations[col.title] ||
@@ -316,6 +317,19 @@ export default function Footer() {
         url: l.url,
       })),
     }));
+
+    // Always expose the guides, even when the CMS supplies its own columns.
+    const guidesLabel = isRTL ? "أدلة عملية" : "Guides";
+    const hasGuides = mapped.some((col: any) =>
+      col.links.some((link: any) => link.url === "/guides"),
+    );
+    if (!hasGuides && mapped.length > 0) {
+      mapped[0] = {
+        ...mapped[0],
+        links: [...mapped[0].links, { label: guidesLabel, url: "/guides" }],
+      };
+    }
+    return mapped;
   }, [settings, defaultColumns, isRTL]);
 
   const displayTagline = isRTL

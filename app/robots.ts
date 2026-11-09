@@ -24,6 +24,8 @@ export default function robots(): MetadataRoute.Robots {
       },
       { userAgent: "Googlebot", allow: "/" },
       { userAgent: "AdsBot-Google", allow: "/" },
+      // AdSense crawler: must be able to read the pages where ads may run.
+      { userAgent: "Mediapartners-Google", allow: "/" },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

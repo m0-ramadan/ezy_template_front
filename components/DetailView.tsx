@@ -17,6 +17,26 @@ import TemplateGallery from "@/components/TemplateGallery";
 import { useLanguage } from "@/context/LanguageContext";
 import { getAssetUrl } from "@/lib/api";
 
+
+function formatFileSize(bytes: number | null | undefined): string {
+  if (!bytes || bytes <= 0) return "";
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+/** Licensing copy that is safe to show publicly. */
+function publicLicense(license: string | null | undefined): string | null {
+  const value = String(license || "").trim();
+  if (!value) return null;
+  // Seed data sometimes contains an internal warning instead of a real
+  // licence. Never publish that as the licence of the template.
+  if (/not specified|confirm redistribution|before public release/i.test(value)) {
+    return null;
+  }
+  return value;
+}
+
 export default function DetailView({
   t,
   relatedList,
@@ -147,7 +167,7 @@ export default function DetailView({
           </div>
 
           <div className="detail-copy" style={{ minHeight: "220px" }}>
-            {activeTab === 0 && (
+            {(
               <div id="tab-sec-overview">
                 <h2>
                   {isRTL ? `عن قالب ${displayName}` : `About ${displayName}`}
@@ -164,7 +184,7 @@ export default function DetailView({
               </div>
             )}
 
-            {activeTab === 1 && (
+            {(
               <div id="tab-sec-features">
                 <h3>
                   {isRTL ? "المميزات والصيغ المتاحة" : "Features & Formats"}
@@ -196,7 +216,7 @@ export default function DetailView({
               </div>
             )}
 
-            {activeTab === 2 && (
+            {(
               <div id="tab-sec-tech">
                 <h3>
                   {isRTL ? "تفاصيل التقنيات والمستندات" : "Technical Details"}
@@ -232,7 +252,88 @@ export default function DetailView({
               </div>
             )}
 
-            {activeTab === 3 && (
+              {/* What is included */}
+              <div id="tab-sec-included">
+                <h3>
+                  {isRTL ? "ماذا يشمل هذا القالب؟" : "What Is Included"}
+                </h3>
+                {Array.isArray(t.files) && t.files.length > 0 ? (
+                  <ul style={{ margin: "12px 0 0", paddingInlineStart: "20px", lineHeight: 1.9 }}>
+                    {t.files.slice(0, 6).map((file: any, index: number) => (
+                      <li key={file?.id || index}>
+                        <b>{file?.original_name || file?.label || `File ${index + 1}`}</b>
+                        {file?.format ? ` · ${String(file.format).toUpperCase()}` : ""}
+                        {formatFileSize(file?.size_bytes) ? ` · ${formatFileSize(file.size_bytes)}` : ""}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="lead">
+                    {isRTL
+                      ? "ملف قابل للتحميل فوراً بصيغة " + (t.formats?.[0] || "الملف الأصلي") + "."
+                      : `One instantly downloadable file${t.formats?.[0] ? ` in ${t.formats[0]}` : ""}.`}
+                  </p>
+                )}
+                <div className="detail-facts" style={{ marginTop: "14px" }}>
+                  <div>
+                    <Folder />
+                    <b>{isRTL ? "صيغة الملف" : "File format"}</b>
+                    <span>{(t.formats || []).join(", ") || t.tech_stack || "—"}</span>
+                  </div>
+                  <div>
+                    <Calendar />
+                    <b>{isRTL ? "آخر تحديث" : "Last updated"}</b>
+                    <span>
+                      {t.updated_at
+                        ? new Date(t.updated_at).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })
+                        : "—"}
+                    </span>
+                  </div>
+                  <div>
+                    <Tag />
+                    <b>{isRTL ? "الترخيص" : "Licence"}</b>
+                    <span>
+                      {publicLicense(t.license) ||
+                        (isRTL
+                          ? "مجاني للتحميل — راجع شروط الاستخدام"
+                          : "Free to download — see our Terms of Use")}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* How to use */}
+              <div id="tab-sec-howto">
+                <h3>{isRTL ? "كيف تستخدم هذا القالب؟" : "How to Use This Template"}</h3>
+                <ol style={{ margin: "12px 0 0", paddingInlineStart: "20px", lineHeight: 1.9 }}>
+                  <li>
+                    {isRTL
+                      ? "حمّل الملف من صفحة التحميل وافتحه في التطبيق المناسب."
+                      : "Download the file and open it in the application it was made for."}
+                  </li>
+                  <li>
+                    {isRTL
+                      ? "استبدل البيانات التجريبية ببياناتك (الأسماء، المبالغ، التواريخ)."
+                      : "Replace the sample names, amounts and dates with your own data."}
+                  </li>
+                  <li>
+                    {isRTL
+                      ? "عدّل الألوان والشعار ليتوافق مع هويتك."
+                      : "Adjust the colours and logo so they match your brand."}
+                  </li>
+                  <li>
+                    {isRTL
+                      ? "احفظ نسخة جديدة وصدّر الملف بصيغة PDF أو الصيغة الأصلية."
+                      : "Save a copy and export it as a PDF or keep the original format."}
+                  </li>
+                </ol>
+              </div>
+
+            {(
               <div id="tab-sec-screenshots">
                 <h3>{isRTL ? "معاينة صور المشروع" : "Screenshots Preview"}</h3>
                 <p style={{ color: "var(--muted)", fontSize: "13px" }}>
@@ -275,7 +376,7 @@ export default function DetailView({
               </div>
             )}
 
-            {activeTab === 4 && (
+            {(
               <div id="tab-sec-docs">
                 <h3>
                   {isRTL ? "التوثيق وطريقة الاستخدام" : "Documentation & Setup"}
@@ -294,7 +395,7 @@ export default function DetailView({
               </div>
             )}
 
-            {activeTab === 5 && (
+            {(
               <div id="tab-sec-reviews">
                 <h3>
                   {isRTL ? "تقييمات وآراء المستخدمين" : "Customer Reviews"}

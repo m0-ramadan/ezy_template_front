@@ -327,7 +327,6 @@ function PreviewContent() {
               textTransform: "uppercase",
             }}
           >
-            {isRTL ? "مساحة إعلانية" : "ADVERTISEMENT"}
           </div>
 
           <div

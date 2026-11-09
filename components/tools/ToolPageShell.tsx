@@ -7,7 +7,6 @@ import ToolFeaturesUsage from "@/components/tools/ToolFeaturesUsage";
 import ToolFAQ from "@/components/tools/ToolFAQ";
 import RelatedTools from "@/components/tools/RelatedTools";
 import RelatedTemplates from "@/components/tools/RelatedTemplates";
-import ToolAdSlot from "@/components/tools/ToolAdSlot";
 import { getToolBySlugFromApi, trackToolEvent } from "@/lib/api";
 import { getToolBySlug } from "@/lib/toolsUtils";
 import { SITE_URL } from "@/lib/site";
@@ -175,7 +174,6 @@ export default function ToolPageShell({
         )}
 
         {/* Ad Placement Slot */}
-        <ToolAdSlot placement="below-workspace" />
 
         {/* Features & Usage Steps */}
         <ToolFeaturesUsage

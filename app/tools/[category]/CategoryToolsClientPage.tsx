@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import ToolBreadcrumb from "@/components/tools/ToolBreadcrumb";
 import ToolCard from "@/components/tools/ToolCard";
-import ToolAdSlot from "@/components/tools/ToolAdSlot";
 import { getToolsFromApi } from "@/lib/api";
 import { TOOLS as fallbackTools } from "@/data/tools";
 import { Wrench } from "lucide-react";
@@ -272,7 +271,6 @@ export default function CategoryToolsClientPage({
           })}
         </div>
 
-        <ToolAdSlot placement="category-top" />
 
         {sourceTools.length > 0 ? (
           <div

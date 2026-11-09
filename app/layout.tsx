@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { Locale } from "@/lib/translations";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getNavigationFacets } from "@/lib/navigation";
+import AdSenseScript from "@/components/AdSenseScript";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
@@ -83,15 +84,6 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <meta
-          name="google-adsense-account"
-          content="ca-pub-1622689578222320"
-        />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1622689578222320"
-          crossOrigin="anonymous"
-        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -135,6 +127,7 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <AdSenseScript />
         <LanguageProvider initialLocale={initialLocale}>
           <AppLayout navGroups={navGroups}>{children}</AppLayout>
         </LanguageProvider>

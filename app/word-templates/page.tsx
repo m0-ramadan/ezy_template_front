@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CollectionIntro from "@/components/CollectionIntro";
 import { getCollectionData } from "@/lib/catalog";
 import MarketplaceListing from "@/components/MarketplaceListing";
 import { SITE_URL } from "@/lib/site";
@@ -25,7 +26,8 @@ export default async function WordMarketplace() {
   const { resources, total, facets, unavailable } = await getCollectionData("word");
 
   return (
-    <MarketplaceListing
+    <>
+      <MarketplaceListing
       basePath="/word-templates"
       bannerTitle="Word Templates Collection"
       bannerTitleAr="مجموعة قوالب وورد"
@@ -43,5 +45,7 @@ export default async function WordMarketplace() {
       facets={facets}
       facetKey="subcategory"
     />
+      <CollectionIntro collection="word" />
+    </>
   );
 }

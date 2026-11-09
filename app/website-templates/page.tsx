@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CollectionIntro from "@/components/CollectionIntro";
 import { getCollectionData } from "@/lib/catalog";
 import MarketplaceListing from "@/components/MarketplaceListing";
 import { SITE_URL } from "@/lib/site";
@@ -25,7 +26,8 @@ export default async function WebsiteMarketplace() {
   const { resources, total, facets, unavailable } = await getCollectionData("website");
 
   return (
-    <MarketplaceListing
+    <>
+      <MarketplaceListing
       basePath="/website-templates"
       bannerTitle="Website Templates Collection"
       bannerTitleAr="مجموعة قوالب المواقع"
@@ -43,5 +45,7 @@ export default async function WebsiteMarketplace() {
       facets={facets}
       facetKey="subcategory"
     />
+      <CollectionIntro collection="website" />
+    </>
   );
 }

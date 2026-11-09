@@ -201,6 +201,7 @@ export function normalizeTemplate(r: any, locale: string = "en") {
         ? `${r.views_count}`
         : r.views || "0",
     rating: r.rating !== undefined && r.rating !== null ? `${r.rating}` : null,
+    updated_at: r.updated_at || r.published_at || null,
     // Prefer the cover that exists on the media server over the legacy
     // sample-1 gallery path that returned 503 for almost every template.
     image: getAssetUrl(coverForPreview(r.preview_image || r.image)),

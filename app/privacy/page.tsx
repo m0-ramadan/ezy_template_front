@@ -40,7 +40,41 @@ export default function PrivacyPage() {
 
       <h2>Google AdSense and Advertising Partners</h2>
       <p>
-        Google is one of our third-party advertising vendors. Google uses cookies, including Google AdSense cookies and DoubleClick cookies, to serve ads to our site visitors based upon their visit to EzyTemplate and other sites on the internet. For users in the European Economic Area (EEA), the UK, and Switzerland, Google-certified Consent Management Platforms (CMP) are utilized to manage user consent for cookies and personalized advertising.
+        Google is one of our third-party advertising vendors. Google uses
+        cookies, including Google AdSense cookies and DoubleClick cookies, to
+        serve ads to our site visitors based upon their visit to EzyTemplate
+        and other sites on the internet. For users in the European Economic
+        Area (EEA), the UK, and Switzerland, Google-certified Consent
+        Management Platforms (CMP) are utilized to manage user consent for
+        cookies and personalized advertising.
+      </p>
+      <p>
+        You can learn how Google uses information from sites that use its
+        services at{" "}
+        <a
+          href="https://policies.google.com/technologies/partner-sites"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          policies.google.com/technologies/partner-sites
+        </a>
+        . You can opt out of personalised advertising at{" "}
+        <a
+          href="https://www.google.com/settings/ads"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          google.com/settings/ads
+        </a>{" "}
+        or through the industry opt-out page at{" "}
+        <a
+          href="https://www.aboutads.info/choices/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          aboutads.info/choices
+        </a>
+        .
       </p>
 
       <h2>Third-Party Services</h2>
