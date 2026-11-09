@@ -36,6 +36,54 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    // Sub-categories that only ever existed as hard-coded menu links (they are
+    // not in the catalogue) used to answer 404. Search Console still lists
+    // them, so they now redirect to the collection that really contains them.
+    const deadFacets: Array<[string, string]> = [
+      ["/website-templates/html-css", "/website-templates"],
+      ["/website-templates/corporate", "/website-templates"],
+      ["/website-templates/business", "/website-templates"],
+      ["/website-templates/landing-pages", "/website-templates"],
+      ["/website-templates/e-commerce", "/website-templates"],
+      ["/website-templates/portfolio", "/website-templates"],
+      ["/website-templates/website-templates", "/website-templates"],
+      ["/excel-templates/sales-reporting", "/excel-templates"],
+      ["/excel-templates/excel-templates", "/excel-templates"],
+      ["/word-templates/word-templates", "/word-templates"],
+      ["/design-templates/business-cards", "/design-templates"],
+      ["/design-templates/certificates-awards", "/design-templates"],
+      ["/design-templates/corporate-identity", "/design-templates"],
+      ["/design-templates/events-invitations", "/design-templates"],
+    ];
+
+    const deadTools = [
+      "age-calculator",
+      "base64-encoder-decoder",
+      "excel-formula-helper",
+      "image-cropper",
+      "lorem-ipsum-generator",
+      "po-generator",
+      "robots-txt-generator",
+      "sitemap-generator",
+      "text-cleaner",
+      "timesheet-calculator",
+    ];
+
+    return [
+      ...deadFacets.map(([source, destination]) => ({
+        source,
+        destination,
+        permanent: true,
+      })),
+      // Tools that were listed in an old seed file but never shipped.
+      ...deadTools.map((slug) => ({
+        source: `/tools/${slug}`,
+        destination: "/tools",
+        permanent: true,
+      })),
+    ];
+  },
   turbopack: {
     root: path.resolve(__dirname),
   },

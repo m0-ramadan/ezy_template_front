@@ -570,3 +570,40 @@ export function normalizeFacetParam(
   if (key === "word") return slug.replace(/^word-/, "");
   return slug;
 }
+
+/**
+ * Slugs whose template title is shared with another published row. Two rows
+ * can have different content (an Excel and a presentation version of the same
+ * idea) while carrying the same title, which shows up in Search Console as a
+ * duplicate. Those pages get a disambiguating suffix in their <title>.
+ */
+async function buildAmbiguousTitleKeys(): Promise<string[]> {
+  const resources = await getPublishedResources({ per_page: 2000 });
+  const counts = new Map<string, number>();
+  for (const resource of resources) {
+    const key = titleKey(resource?.title);
+    if (!key) continue;
+    counts.set(key, (counts.get(key) || 0) + 1);
+  }
+  return [...counts.entries()]
+    .filter(([, count]) => count > 1)
+    .map(([key]) => key);
+}
+
+const cachedAmbiguousTitleKeys = unstable_cache(
+  buildAmbiguousTitleKeys,
+  ["ambiguous-title-keys"],
+  { revalidate: CATALOG_REVALIDATE_SECONDS },
+);
+
+export async function hasAmbiguousTitle(
+  title: string | null | undefined,
+): Promise<boolean> {
+  const key = titleKey(title);
+  if (!key) return false;
+  try {
+    return (await cachedAmbiguousTitleKeys()).includes(key);
+  } catch {
+    return false;
+  }
+}

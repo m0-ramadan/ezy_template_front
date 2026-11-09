@@ -7,6 +7,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 import {
   getCanonicalTemplateSlug,
   getTemplateDetailResult,
+  hasAmbiguousTitle,
 } from "@/lib/catalog";
 
 function plainText(value: unknown, max = 160): string {
@@ -32,7 +33,18 @@ export async function generateMetadata({
   // Rows that were seeded twice under two category paths share one canonical.
   const canonicalSlug = await getCanonicalTemplateSlug(slug);
   const normalized = normalizeTemplate(resource);
-  const title = plainText(resource.title || slug, 120);
+  const baseTitle = plainText(resource.title || slug, 110);
+  // Two published rows can share a title (Excel and presentation versions).
+  // Give those pages distinct titles instead of competing with each other.
+  const ambiguous = await hasAmbiguousTitle(resource.title);
+  const typeLabel = resource.resource_type
+    ? resource.resource_type.charAt(0).toUpperCase() + resource.resource_type.slice(1)
+    : "";
+  const categoryLabel = resource.subcategory?.name || resource.category?.name || "";
+  const title =
+    ambiguous && (typeLabel || categoryLabel)
+      ? `${baseTitle} – ${[typeLabel, categoryLabel].filter(Boolean).join(", ")}`
+      : baseTitle;
   const description =
     plainText(resource.short_description, 155) ||
     plainText(resource.description, 155) ||
